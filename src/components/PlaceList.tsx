@@ -6,6 +6,7 @@ import { Place } from "@/types/place";
 import { Tag, MapPin, Search, Filter, Compass, ArrowRight } from "lucide-react";
 import AriaMap from "./AriaMap";
 import AriaDetailModal from "./AriaDetailModal";
+import Link from "next/link";
 
 interface PlaceListProps {
   initialPlaces: Place[];
@@ -146,60 +147,60 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
       >
         <AnimatePresence mode="popLayout">
           {filteredPlaces.map((place) => (
-            <motion.div
-              layout
-              key={place.id}
-              variants={cardVariants}
-              initial="hidden"
-              animate="visible"
-              exit={{ opacity: 0, scale: 0.8 }}
-              onClick={() => setActivePlace(place)}
-              className="group relative bg-white dark:bg-forest p-1 rounded-[2.5rem] border border-forest/5 shadow-xl hover:shadow-[0_45px_100px_-20px_rgba(26,67,47,0.12)] hover:-translate-y-3 cursor-pointer transition-all duration-700 overflow-hidden"
-            >
-              <div className="p-8 h-full flex flex-col justify-between space-y-6 relative z-10">
-                <div className="space-y-4">
-                  <div className="flex justify-between items-start">
-                    <span className="text-[10px] uppercase tracking-[0.2em] font-black text-accent/80 bg-accent/5 px-3 py-1.5 rounded-xl border border-accent/10">
-                      No. {place.id}
+            <Link key={place.id} href={`/places/${place.id}`} className="block group">
+              <motion.div
+                layout
+                variants={cardVariants}
+                initial="hidden"
+                animate="visible"
+                exit={{ opacity: 0, scale: 0.8 }}
+                className="group relative bg-white dark:bg-forest p-1 rounded-[2.5rem] border border-forest/5 shadow-xl hover:shadow-[0_45px_100px_-20px_rgba(26,67,47,0.12)] hover:-translate-y-3 cursor-pointer transition-all duration-700 overflow-hidden h-full"
+              >
+                <div className="p-8 h-full flex flex-col justify-between space-y-6 relative z-10">
+                  <div className="space-y-4">
+                    <div className="flex justify-between items-start">
+                      <span className="text-[10px] uppercase tracking-[0.2em] font-black text-accent/80 bg-accent/5 px-3 py-1.5 rounded-xl border border-accent/10">
+                        No. {place.id}
+                      </span>
+                      <motion.div 
+                        whileHover={{ scale: 1.2, rotate: 15 }}
+                        className="p-3 rounded-full bg-forest/5 text-forest group-hover:bg-accent group-hover:text-white transition-all duration-500 shadow-sm"
+                      >
+                        <MapPin className="w-4 h-4" />
+                      </motion.div>
+                    </div>
+                    
+                    <h3 className="text-2xl font-black text-forest group-hover:text-accent transition-colors leading-tight">
+                      {place.name}
+                    </h3>
+                    
+                    <div className="inline-flex items-center text-[10px] font-black uppercase tracking-[0.1em] text-forest/50 bg-forest/5 px-3 py-1 rounded-lg">
+                      <Tag className="w-3 h-3 mr-2" />
+                      {place.category}
+                    </div>
+
+                    <p className="text-sm text-forest/60 line-clamp-3 leading-relaxed font-bold italic opacity-80 group-hover:opacity-100 transition-opacity">
+                      {place.description || "이 장소에 대한 신비로운 이야기가 곧 추가될 예정입니다."}
+                    </p>
+                  </div>
+
+                  <div className="pt-6 border-t border-forest/5 flex justify-between items-center group-hover:border-accent/20 transition-colors">
+                    <span className="text-[10px] font-black tracking-widest font-mono text-forest/20 group-hover:text-accent/60 uppercase transition-colors">
+                      View Curation
                     </span>
-                    <motion.div 
-                      whileHover={{ scale: 1.2, rotate: 15 }}
-                      className="p-3 rounded-full bg-forest/5 text-forest group-hover:bg-accent group-hover:text-white transition-all duration-500 shadow-sm"
+                    <motion.div
+                      animate={{ x: [0, 5, 0] }}
+                      transition={{ repeat: Infinity, duration: 1.5 }}
                     >
-                      <MapPin className="w-4 h-4" />
+                      <ArrowRight className="w-4 h-4 text-forest/20 group-hover:text-accent" />
                     </motion.div>
                   </div>
-                  
-                  <h3 className="text-2xl font-black text-forest group-hover:text-accent transition-colors leading-tight">
-                    {place.name}
-                  </h3>
-                  
-                  <div className="inline-flex items-center text-[10px] font-black uppercase tracking-[0.1em] text-forest/50 bg-forest/5 px-3 py-1 rounded-lg">
-                    <Tag className="w-3 h-3 mr-2" />
-                    {place.category}
-                  </div>
-
-                  <p className="text-sm text-forest/60 line-clamp-3 leading-relaxed font-bold italic opacity-80 group-hover:opacity-100 transition-opacity">
-                    {place.description || "이 장소에 대한 신비로운 이야기가 곧 추가될 예정입니다."}
-                  </p>
                 </div>
-
-                <div className="pt-6 border-t border-forest/5 flex justify-between items-center group-hover:border-accent/20 transition-colors">
-                  <span className="text-[10px] font-black tracking-widest font-mono text-forest/20 group-hover:text-accent/60 uppercase transition-colors">
-                    Explorer Mode
-                  </span>
-                  <motion.div
-                    animate={{ x: [0, 5, 0] }}
-                    transition={{ repeat: Infinity, duration: 1.5 }}
-                  >
-                    <ArrowRight className="w-4 h-4 text-forest/20 group-hover:text-accent" />
-                  </motion.div>
-                </div>
-              </div>
-              
-              {/* Hover Luxury Decor */}
-              <div className="absolute top-0 right-0 w-48 h-48 bg-accent/5 rounded-full -mr-24 -mt-24 group-hover:bg-accent/10 transition-all duration-1000 blur-3xl opacity-0 group-hover:opacity-100" />
-            </motion.div>
+                
+                {/* Hover Luxury Decor */}
+                <div className="absolute top-0 right-0 w-48 h-48 bg-accent/5 rounded-full -mr-24 -mt-24 group-hover:bg-accent/10 transition-all duration-1000 blur-3xl opacity-0 group-hover:opacity-100" />
+              </motion.div>
+            </Link>
           ))}
         </AnimatePresence>
       </motion.div>
@@ -220,7 +221,7 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
         </motion.div>
       )}
 
-      {/* Premium Detail Modal */}
+      {/* Premium Detail Quick Modal (Keep for Map interactions) */}
       <AriaDetailModal 
         place={activePlace} 
         onClose={() => setActivePlace(null)} 
