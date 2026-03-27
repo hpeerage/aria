@@ -1,0 +1,31 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #f8faf9; /* Soft Off-white for Wellness feel */
+  --foreground: #1a432f; /* Deep Forest Green for primary text */
+  --forest-green: #1a432f;
+  --vital-orange: #f26b38;
+  --card-bg: #ffffff;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0f241a; /* Dark Forest tone */
+    --foreground: #f3f0df; /* Creamy light text */
+    --card-bg: #1a432f;
+  }
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
