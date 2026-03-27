@@ -33,17 +33,26 @@ export async function getPlacesFromGoogleSheet(sheetId: string, sheetName?: stri
 
     const rows = jsonData.table.rows as GoogleSheetRow[];
     
-    return rows.map((row) => {
+    return rows.map((row, index) => {
       const c = row.c;
+      /* 원본 시트 구조 분석 결과 (1Setffm...): 
+         c[0]: 지역 (강원도 정선군)
+         c[1]: 장소명
+         c[2]: 위도
+         c[3]: 경도
+         c[4]: 주소
+         c[5]: 카테고리
+         c[6]: 태그
+      */
       return {
-        id: Number(c[0]?.v) || 0,
-        category: String(c[1]?.v || ''),
-        name: String(c[2]?.v || ''),
+        id: index + 1, // 행 번호 기반 ID 생성
+        name: String(c[1]?.v || '정선의 공간'),
+        category: String(c[5]?.v || '기타'),
         coordinates: {
-          lat: Number(c[3]?.v) || 0,
-          lng: Number(c[4]?.v) || 0,
+          lat: Number(c[2]?.v) || 0,
+          lng: Number(c[3]?.v) || 0,
         },
-        description: String(c[5]?.v || ''), // 설명 필드가 있을 경우 대비
+        description: `${c[4]?.v || ''} ${c[6]?.v || ''}`.trim(), // 주소와 태그 결합
       };
     });
   } catch (error) {

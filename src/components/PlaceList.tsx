@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, Variants } from "framer-motion";
 import { Place } from "@/types/place";
-import { Tag, MapPin, Search, Filter, Compass, ArrowRight } from "lucide-react";
+import { MapPin, Search, Filter, Compass, ArrowRight } from "lucide-react";
 import AriaMap from "./AriaMap";
 import AriaDetailModal from "./AriaDetailModal";
 import Link from "next/link";
@@ -23,7 +23,7 @@ const containerVariants = {
   },
 };
 
-const cardVariants = {
+const cardVariants: Variants = {
   hidden: { opacity: 0, y: 30, scale: 0.95 },
   visible: { 
     opacity: 1, 
@@ -122,7 +122,7 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
               }`}
             >
               {cat}
-            </button>
+            </motion.button>
           ))}
         </div>
       </motion.div>
@@ -175,7 +175,7 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
                     </h3>
                     
                     <div className="inline-flex items-center text-[10px] font-black uppercase tracking-[0.1em] text-forest/50 bg-forest/5 px-3 py-1 rounded-lg">
-                      <Tag className="w-3 h-3 mr-2" />
+                      <CustomTag className="w-3 h-3 mr-2" />
                       {place.category}
                     </div>
 
@@ -231,7 +231,7 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
   );
 }
 
-function Tag({ className }: { className?: string }) {
+function CustomTag({ className }: { className?: string }) {
   return (
     <svg 
       className={className} 
