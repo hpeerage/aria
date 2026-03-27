@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import { Place } from "@/types/place";
-import { Tag, MapPin, Search, Filter, Compass } from "lucide-react";
+import { Tag, MapPin, Search, Filter, Compass, ArrowRight } from "lucide-react";
 import AriaMap from "./AriaMap";
+import AriaDetailModal from "./AriaDetailModal";
 
 interface PlaceListProps {
   initialPlaces: Place[];
@@ -12,6 +13,7 @@ interface PlaceListProps {
 export default function PlaceList({ initialPlaces }: PlaceListProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("전체");
+  const [activePlace, setActivePlace] = useState<Place | null>(null);
 
   const categories = ["전체", ...Array.from(new Set(initialPlaces.map((p) => p.category)))];
 
@@ -44,7 +46,10 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
           </div>
         </div>
         
-        <AriaMap places={filteredPlaces} />
+        <AriaMap 
+          places={filteredPlaces} 
+          onMarkerClick={(place) => setActivePlace(place)}
+        />
       </section>
 
       {/* Search and Filter Header */}
@@ -88,7 +93,8 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
         {filteredPlaces.map((place) => (
           <div
             key={place.id}
-            className="group relative bg-white dark:bg-forest p-1 rounded-[2.5rem] border border-forest/5 shadow-xl hover:shadow-[0_45px_100px_-20px_rgba(26,67,47,0.1)] hover:-translate-y-3 transition-all duration-700 overflow-hidden"
+            onClick={() => setActivePlace(place)}
+            className="group relative bg-white dark:bg-forest p-1 rounded-[2.5rem] border border-forest/5 shadow-xl hover:shadow-[0_45px_100px_-20px_rgba(26,67,47,0.1)] hover:-translate-y-3 cursor-pointer transition-all duration-700 overflow-hidden"
           >
             <div className="p-8 h-full flex flex-col justify-between space-y-6">
               <div className="space-y-4">
@@ -115,15 +121,16 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
                 </p>
               </div>
 
-              <div className="pt-6 border-t border-forest/5 flex justify-between items-center text-[10px] font-black tracking-widest font-mono text-forest/20 group-hover:text-forest/40 transition-colors uppercase">
-                <span>Lat: {place.coordinates.lat.toFixed(4)}</span>
-                <span>Lng: {place.coordinates.lng.toFixed(4)}</span>
+              <div className="pt-6 border-t border-forest/5 flex justify-between items-center group-hover:border-accent/20 transition-colors">
+                <span className="text-[10px] font-black tracking-widest font-mono text-forest/20 group-hover:text-accent/60 uppercase transition-colors">
+                  Explorer Mode
+                </span>
+                <ArrowRight className="w-4 h-4 text-forest/20 group-hover:text-accent group-hover:translate-x-1 transition-all" />
               </div>
             </div>
             
             {/* Hover Decor - Luxury Glow */}
             <div className="absolute top-0 right-0 w-48 h-48 bg-accent/5 rounded-full -mr-24 -mt-24 group-hover:bg-accent/10 transition-all duration-1000 blur-3xl opacity-0 group-hover:opacity-100" />
-            <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-forest/5 rounded-full group-hover:bg-forest/10 transition-all duration-1000 blur-2xl opacity-0 group-hover:opacity-100" />
           </div>
         ))}
       </div>
@@ -134,11 +141,18 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
             <Search className="w-16 h-16 animate-pulse" />
           </div>
           <div className="space-y-2">
-            <p className="text-3xl font-black text-forest/50 italic tracking-tighter">오리무중 (五里霧中)</p>
+            <p className="text-3xl font-black text-forest/50 italic tracking-tighter">오리무중 (五里霧중)</p>
             <p className="text-forest/30 font-bold uppercase tracking-widest">찾으시는 장소가 아직 안개 속에 있습니다.</p>
           </div>
         </div>
       )}
+
+      {/* Premium Detail Modal */}
+      <AriaDetailModal 
+        place={activePlace} 
+        onClose={() => setActivePlace(null)} 
+        allPlaces={initialPlaces}
+      />
     </div>
   );
 }

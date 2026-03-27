@@ -3,7 +3,7 @@
 import { APIProvider, Map, Marker, InfoWindow, useMarkerRef } from "@vis.gl/react-google-maps";
 import { Place } from "@/types/place";
 import { useState } from "react";
-import { MapPin, Info } from "lucide-react";
+import { MapPin, Info, ArrowRight } from "lucide-react";
 
 interface AriaMapProps {
   places: Place[];
@@ -48,7 +48,6 @@ export default function AriaMap({ places, onMarkerClick }: AriaMapProps) {
               place={place} 
               onClick={() => {
                 setSelectedPlace(place);
-                onMarkerClick?.(place);
               }}
             />
           ))}
@@ -64,13 +63,17 @@ export default function AriaMap({ places, onMarkerClick }: AriaMapProps) {
                 </div>
               }
             >
-              <div className="max-w-xs space-y-2 p-1">
-                <p className="text-xs text-forest/70 font-medium leading-relaxed">
+              <div className="max-w-xs space-y-3 p-1">
+                <p className="text-xs text-forest/70 font-medium leading-relaxed line-clamp-2">
                   {selectedPlace.description || "이 장소에 대한 신비로운 이야기가 곧 추가될 예정입니다."}
                 </p>
-                <div className="text-[10px] uppercase tracking-widest font-bold text-accent">
-                  {selectedPlace.category}
-                </div>
+                <button 
+                  onClick={() => onMarkerClick?.(selectedPlace)}
+                  className="w-full py-2 bg-forest text-white text-[10px] font-black uppercase tracking-widest rounded-lg hover:bg-accent transition-all flex items-center justify-center gap-2 group/btn"
+                >
+                  상세 정보 탐색
+                  <ArrowRight className="w-3 h-3 group-hover/btn:translate-x-1 transition-transform" />
+                </button>
               </div>
             </InfoWindow>
           )}
@@ -80,14 +83,14 @@ export default function AriaMap({ places, onMarkerClick }: AriaMapProps) {
       {/* Map Overlay Decor */}
       <div className="absolute top-6 left-6 z-10 px-6 py-3 bg-white/80 backdrop-blur-xl rounded-2xl shadow-lg border border-forest/5 flex items-center gap-3">
         <div className="w-3 h-3 bg-accent rounded-full animate-ping" />
-        <span className="text-xs font-bold text-forest uppercase tracking-widest">Live Exploration</span>
+        <span className="text-xs font-bold text-forest uppercase tracking-widest leading-none">Live Exploration</span>
       </div>
     </div>
   );
 }
 
 function CustomMarker({ place, onClick }: { place: Place; onClick: () => void }) {
-  const [markerRef, marker] = useMarkerRef();
+  const [markerRef] = useMarkerRef();
 
   return (
     <Marker
