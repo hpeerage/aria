@@ -8,4 +8,5 @@ export interface Place {
   };
   description: string; // 설명
   images?: string[];   // 이미지 리스트 (갤러리용)
+  wellnessTips?: string[]; // 웰니스 인사이트/팁 리스트
 }

@@ -138,9 +138,19 @@ export default function AriaDetailModal({ place, onClose, allPlaces }: AriaDetai
                     Wellness Insight
                   </div>
                   <h4 className="text-xl font-black text-forest">{dict.common.wellnessTip}</h4>
-                  <p className="text-sm font-bold text-forest/60 leading-relaxed">
-                    숨겨진 82개의 보물 중 하나인 이곳은 바쁜 일상을 잠시 잊고, 정선의 맑은 정기와 함께 영혼의 질서를 되찾기에 가장 최적화된 공간입니다. 30분 정도의 느린 걸음으로 공간의 정적을 느껴보세요.
-                  </p>
+                  <div className="space-y-3">
+                    {place.wellnessTips && place.wellnessTips.length > 0 ? (
+                      place.wellnessTips.map((tip, idx) => (
+                        <div key={idx} className="flex gap-3 text-sm font-bold text-forest/60 leading-relaxed list-item list-inside marker:text-accent">
+                          {tip}
+                        </div>
+                      ))
+                    ) : (
+                      <p className="text-sm font-bold text-forest/60 leading-relaxed">
+                        숨겨진 82개의 보물 중 하나인 이곳은 바쁜 일상을 잠시 잊고, 정선의 맑은 정기와 함께 영혼의 질서를 되찾기에 가장 최적화된 공간입니다. 30분 정도의 느린 걸음으로 공간의 정적을 느껴보세요.
+                      </p>
+                    )}
+                  </div>
                 </div>
               </section>
 

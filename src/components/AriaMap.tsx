@@ -38,7 +38,6 @@ export default function AriaMap({ places, onMarkerClick, userLocation }: AriaMap
         <Map
           defaultCenter={defaultCenter}
           defaultZoom={11}
-          mapId="aria-wellness-map"
           gestureHandling={"greedy"}
           disableDefaultUI={false}
           className="w-full h-full"
