@@ -8,9 +8,10 @@ import { MapPin, Info, ArrowRight } from "lucide-react";
 interface AriaMapProps {
   places: Place[];
   onMarkerClick?: (place: Place) => void;
+  userLocation?: { lat: number; lng: number } | null;
 }
 
-export default function AriaMap({ places, onMarkerClick }: AriaMapProps) {
+export default function AriaMap({ places, onMarkerClick, userLocation }: AriaMapProps) {
   const [selectedPlace, setSelectedPlace] = useState<Place | null>(null);
   const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "";
 
@@ -51,6 +52,21 @@ export default function AriaMap({ places, onMarkerClick }: AriaMapProps) {
               }}
             />
           ))}
+
+          {userLocation && (
+            <Marker
+              position={userLocation}
+              title="현재 위치"
+              icon={{
+                path: 0, // CIRCLE
+                scale: 10,
+                fillColor: "#4285F4",
+                fillOpacity: 1,
+                strokeWeight: 2,
+                strokeColor: "white",
+              } as google.maps.Symbol}
+            />
+          )}
 
           {selectedPlace && (
             <InfoWindow

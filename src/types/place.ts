@@ -7,4 +7,5 @@ export interface Place {
     lng: number;       // 경도
   };
   description: string; // 설명
+  images?: string[];   // 이미지 리스트 (갤러리용)
 }

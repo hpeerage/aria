@@ -1,4 +1,5 @@
 import { Place } from "@/types/place";
+import { getImagesByCategory } from "./place-images";
 
 /**
  * 구글 시트 데이터를 가져오는 유틸리티 (서버 전 전용)
@@ -44,15 +45,19 @@ export async function getPlacesFromGoogleSheet(sheetId: string, sheetName?: stri
          c[5]: 카테고리
          c[6]: 태그
       */
+      const category = String(c[5]?.v || '기타');
+      const id = index + 1;
+
       return {
-        id: index + 1, // 행 번호 기반 ID 생성
+        id, // 행 번호 기반 ID 생성
         name: String(c[1]?.v || '정선의 공간'),
-        category: String(c[5]?.v || '기타'),
+        category,
         coordinates: {
           lat: Number(c[2]?.v) || 0,
           lng: Number(c[3]?.v) || 0,
         },
         description: `${c[4]?.v || ''} ${c[6]?.v || ''}`.trim(), // 주소와 태그 결합
+        images: getImagesByCategory(category, id),
       };
     });
   } catch (error) {

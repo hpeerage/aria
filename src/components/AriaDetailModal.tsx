@@ -3,6 +3,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { Place } from "@/types/place";
 import { X, MapPin, Tag, Sparkles, Navigation, Share2, Compass, ArrowRight } from "lucide-react";
+import { useLanguage } from "@/lib/i18n/context";
 
 interface AriaDetailModalProps {
   place: Place | null;
@@ -11,6 +12,7 @@ interface AriaDetailModalProps {
 }
 
 export default function AriaDetailModal({ place, onClose, allPlaces }: AriaDetailModalProps) {
+  const { dict } = useLanguage();
   if (!place) return null;
 
   // 단순 거리 계산 (피타고라스) 기반 주변 추천 (임시 로직)
@@ -45,7 +47,12 @@ export default function AriaDetailModal({ place, onClose, allPlaces }: AriaDetai
           className="relative w-full max-w-4xl max-h-[90vh] bg-[#F8FAF9] dark:bg-forest-dark rounded-[3rem] shadow-2xl overflow-hidden flex flex-col md:flex-row"
         >
           {/* Left: Visual & Quick Info */}
-          <div className="md:w-2/5 relative bg-forest overflow-hidden">
+          <div className="md:w-2/5 relative bg-forest overflow-hidden min-h-[300px] md:min-h-full">
+            {/* Background Image */}
+            <div 
+              className="absolute inset-0 bg-cover bg-center grayscale blur-xs opacity-40 scale-105"
+              style={{ backgroundImage: `url('${place.images?.[0] || 'https://images.unsplash.com/photo-1542224566-6e85f2e6772f?q=80&w=1950'}')` }}
+            />
             {/* Background Texture/Effect */}
             <div className="absolute inset-0 bg-gradient-to-br from-accent/20 to-transparent pointer-events-none" />
             <div className="absolute inset-0 opacity-20 pointer-events-none">
@@ -56,6 +63,9 @@ export default function AriaDetailModal({ place, onClose, allPlaces }: AriaDetai
                 <rect width="100%" height="100%" fill="url(#modal-pattern)" />
               </svg>
             </div>
+            
+            {/* Gradient Overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-forest via-forest/40 to-transparent z-[5]" />
 
             <div className="h-full flex flex-col justify-center p-12 text-white space-y-6 relative z-10">
               <div className="p-4 bg-white/10 rounded-full w-fit backdrop-blur-md">
@@ -71,12 +81,12 @@ export default function AriaDetailModal({ place, onClose, allPlaces }: AriaDetai
                 </h2>
                 <div className="flex items-center gap-2 text-white/60 font-bold text-sm">
                   <Tag className="w-4 h-4" />
-                  {place.category}
+                  {dict.common.category}: {place.category}
                 </div>
               </div>
 
               <div className="pt-8 border-t border-white/10 space-y-4">
-                <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent">Location</p>
+                <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent">{dict.common.location}</p>
                 <div className="font-mono text-[10px] text-white/40 space-y-1 lowercase">
                   <p>latitude: {place.coordinates.lat}</p>
                   <p>longitude: {place.coordinates.lng}</p>
@@ -110,7 +120,7 @@ export default function AriaDetailModal({ place, onClose, allPlaces }: AriaDetai
               <section className="space-y-6">
                 <div className="flex items-center gap-3">
                   <div className="w-1 h-8 bg-accent rounded-full" />
-                  <h4 className="text-2xl font-black text-forest">장소의 이야기</h4>
+                  <h4 className="text-2xl font-black text-forest">{dict.common.story}</h4>
                 </div>
                 <p className="text-lg text-forest/70 font-bold leading-relaxed italic">
                   {place.description || "이 장소의 깊은 역사와 웰니스 리듬을 발견할 수 있는 상세한 이야기가 준비되고 있습니다."}
@@ -127,7 +137,7 @@ export default function AriaDetailModal({ place, onClose, allPlaces }: AriaDetai
                     <Sparkles className="w-4 h-4" />
                     Wellness Insight
                   </div>
-                  <h4 className="text-xl font-black text-forest">정선 아리아가 전하는 웰니스 팁</h4>
+                  <h4 className="text-xl font-black text-forest">{dict.common.wellnessTip}</h4>
                   <p className="text-sm font-bold text-forest/60 leading-relaxed">
                     숨겨진 82개의 보물 중 하나인 이곳은 바쁜 일상을 잠시 잊고, 정선의 맑은 정기와 함께 영혼의 질서를 되찾기에 가장 최적화된 공간입니다. 30분 정도의 느린 걸음으로 공간의 정적을 느껴보세요.
                   </p>
@@ -137,7 +147,7 @@ export default function AriaDetailModal({ place, onClose, allPlaces }: AriaDetai
               {/* Nearby Recommendations */}
               <section className="space-y-6">
                 <div className="flex items-center justify-between">
-                  <h4 className="text-xl font-black text-forest">주변의 또 다른 보물들</h4>
+                  <h4 className="text-xl font-black text-forest">{dict.common.nearbyTreasures}</h4>
                   <div className="text-[10px] font-black uppercase tracking-widest text-forest/20">Discovery Loop</div>
                 </div>
                 <div className="grid grid-cols-1 gap-4">

@@ -3,10 +3,11 @@
 import { useState } from "react";
 import { motion, AnimatePresence, Variants } from "framer-motion";
 import { Place } from "@/types/place";
-import { MapPin, Search, Filter, Compass, ArrowRight } from "lucide-react";
+import { Search, Filter, Compass, ArrowRight, Navigation } from "lucide-react";
 import AriaMap from "./AriaMap";
 import AriaDetailModal from "./AriaDetailModal";
 import Link from "next/link";
+import { useLanguage } from "@/lib/i18n/context";
 
 interface PlaceListProps {
   initialPlaces: Place[];
@@ -38,17 +39,71 @@ const cardVariants: Variants = {
 };
 
 export default function PlaceList({ initialPlaces }: PlaceListProps) {
+  const { dict } = useLanguage();
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("전체");
+  const [selectedCategory, setSelectedCategory] = useState(dict.common.all);
   const [activePlace, setActivePlace] = useState<Place | null>(null);
+  const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
+  const [isLocating, setIsLocating] = useState(false);
 
-  const categories = ["전체", ...Array.from(new Set(initialPlaces.map((p) => p.category)))];
+  const categories = [dict.common.all, dict.common.nearMe, ...Array.from(new Set(initialPlaces.map((p) => p.category)))];
 
-  const filteredPlaces = initialPlaces.filter((place) => {
-    const matchesSearch = place.name.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = selectedCategory === "전체" || place.category === selectedCategory;
-    return matchesSearch && matchesCategory;
-  });
+  const handleLocateMe = () => {
+    setIsLocating(true);
+    if (!navigator.geolocation) {
+      alert("브라우저가 위치 정보를 지원하지 않습니다.");
+      setIsLocating(false);
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        setUserLocation({
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        });
+        setIsLocating(false);
+        setSelectedCategory(dict.common.nearMe);
+      },
+      (error) => {
+        console.error("Geolocation error:", error);
+        alert("위치 정보를 가져오는 데 실패했습니다.");
+        setIsLocating(false);
+      }
+    );
+  };
+
+  const calculateDistance = (lat1: number, lng1: number, lat2: number, lng2: number) => {
+    const R = 6371; // 지구 반지름 (km)
+    const dLat = (lat2 - lat1) * (Math.PI / 180);
+    const dLng = (lng2 - lng1) * (Math.PI / 180);
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(lat1 * (Math.PI / 180)) *
+        Math.cos(lat2 * (Math.PI / 180)) *
+        Math.sin(dLng / 2) *
+        Math.sin(dLng / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
+  };
+
+  const filteredPlaces = initialPlaces
+    .filter((place) => {
+      const matchesSearch = place.name.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesCategory =
+        selectedCategory === dict.common.all ||
+        (selectedCategory === dict.common.nearMe && userLocation) ||
+        place.category === selectedCategory;
+      return matchesSearch && matchesCategory;
+    })
+    .sort((a, b) => {
+      if (selectedCategory === dict.common.nearMe && userLocation) {
+        const distA = calculateDistance(userLocation.lat, userLocation.lng, a.coordinates.lat, a.coordinates.lng);
+        const distB = calculateDistance(userLocation.lat, userLocation.lng, b.coordinates.lat, b.coordinates.lng);
+        return distA - distB;
+      }
+      return 0;
+    });
 
   return (
     <div className="w-full max-w-7xl mx-auto px-4 py-12 space-y-12">
@@ -86,6 +141,7 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
         <AriaMap 
           places={filteredPlaces} 
           onMarkerClick={(place) => setActivePlace(place)}
+          userLocation={userLocation}
         />
       </motion.section>
 
@@ -100,7 +156,7 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-forest/40 group-focus-within:text-accent transition-colors" />
           <input
             type="text"
-            placeholder="어떤 치유의 공간을 찾으시나요?"
+            placeholder={dict.common.searchPlaceholder}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full pl-12 pr-4 py-3 rounded-2xl bg-forest/5 border-none focus:ring-2 focus:ring-accent outline-none transition-all placeholder:text-forest/30 font-bold"
@@ -114,13 +170,26 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
               key={cat}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              onClick={() => setSelectedCategory(cat)}
-              className={`px-6 py-2.5 rounded-2xl text-xs font-black transition-all whitespace-nowrap uppercase tracking-widest ${
+              onClick={() => {
+                if (cat === dict.common.nearMe) {
+                  if (!userLocation) {
+                    handleLocateMe();
+                  } else {
+                    setSelectedCategory(cat);
+                  }
+                } else {
+                  setSelectedCategory(cat);
+                }
+              }}
+              className={`px-6 py-2.5 rounded-2xl text-xs font-black transition-all whitespace-nowrap uppercase tracking-widest flex items-center gap-2 ${
                 selectedCategory === cat
                   ? "bg-forest text-white shadow-xl shadow-forest/20 scale-105"
                   : "bg-forest/5 text-forest/60 hover:bg-forest/10 hover:text-forest"
               }`}
             >
+              {cat === dict.common.nearMe && (
+                <Navigation className={`w-3.5 h-3.5 ${isLocating ? "animate-spin" : ""}`} />
+              )}
               {cat}
             </motion.button>
           ))}
@@ -134,7 +203,7 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
         className="text-forest/60 text-sm font-bold tracking-tight px-4 flex items-center gap-2"
       >
         <div className="w-1.5 h-1.5 bg-accent rounded-full animate-pulse" />
-        당신을 위해 선별된 <span className="text-accent underline underline-offset-4 decoration-accent/20 font-black">{filteredPlaces.length}</span>개의 공간들
+        {dict.common.placesFound.replace("{count}", filteredPlaces.length.toString())}
       </motion.p>
 
       {/* Place Grid */}
@@ -156,37 +225,50 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
                 exit={{ opacity: 0, scale: 0.8 }}
                 className="group relative bg-white dark:bg-forest p-1 rounded-[2.5rem] border border-forest/5 shadow-xl hover:shadow-[0_45px_100px_-20px_rgba(26,67,47,0.12)] hover:-translate-y-3 cursor-pointer transition-all duration-700 overflow-hidden h-full"
               >
-                <div className="p-8 h-full flex flex-col justify-between space-y-6 relative z-10">
+                <div className="relative h-48 w-full overflow-hidden rounded-[2rem] mb-4">
+                  <div 
+                    className="absolute inset-0 bg-cover bg-center group-hover:scale-110 transition-transform duration-1000 grayscale-[0.3] group-hover:grayscale-0"
+                    style={{ backgroundImage: `url('${place.images?.[0] || 'https://images.unsplash.com/photo-1542224566-6e85f2e6772f?q=80&w=1950'}')` }}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-forest/20 to-transparent" />
+                  <div className="absolute top-4 left-4">
+                    <span className="text-[10px] uppercase tracking-[0.2em] font-black text-white bg-forest/40 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10">
+                      No. {place.id}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="px-6 pb-8 flex-grow flex flex-col justify-between space-y-6 relative z-10">
                   <div className="space-y-4">
                     <div className="flex justify-between items-start">
-                      <span className="text-[10px] uppercase tracking-[0.2em] font-black text-accent/80 bg-accent/5 px-3 py-1.5 rounded-xl border border-accent/10">
-                        No. {place.id}
-                      </span>
-                      <motion.div 
-                        whileHover={{ scale: 1.2, rotate: 15 }}
-                        className="p-3 rounded-full bg-forest/5 text-forest group-hover:bg-accent group-hover:text-white transition-all duration-500 shadow-sm"
-                      >
-                        <MapPin className="w-4 h-4" />
-                      </motion.div>
+                      <div className="inline-flex items-center text-[10px] font-black uppercase tracking-[0.1em] text-accent-light bg-accent/5 px-3 py-1 rounded-lg border border-accent/10">
+                        <CustomTag className="w-3 h-3 mr-2" />
+                        {place.category}
+                      </div>
+                      {userLocation && (
+                        <div className="flex items-center text-[10px] font-black uppercase tracking-[0.1em] text-accent font-mono ml-auto">
+                          {calculateDistance(
+                            userLocation.lat,
+                            userLocation.lng,
+                            place.coordinates.lat,
+                            place.coordinates.lng
+                          ).toFixed(1)}km
+                        </div>
+                      )}
                     </div>
                     
-                    <h3 className="text-2xl font-black text-forest group-hover:text-accent transition-colors leading-tight">
+                    <h3 className="text-xl font-black text-forest group-hover:text-accent transition-colors leading-tight">
                       {place.name}
                     </h3>
                     
-                    <div className="inline-flex items-center text-[10px] font-black uppercase tracking-[0.1em] text-forest/50 bg-forest/5 px-3 py-1 rounded-lg">
-                      <CustomTag className="w-3 h-3 mr-2" />
-                      {place.category}
-                    </div>
-
-                    <p className="text-sm text-forest/60 line-clamp-3 leading-relaxed font-bold italic opacity-80 group-hover:opacity-100 transition-opacity">
+                    <p className="text-xs text-forest/60 line-clamp-3 leading-relaxed font-bold italic opacity-80 group-hover:opacity-100 transition-opacity">
                       {place.description || "이 장소에 대한 신비로운 이야기가 곧 추가될 예정입니다."}
                     </p>
                   </div>
 
                   <div className="pt-6 border-t border-forest/5 flex justify-between items-center group-hover:border-accent/20 transition-colors">
                     <span className="text-[10px] font-black tracking-widest font-mono text-forest/20 group-hover:text-accent/60 uppercase transition-colors">
-                      View Curation
+                      {dict.common.viewCuration}
                     </span>
                     <motion.div
                       animate={{ x: [0, 5, 0] }}
