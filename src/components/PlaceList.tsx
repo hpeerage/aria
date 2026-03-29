@@ -127,11 +127,11 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
             </motion.div>
             <div>
               <h2 className="text-3xl font-black text-forest dark:text-white tracking-tighter">정선 아리아 지도</h2>
-              <p className="text-sm font-bold text-forest/40 dark:text-white/40 uppercase tracking-widest leading-none">Interactive Exploration</p>
+              <p className="text-sm font-bold text-forest/70 dark:text-white/40 uppercase tracking-widest leading-none">Interactive Exploration</p>
             </div>
           </div>
           
-          <div className="hidden md:flex gap-4 text-[10px] font-black uppercase tracking-widest text-forest/30 italic">
+          <div className="hidden md:flex gap-4 text-[10px] font-black uppercase tracking-widest text-forest/50 dark:text-white/30 italic">
             <span>82 Local Jewels Mapped</span>
             <span>•</span>
             <span>Live Data Sync</span>
@@ -184,7 +184,7 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
               className={`px-6 py-2.5 rounded-2xl text-xs font-black transition-all whitespace-nowrap uppercase tracking-widest flex items-center gap-2 ${
                 selectedCategory === cat
                   ? "bg-forest text-white shadow-xl shadow-forest/20 scale-105 dark:bg-accent dark:shadow-accent/20"
-                  : "bg-forest/5 text-forest/60 dark:bg-white/5 dark:text-white/60 hover:bg-forest/10 hover:text-forest dark:hover:text-white"
+                  : "bg-forest/5 text-forest/80 dark:bg-white/5 dark:text-white/60 hover:bg-forest/10 hover:text-forest dark:hover:text-white"
               }`}
             >
               {cat === dict.common.nearMe && (

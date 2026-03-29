@@ -138,7 +138,7 @@ export default function HomeClient({ places }: HomeClientProps) {
                 <span className="text-[10px] uppercase font-black tracking-[0.3em] text-white/50">Curation</span>
               </div>
             </div>
-            <p className="text-sm text-white/60 font-bold leading-relaxed">
+            <p className="text-sm text-white/70 font-bold leading-relaxed">
               정선의 맑은 정취와 아리랑의 선율을 담아낸 82개의 치유 거점을 제안합니다. 진정한 웰니스로 가는 길, 정선 아리아가 함께합니다.
             </p>
           </div>
@@ -180,9 +180,9 @@ function StatItem({ icon, label, value, suffix }: { icon: React.ReactNode; label
         {icon}
       </div>
       <div className="text-center flex-grow flex flex-col justify-center">
-        <p className="text-[10px] uppercase tracking-widest font-black text-forest/20 dark:text-white/60 group-hover:text-accent transition-colors mb-1">{label}</p>
+        <p className="text-[10px] uppercase tracking-widest font-black text-forest/40 dark:text-white/60 group-hover:text-accent transition-colors mb-1">{label}</p>
         <p className="text-4xl font-black text-forest dark:text-white tracking-tighter group-hover:scale-110 transition-transform duration-500">{value}</p>
-        <p className="text-[9px] font-black text-forest/20 dark:text-white/50 uppercase tracking-tighter">{suffix}</p>
+        <p className="text-[9px] font-black text-forest/30 dark:text-white/50 uppercase tracking-tighter">{suffix}</p>
       </div>
     </div>
   );
