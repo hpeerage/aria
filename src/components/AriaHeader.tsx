@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, Menu, X, Sparkles } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { useLanguage } from "@/lib/i18n/context";
 
 export default function AriaHeader() {
@@ -42,12 +43,13 @@ export default function AriaHeader() {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3 group">
             <div className={`relative transition-all duration-500 overflow-hidden rounded-xl ${
-              isScrolled ? "h-8" : "h-10"
+              isScrolled ? "h-6 w-16" : "h-10 w-24"
             }`}>
-              <img 
+              <Image 
                 src="/images/logo.jpeg" 
                 alt="Jeongseon Aria" 
-                className="h-full w-auto object-contain transition-transform duration-500 group-hover:scale-110"
+                fill
+                className="object-contain transition-transform duration-500 group-hover:scale-110"
               />
             </div>
             {!isScrolled && (
