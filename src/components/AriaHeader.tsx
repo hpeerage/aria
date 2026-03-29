@@ -41,23 +41,25 @@ export default function AriaHeader() {
         >
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3 group">
-            <div className={`p-2 rounded-xl transition-all duration-500 ${
-              isScrolled ? "bg-forest/5 dark:bg-white/10 text-forest dark:text-accent" : "bg-white/10 text-white"
-            } group-hover:scale-110 group-hover:rotate-12`}>
-              <Sparkles className={`w-5 h-5 ${isScrolled ? "text-accent" : "text-white"}`} />
+            <div className={`relative transition-all duration-500 overflow-hidden rounded-xl ${
+              isScrolled ? "h-8" : "h-10"
+            }`}>
+              <img 
+                src="/images/logo.jpeg" 
+                alt="Jeongseon Aria" 
+                className="h-full w-auto object-contain transition-transform duration-500 group-hover:scale-110"
+              />
             </div>
-            <div className="flex flex-col">
-              <span className={`text-lg font-black tracking-tighter transition-colors ${
-                isScrolled ? "text-forest dark:text-white" : "text-white"
-              }`}>
-                JEONGSEON ARIA
-              </span>
-              <span className={`text-[8px] font-black tracking-[0.3em] uppercase transition-colors ${
-                isScrolled ? "text-forest/30 dark:text-white/40" : "text-white/40"
-              }`}>
-                Wellness Curation
-              </span>
-            </div>
+            {!isScrolled && (
+              <motion.div 
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                className="flex flex-col border-l border-white/20 pl-3 ml-1"
+              >
+                <span className="text-xs font-black tracking-widest text-white uppercase leading-tight">Jeongseon</span>
+                <span className="text-[10px] font-bold text-white/40 uppercase tracking-tighter">Wellness</span>
+              </motion.div>
+            )}
           </Link>
 
           {/* Desktop Nav Items */}
