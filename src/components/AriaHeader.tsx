@@ -46,7 +46,7 @@ export default function AriaHeader() {
               isScrolled ? "h-6 w-16" : "h-10 w-24"
             }`}>
               <Image 
-                src="/images/logo.jpeg" 
+                src="/aria/images/logo.jpeg" 
                 alt="Jeongseon Aria" 
                 fill
                 className="object-contain transition-transform duration-500 group-hover:scale-110"

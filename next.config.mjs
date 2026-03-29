@@ -2,6 +2,7 @@
 const nextConfig = {
     output: 'export',
     basePath: '/aria',
+    assetPrefix: '/aria/',
     trailingSlash: true,
     images: {
           unoptimized: true,

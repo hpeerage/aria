@@ -26,8 +26,8 @@ export const metadata: Metadata = {
     type: "website",
   },
   icons: {
-    icon: "/icon.svg",
-    apple: "/icon.svg",
+    icon: "/aria/icon.svg",
+    apple: "/aria/icon.svg",
   },
 };
 
