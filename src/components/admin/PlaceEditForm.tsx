@@ -66,7 +66,7 @@ export default function PlaceEditForm() {
       <div className="flex items-center justify-between">
         <Link 
           href="/admin/places" 
-          className="flex items-center gap-3 text-white/40 hover:text-white transition-all text-xs font-black uppercase tracking-widest group"
+          className="flex items-center gap-3 text-white/60 hover:text-white transition-all text-xs font-black uppercase tracking-widest group"
         >
           <div className="p-3 bg-white/5 rounded-2xl group-hover:bg-accent/10 transition-all">
             <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
@@ -97,7 +97,7 @@ export default function PlaceEditForm() {
         animate={{ opacity: 1, y: 0 }}
         className="bg-white/5 border border-white/10 rounded-[3.5rem] p-12 overflow-hidden relative shadow-2xl backdrop-blur-3xl"
       >
-        <div className="absolute top-0 right-0 p-12 text-accent/5">
+        <div className="absolute top-0 right-0 p-12 text-accent/10">
              <MapPin className="w-64 h-64 rotate-12" />
         </div>
 
@@ -120,7 +120,7 @@ export default function PlaceEditForm() {
                <label className="text-[10px] font-black uppercase tracking-widest text-accent px-1">Wellness Story (KO)</label>
                <textarea 
                  rows={4}
-                 className="w-full px-6 py-5 bg-white/5 border border-white/10 rounded-2xl text-white placeholder:text-white/20 focus:ring-2 focus:ring-accent outline-none transition-all font-bold resize-none"
+                 className="w-full px-6 py-5 bg-white/5 border border-white/10 rounded-2xl text-white placeholder:text-white/40 focus:ring-2 focus:ring-accent outline-none transition-all font-bold resize-none"
                  defaultValue={place.description}
                />
              </div>
@@ -133,7 +133,7 @@ export default function PlaceEditForm() {
                    <button 
                     type="button"
                     onClick={handleAddTip}
-                    className="px-6 py-2 bg-white/5 hover:bg-white/10 border border-white/5 text-[10px] font-black text-white/40 hover:text-white uppercase tracking-widest rounded-xl transition-all"
+                    className="px-6 py-2 bg-white/5 hover:bg-white/10 border border-white/5 text-[10px] font-black text-white/60 hover:text-white uppercase tracking-widest rounded-xl transition-all"
                    >
                     + Add Insight
                    </button>
@@ -210,7 +210,7 @@ function FormItem({ label, placeholder, value }: { label: string; placeholder: s
                     type="text" 
                     defaultValue={value}
                     placeholder={placeholder}
-                    className="w-full px-6 py-5 bg-white/5 border border-white/10 rounded-2xl text-white placeholder:text-white/20 focus:ring-2 focus:ring-accent outline-none transition-all font-bold"
+                    className="w-full px-6 py-5 bg-white/5 border border-white/10 rounded-2xl text-white placeholder:text-white/40 focus:ring-2 focus:ring-accent outline-none transition-all font-bold"
                 />
             </div>
         </div>

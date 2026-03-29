@@ -27,13 +27,13 @@ export default function AriaPlacesList({ initialPlaces }: AriaPlacesListProps) {
       {/* Search & Filter Header */}
       <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
         <div className="relative group w-full md:max-w-md">
-          <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-white/20 group-focus-within:text-accent transition-colors" />
+          <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-white/40 group-focus-within:text-accent transition-colors" />
           <input 
             type="text" 
             placeholder="Search by name or description..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-14 pr-6 py-4 bg-white/5 border border-white/10 rounded-[2rem] text-white placeholder:text-white/20 focus:ring-2 focus:ring-accent outline-none transition-all font-bold"
+            className="w-full pl-14 pr-6 py-4 bg-white/5 border border-white/10 rounded-[2rem] text-white placeholder:text-white/40 focus:ring-2 focus:ring-accent outline-none transition-all font-bold"
           />
         </div>
         
@@ -46,7 +46,7 @@ export default function AriaPlacesList({ initialPlaces }: AriaPlacesListProps) {
               className={`px-6 py-2.5 rounded-2xl text-[10px] font-black tracking-widest uppercase transition-all whitespace-nowrap ${
                 selectedCategory === cat 
                   ? "bg-accent text-white shadow-lg shadow-accent/20 scale-105 border-b-2 border-white/20" 
-                  : "bg-white/5 text-white/40 hover:bg-white/10 hover:text-white"
+                  : "bg-white/5 text-white/60 hover:bg-white/10 hover:text-white"
               }`}
             >
               {cat}
@@ -85,9 +85,9 @@ export default function AriaPlacesList({ initialPlaces }: AriaPlacesListProps) {
                         </div>
                         <div>
                           <p className="font-black text-white text-lg tracking-tight mb-1">{place.name}</p>
-                          <p className="text-[10px] font-bold text-white/30 uppercase tracking-widest flex items-center gap-2">
+                          <p className="text-[10px] font-bold text-white/50 uppercase tracking-widest flex items-center gap-2">
                             ID: {String(place.id).padStart(3, '0')}
-                            <span className="w-1 h-1 bg-white/20 rounded-full" />
+                            <span className="w-1 h-1 bg-white/40 rounded-full" />
                             {place.description.slice(0, 30)}...
                           </p>
                         </div>
@@ -105,7 +105,7 @@ export default function AriaPlacesList({ initialPlaces }: AriaPlacesListProps) {
                       </div>
                     </td>
                     <td className="px-8 py-6">
-                      <div className="font-mono text-[10px] text-white/40 space-y-1">
+                      <div className="font-mono text-[10px] text-white/60 space-y-1">
                         <p>LAT: {place.coordinates.lat.toFixed(6)}</p>
                         <p>LNG: {place.coordinates.lng.toFixed(6)}</p>
                       </div>

@@ -126,8 +126,8 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
               <Compass className="w-6 h-6" />
             </motion.div>
             <div>
-              <h2 className="text-3xl font-black text-forest tracking-tighter">정선 아리아 지도</h2>
-              <p className="text-sm font-bold text-forest/40 uppercase tracking-widest leading-none">Interactive Exploration</p>
+              <h2 className="text-3xl font-black text-forest dark:text-white tracking-tighter">정선 아리아 지도</h2>
+              <p className="text-sm font-bold text-forest/40 dark:text-white/40 uppercase tracking-widest leading-none">Interactive Exploration</p>
             </div>
           </div>
           
@@ -159,7 +159,7 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
             placeholder={dict.common.searchPlaceholder}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-12 pr-4 py-3 rounded-2xl bg-forest/5 border-none focus:ring-2 focus:ring-accent outline-none transition-all placeholder:text-forest/30 font-bold"
+            className="w-full pl-12 pr-4 py-3 rounded-2xl bg-forest/5 dark:bg-white/5 border-none focus:ring-2 focus:ring-accent outline-none transition-all placeholder:text-forest/30 dark:placeholder:text-white/30 font-bold dark:text-white"
           />
         </div>
 
@@ -183,8 +183,8 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
               }}
               className={`px-6 py-2.5 rounded-2xl text-xs font-black transition-all whitespace-nowrap uppercase tracking-widest flex items-center gap-2 ${
                 selectedCategory === cat
-                  ? "bg-forest text-white shadow-xl shadow-forest/20 scale-105"
-                  : "bg-forest/5 text-forest/60 hover:bg-forest/10 hover:text-forest"
+                  ? "bg-forest text-white shadow-xl shadow-forest/20 scale-105 dark:bg-accent dark:shadow-accent/20"
+                  : "bg-forest/5 text-forest/60 dark:bg-white/5 dark:text-white/60 hover:bg-forest/10 hover:text-forest dark:hover:text-white"
               }`}
             >
               {cat === dict.common.nearMe && (
@@ -200,7 +200,7 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
       <motion.p 
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="text-forest/60 text-sm font-bold tracking-tight px-4 flex items-center gap-2"
+        className="text-forest/60 dark:text-white/60 text-sm font-bold tracking-tight px-4 flex items-center gap-2"
       >
         <div className="w-1.5 h-1.5 bg-accent rounded-full animate-pulse" />
         {dict.common.placesFound.replace("{count}", filteredPlaces.length.toString())}
@@ -257,24 +257,24 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
                       )}
                     </div>
                     
-                    <h3 className="text-xl font-black text-forest group-hover:text-accent transition-colors leading-tight">
+                    <h3 className="text-xl font-black text-forest dark:text-white group-hover:text-accent transition-colors leading-tight">
                       {place.name}
                     </h3>
                     
-                    <p className="text-xs text-forest/60 line-clamp-3 leading-relaxed font-bold italic opacity-80 group-hover:opacity-100 transition-opacity">
+                    <p className="text-xs text-forest/60 dark:text-white/80 line-clamp-3 leading-relaxed font-bold italic opacity-90 group-hover:opacity-100 transition-opacity">
                       {place.description || "이 장소에 대한 신비로운 이야기가 곧 추가될 예정입니다."}
                     </p>
                   </div>
 
-                  <div className="pt-6 border-t border-forest/5 flex justify-between items-center group-hover:border-accent/20 transition-colors">
-                    <span className="text-[10px] font-black tracking-widest font-mono text-forest/20 group-hover:text-accent/60 uppercase transition-colors">
+                  <div className="pt-6 border-t border-forest/10 dark:border-white/10 flex justify-between items-center group-hover:border-accent/20 transition-colors">
+                    <span className="text-[10px] font-black tracking-widest font-mono text-forest/20 dark:text-white/40 group-hover:text-accent/60 uppercase transition-colors">
                       {dict.common.viewCuration}
                     </span>
                     <motion.div
                       animate={{ x: [0, 5, 0] }}
                       transition={{ repeat: Infinity, duration: 1.5 }}
                     >
-                      <ArrowRight className="w-4 h-4 text-forest/20 group-hover:text-accent" />
+                      <ArrowRight className="w-4 h-4 text-forest/20 dark:text-white/40 group-hover:text-accent" />
                     </motion.div>
                   </div>
                 </div>

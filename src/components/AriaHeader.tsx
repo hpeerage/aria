@@ -42,18 +42,18 @@ export default function AriaHeader() {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3 group">
             <div className={`p-2 rounded-xl transition-all duration-500 ${
-              isScrolled ? "bg-forest/5 text-forest" : "bg-white/10 text-white"
+              isScrolled ? "bg-forest/5 dark:bg-white/10 text-forest dark:text-accent" : "bg-white/10 text-white"
             } group-hover:scale-110 group-hover:rotate-12`}>
               <Sparkles className={`w-5 h-5 ${isScrolled ? "text-accent" : "text-white"}`} />
             </div>
             <div className="flex flex-col">
               <span className={`text-lg font-black tracking-tighter transition-colors ${
-                isScrolled ? "text-forest" : "text-white"
+                isScrolled ? "text-forest dark:text-white" : "text-white"
               }`}>
                 JEONGSEON ARIA
               </span>
               <span className={`text-[8px] font-black tracking-[0.3em] uppercase transition-colors ${
-                isScrolled ? "text-forest/30" : "text-white/40"
+                isScrolled ? "text-forest/30 dark:text-white/40" : "text-white/40"
               }`}>
                 Wellness Curation
               </span>
@@ -67,7 +67,7 @@ export default function AriaHeader() {
                 key={item.title} 
                 href={item.href}
                 className={`text-[10px] font-black uppercase tracking-[0.2em] transition-all hover:text-accent ${
-                  isScrolled ? "text-forest/60" : "text-white/70"
+                  isScrolled ? "text-forest/60 dark:text-white/70" : "text-white/70"
                 }`}
               >
                 {item.title}
@@ -77,11 +77,11 @@ export default function AriaHeader() {
 
           {/* Action Icons */}
           <div className="flex items-center gap-4">
-            <div className="hidden lg:flex items-center bg-forest/5 rounded-2xl p-1 border border-forest/10">
+            <div className="hidden lg:flex items-center bg-forest/5 dark:bg-white/10 rounded-2xl p-1 border border-forest/10 dark:border-white/10">
               <button 
                 onClick={() => setLocale("ko")}
                 className={`px-3 py-1.5 rounded-xl text-[10px] font-black transition-all ${
-                  locale === "ko" ? "bg-forest text-white shadow-lg" : "text-forest/40 hover:text-forest"
+                  locale === "ko" ? "bg-forest dark:bg-accent text-white shadow-lg" : "text-forest/40 dark:text-white/40 hover:text-forest dark:hover:text-white"
                 }`}
               >
                 KO
@@ -89,7 +89,7 @@ export default function AriaHeader() {
               <button 
                 onClick={() => setLocale("en")}
                 className={`px-3 py-1.5 rounded-xl text-[10px] font-black transition-all ${
-                  locale === "en" ? "bg-forest text-white shadow-lg" : "text-forest/40 hover:text-forest"
+                  locale === "en" ? "bg-forest dark:bg-accent text-white shadow-lg" : "text-forest/40 dark:text-white/40 hover:text-forest dark:hover:text-white"
                 }`}
               >
                 EN

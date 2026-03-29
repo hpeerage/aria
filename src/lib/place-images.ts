@@ -22,6 +22,11 @@ const CATEGORY_IMAGES: Record<string, string[]> = {
   "숙소": [
     "https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?q=80&w=2070",
     "https://images.unsplash.com/photo-1432339463661-89d81617477c?q=80&w=2072"
+  ],
+  "정선맛집": [
+    "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=2070",
+    "https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=2070",
+    "https://images.unsplash.com/photo-1476224484781-a35ca36b60ef?q=80&w=2070"
   ]
 };
 
@@ -29,7 +34,9 @@ export function getImagesByCategory(category: string, id: number): string[] {
   // 카테고리별 매칭 (없으면 기본 이미지셋 사용)
   let images = CATEGORY_IMAGES["기본"];
   
-  if (category.includes("식음") || category.includes("카페") || category.includes("맛")) {
+  if (category.includes("맛집") || category.includes("정선맛집")) {
+    images = CATEGORY_IMAGES["정선맛집"];
+  } else if (category.includes("식음") || category.includes("카페") || category.includes("맛")) {
     images = CATEGORY_IMAGES["카페/식당"];
   } else if (category.includes("문화") || category.includes("유적") || category.includes("전통")) {
     images = CATEGORY_IMAGES["힐링/전통"];

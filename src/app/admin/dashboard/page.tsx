@@ -26,7 +26,7 @@ export default function DashboardPage() {
             <div className={`p-4 bg-white/10 rounded-2xl w-fit mb-6 ${stat.color} group-hover:bg-accent group-hover:text-white transition-all`}>
               <stat.icon className="w-6 h-6" />
             </div>
-            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30 mb-2">{stat.label}</p>
+            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50 mb-2">{stat.label}</p>
             <div className="flex items-end gap-3">
               <h3 className="text-4xl font-black text-white tracking-tighter">{stat.value}</h3>
               <p className="text-[10px] font-bold text-accent mb-1 flex items-center gap-1">
@@ -55,20 +55,20 @@ export default function DashboardPage() {
           </div>
           <div className="relative z-10 space-y-6">
             <h4 className="text-2xl font-black text-white tracking-tight">System Integrity Check</h4>
-            <p className="text-white/40 leading-relaxed max-w-md">
+            <p className="text-white/60 leading-relaxed max-w-md">
               Google Sheets (ID: 1Setffm...) 데이터와 실시간 동기화 상태입니다. 
               최근 업데이트 이후 모든 치유 자산의 맵핑 데이터가 정상적으로 보호되고 있습니다.
             </p>
             <div className="space-y-4">
               <div className="flex justify-between items-center text-xs font-bold border-b border-white/5 pb-4">
-                <span className="text-white/40 uppercase tracking-widest">Connectivity Status</span>
+                <span className="text-white/60 uppercase tracking-widest (prefers-color-scheme: dark)">Connectivity Status</span>
                 <span className="text-accent flex items-center gap-2">
                   <div className="w-2 h-2 bg-accent rounded-full animate-ping" />
                   Stable Connection
                 </span>
               </div>
               <div className="flex justify-between items-center text-xs font-bold border-b border-white/5 pb-4">
-                <span className="text-white/40 uppercase tracking-widest">Last Database Sync</span>
+                <span className="text-white/60 uppercase tracking-widest (prefers-color-scheme: dark)">Last Database Sync</span>
                 <span className="text-white">Today 21:30 PM</span>
               </div>
               <div className="flex justify-between items-center text-xs font-bold">

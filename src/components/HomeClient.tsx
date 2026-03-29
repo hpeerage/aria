@@ -67,7 +67,7 @@ export default function HomeClient({ places }: HomeClientProps) {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 1.5, delay: 0.6 }}
-              className="text-xl md:text-2xl text-white/60 font-medium tracking-tight max-w-2xl mx-auto"
+              className="text-xl md:text-2xl text-white/80 font-medium tracking-tight max-w-2xl mx-auto dark:text-white/90"
             >
               {dict.hero.description}
             </motion.p>
@@ -111,7 +111,7 @@ export default function HomeClient({ places }: HomeClientProps) {
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, type: "spring" }}
-          className="grid grid-cols-2 md:grid-cols-4 gap-8 bg-white dark:bg-forest p-10 rounded-[3.5rem] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.15)] border border-forest/5"
+          className="grid grid-cols-2 md:grid-cols-4 gap-8 bg-white dark:bg-forest/50 p-10 rounded-[3.5rem] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.15)] border border-forest/5 dark:border-white/10 backdrop-blur-3xl"
         >
           <StatItem icon={<MapIcon className="w-8 h-8" />} label={dict.stats.assets} value="82" suffix="Assets" />
           <StatItem icon={<Users className="w-8 h-8" />} label={dict.stats.paths} value="12" suffix="Paths" />
@@ -135,10 +135,10 @@ export default function HomeClient({ places }: HomeClientProps) {
               <Sparkles className="w-6 h-6 text-accent" />
               <div className="flex flex-col">
                 <span className="text-xl font-black tracking-tighter">ARIA</span>
-                <span className="text-[10px] uppercase font-black tracking-[0.3em] text-white/30">Curation</span>
+                <span className="text-[10px] uppercase font-black tracking-[0.3em] text-white/50">Curation</span>
               </div>
             </div>
-            <p className="text-sm text-white/40 font-bold leading-relaxed">
+            <p className="text-sm text-white/60 font-bold leading-relaxed">
               정선의 맑은 정취와 아리랑의 선율을 담아낸 82개의 치유 거점을 제안합니다. 진정한 웰니스로 가는 길, 정선 아리아가 함께합니다.
             </p>
           </div>
@@ -159,10 +159,10 @@ export default function HomeClient({ places }: HomeClientProps) {
         </div>
 
         <div className="max-w-7xl mx-auto px-6 mt-20 pt-10 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
-          <p className="text-[10px] font-black text-white/20 uppercase tracking-[0.4em] text-center md:text-left">
+          <p className="text-[10px] font-black text-white/40 uppercase tracking-[0.4em] text-center md:text-left">
             &copy; 2026 Jeongseon Wellness Tourism Project. All Rights Reserved.
           </p>
-          <div className="flex gap-8 text-[9px] font-black uppercase tracking-widest text-white/30">
+          <div className="flex gap-8 text-[9px] font-black uppercase tracking-widest text-white/50">
             <a href="#" className="hover:text-accent transition-colors">Privacy</a>
             <a href="#" className="hover:text-accent transition-colors">Terms</a>
             <a href="#" className="hover:text-accent transition-colors">Global</a>
@@ -176,13 +176,13 @@ export default function HomeClient({ places }: HomeClientProps) {
 function StatItem({ icon, label, value, suffix }: { icon: React.ReactNode; label: string; value: string; suffix: string }) {
   return (
     <div className="flex flex-col items-center space-y-3 group cursor-default h-full justify-between">
-      <div className="p-4 bg-forest/5 text-forest group-hover:bg-accent group-hover:text-white rounded-[2rem] transition-all duration-700 shadow-sm group-hover:shadow-2xl group-hover:shadow-accent/30 group-hover:-translate-y-3">
+      <div className="p-4 bg-forest/5 text-forest dark:bg-white/10 dark:text-accent group-hover:bg-accent group-hover:text-white rounded-[2rem] transition-all duration-700 shadow-sm group-hover:shadow-2xl group-hover:shadow-accent/30 group-hover:-translate-y-3">
         {icon}
       </div>
       <div className="text-center flex-grow flex flex-col justify-center">
-        <p className="text-[10px] uppercase tracking-widest font-black text-forest/20 group-hover:text-accent transition-colors mb-1">{label}</p>
-        <p className="text-4xl font-black text-forest tracking-tighter group-hover:scale-110 transition-transform duration-500">{value}</p>
-        <p className="text-[9px] font-black text-forest/20 uppercase tracking-tighter">{suffix}</p>
+        <p className="text-[10px] uppercase tracking-widest font-black text-forest/20 dark:text-white/60 group-hover:text-accent transition-colors mb-1">{label}</p>
+        <p className="text-4xl font-black text-forest dark:text-white tracking-tighter group-hover:scale-110 transition-transform duration-500">{value}</p>
+        <p className="text-[9px] font-black text-forest/20 dark:text-white/50 uppercase tracking-tighter">{suffix}</p>
       </div>
     </div>
   );
