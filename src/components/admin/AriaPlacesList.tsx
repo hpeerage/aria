@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, Filter, Edit2, Trash2, Eye, MapPin, Tag, Sparkles, AlertCircle, CheckCircle2 } from "lucide-react";
 import Link from "next/link";
@@ -11,16 +11,53 @@ interface AriaPlacesListProps {
 }
 
 export default function AriaPlacesList({ initialPlaces }: AriaPlacesListProps) {
+  const [places, setPlaces] = useState<Place[]>(initialPlaces);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
 
-  const categories = ["All", ...Array.from(new Set(initialPlaces.map(p => p.category)))];
+  useEffect(() => {
+    // Merge with LocalStorage changes
+    const localData = localStorage.getItem('aria_local_places');
+    if (localData) {
+      const parsed = JSON.parse(localData);
+      const merged = [...initialPlaces];
+      
+      parsed.forEach((localPlace: Place) => {
+        const idx = merged.findIndex(p => p.id === localPlace.id);
+        if (idx >= 0) {
+          merged[idx] = localPlace;
+        } else {
+          merged.push(localPlace);
+        }
+      });
+      setPlaces(merged);
+    }
+  }, [initialPlaces]);
 
-  const filteredPlaces = initialPlaces.filter(place => {
+  const categories = ["All", ...Array.from(new Set(places.map(p => p.category)))];
+
+  const filteredPlaces = places.filter(place => {
     const matchesSearch = place.name.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = selectedCategory === "All" || place.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
+
+  const handleDelete = (id: number, name: string) => {
+    if (confirm(`Are you sure you want to delete "${name}"? This action cannot be undone.`)) {
+      const updatedPlaces = places.filter(p => p.id !== id);
+      setPlaces(updatedPlaces);
+      
+      // Update LocalStorage to persist deletion
+      const localData = localStorage.getItem('aria_local_places');
+      if (localData) {
+        const parsed = JSON.parse(localData);
+        const filtered = parsed.filter((p: Place) => p.id !== id);
+        localStorage.setItem('aria_local_places', JSON.stringify(filtered));
+      }
+      
+      alert("Asset successfully decommissioned from the registry.");
+    }
+  };
 
   return (
     <div className="space-y-8">
@@ -132,7 +169,10 @@ export default function AriaPlacesList({ initialPlaces }: AriaPlacesListProps) {
                         >
                           <Edit2 className="w-4 h-4" />
                         </Link>
-                        <button className="p-3 bg-red-500/10 hover:bg-red-500 text-red-400 hover:text-white rounded-xl transition-all border border-red-500/10 group-hover:scale-105">
+                        <button 
+                          onClick={() => handleDelete(place.id, place.name)}
+                          className="p-3 bg-red-500/10 hover:bg-red-500 text-red-400 hover:text-white rounded-xl transition-all border border-red-500/10 group-hover:scale-105"
+                        >
                           <Trash2 className="w-4 h-4" />
                         </button>
                       </div>

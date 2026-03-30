@@ -32,34 +32,33 @@ export async function getPlacesFromGoogleSheet(sheetId: string, sheetName?: stri
       )[];
     }
 
-    const rows = jsonData.table.rows as GoogleSheetRow[];
+    let rows = jsonData.table.rows as GoogleSheetRow[];
     
-    return rows.map((row, index) => {
-      const c = row.c;
-      /* 원본 시트 구조 분석 결과 (1Setffm...): 
-         c[0]: 지역 (강원도 정선군)
-         c[1]: 장소명
-         c[2]: 위도
-         c[3]: 경도
-         c[4]: 주소
-         c[5]: 카테고리
-         c[6]: 태그
-      */
-      const category = String(c[5]?.v || '기타');
-      const id = index + 1;
+    // 첫 번째 행이 헤더인지 확인 (장소명 등 텍스트 포함 여부)
+    if (rows.length > 0 && String(rows[0].c[1]?.v).includes('장소명')) {
+      rows = rows.slice(1);
+    }
 
-      return {
-        id, // 행 번호 기반 ID 생성
-        name: String(c[1]?.v || '정선의 공간'),
-        category,
-        coordinates: {
-          lat: Number(c[2]?.v) || 0,
-          lng: Number(c[3]?.v) || 0,
-        },
-        description: `${c[4]?.v || ''} ${c[6]?.v || ''}`.trim(), // 주소와 태그 결합
-        images: getImagesByCategory(category, id),
-      };
-    });
+    // 유효한 데이터가 있는 행만 필터링 (장소명이 없는 빈 행 제외)
+    return rows
+      .filter(row => row.c[1]?.v)
+      .map((row, index) => {
+        const c = row.c;
+        const category = String(c[5]?.v || '기타');
+        const id = index + 1;
+
+        return {
+          id,
+          name: String(c[1]?.v || '정선의 공간'),
+          category,
+          coordinates: {
+            lat: Number(c[2]?.v) || 0,
+            lng: Number(c[3]?.v) || 0,
+          },
+          description: `${c[4]?.v || ''} ${c[6]?.v || ''}`.trim(),
+          images: getImagesByCategory(category, id),
+        };
+      });
   } catch (error) {
     console.error("Error fetching places from Google Sheets:", error);
     return [];

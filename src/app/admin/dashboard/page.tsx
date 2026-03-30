@@ -3,9 +3,24 @@
 import { motion } from "framer-motion";
 import { Map, Users, Sparkles, Calendar, ArrowUpRight, TrendingUp, Info } from "lucide-react";
 
+import { useEffect, useState } from "react";
+import { getPlacesFromGoogleSheet } from "@/lib/google-sheets";
+
 export default function DashboardPage() {
+  const [placeCount, setPlaceCount] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadStats() {
+      const places = await getPlacesFromGoogleSheet('1Setffm27HQ8LyOM3N9o9V8eA0ihGbZeZgN763jkm1WU');
+      setPlaceCount(places.length);
+      setIsLoading(false);
+    }
+    loadStats();
+  }, []);
+
   const stats = [
-    { label: "Total Asset Count", value: "82", trend: "+4 this month", icon: Map, color: "text-accent" },
+    { label: "Total Asset Count", value: isLoading ? "..." : String(placeCount), trend: "+4 this month", icon: Map, color: "text-accent" },
     { label: "Active Exploration Paths", value: "12", trend: "Maintained", icon: TrendingUp, color: "text-blue-400" },
     { label: "Wellness Vitality Score", value: "98%", trend: "+2% growth", icon: Sparkles, color: "text-purple-400" },
     { label: "Registered Operators", value: "24", trend: "Stable", icon: Users, color: "text-white" },

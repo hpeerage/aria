@@ -1,20 +1,52 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import { getPlacesFromGoogleSheet } from "@/lib/google-sheets";
 import AriaPlacesList from "@/components/admin/AriaPlacesList";
 import AriaMap from "@/components/AriaMap";
+import Link from "next/link";
+import { Place } from "@/types/place";
 
-export default async function AdminPlacesPage() {
-  const places = await getPlacesFromGoogleSheet('1Setffm27HQ8LyOM3N9o9V8eA0ihGbZeZgN763jkm1WU');
+export default function AdminPlacesPage() {
+  const [places, setPlaces] = useState<Place[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadPlaces() {
+      try {
+        const data = await getPlacesFromGoogleSheet('1Setffm27HQ8LyOM3N9o9V8eA0ihGbZeZgN763jkm1WU');
+        setPlaces(data);
+      } catch (error) {
+        console.error("Failed to fetch places:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    loadPlaces();
+  }, []);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-[60vh] flex flex-col items-center justify-center space-y-6">
+        <div className="w-12 h-12 border-4 border-accent/20 border-t-accent rounded-full animate-spin" />
+        <p className="text-white/40 font-black uppercase tracking-[0.3em] text-xs animate-pulse">Syncing with Registry...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-12 animate-in fade-in duration-1000">
       <div className="flex justify-between items-center bg-white/5 p-8 rounded-[2.5rem] border border-white/10 backdrop-blur-xl">
         <div className="space-y-2">
           <h3 className="text-3xl font-black text-white tracking-tighter">Place Explorer</h3>
-          <p className="text-white/40 text-sm font-bold">Manage and monitor all 82 wellness assets in real-time.</p>
+          <p className="text-white/40 text-sm font-bold">Manage and monitor all wellness assets in real-time.</p>
         </div>
-        <button className="px-8 py-4 bg-accent text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-white hover:text-forest transition-all shadow-xl shadow-accent/20">
+        <Link 
+          href="/admin/places/new"
+          className="px-8 py-4 bg-accent text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-white hover:text-forest transition-all shadow-xl shadow-accent/20"
+        >
           + Registry New Asset
-        </button>
+        </Link>
       </div>
 
       <div className="space-y-6">

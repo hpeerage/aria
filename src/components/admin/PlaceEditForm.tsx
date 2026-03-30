@@ -1,49 +1,109 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { ArrowLeft, Save, MapPin, Tag, Sparkles, Image as ImageIcon, CheckCircle2 } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ArrowLeft, Save, MapPin, Tag, Sparkles, Image as ImageIcon, CheckCircle2, Upload, X } from "lucide-react";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { Place } from "@/types/place";
+import { getPlacesFromGoogleSheet } from "@/lib/google-sheets";
 
-export default function PlaceEditForm() {
+export default function PlaceEditForm({ isNew = false }: { isNew?: boolean }) {
   const params = useParams();
   const router = useRouter();
   const id = params?.id;
+  const fileInputRef = useRef<HTMLInputElement>(null);
   
-  const [place, setPlace] = useState<Place | null>(null);
+  const [formData, setFormData] = useState<Place | null>(null);
   const [images, setImages] = useState<string[]>([]);
   const [wellnessTips, setWellnessTips] = useState<string[]>([]);
   const [isSaving, setIsSaving] = useState(false);
-  const [unsplashKeyword, setUnsplashKeyword] = useState("");
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // 82개 데이터 중 id기반으로 가져오는 로직 (임시 목업)
-    const mockImages = [
-      "https://images.unsplash.com/photo-1542224566-6e85f2e6772f?q=80&w=1950",
-      "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=1950",
-    ];
-    const mockTips = [
-        "해발 1,000m 이상의 고원 지대에서 뿜어져 나오는 신선한 산소와 피톤치드를 온몸으로 느껴보세요.",
-        "천천히 걸으며 발바닥에 닿는 숲길의 촉감에 집중해 보세요. 명상의 효과를 극대화할 수 있습니다."
-    ];
-    setPlace({
-      id: Number(id),
-      name: "정선 숲속의 집",
-      category: "Nature",
-      coordinates: { lat: 37.38, lng: 128.66 },
-      description: "정선의 깊은 숲속에서 즐기는 온전한 휴식.",
-      images: mockImages,
-      wellnessTips: mockTips
-    });
-    setImages(mockImages);
-    setWellnessTips(mockTips);
-  }, [id]);
+    async function loadPlace() {
+      setIsLoading(true);
+      
+      // 1. Check LocalStorage first (Persistence Mock)
+      const cached = localStorage.getItem(`aria_place_${id || 'new'}`);
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        setFormData(parsed);
+        setImages(parsed.images || []);
+        setWellnessTips(parsed.wellnessTips || []);
+        setIsLoading(false);
+        return;
+      }
 
-  const handleAddImage = () => {
-    const newImg = prompt("Enter Image URL (Unsplash or direct URL):");
-    if (newImg) setImages([...images, newImg]);
+      if (isNew || !id) {
+        const newPlace = {
+          id: Date.now(),
+          name: "",
+          category: "Nature",
+          coordinates: { lat: 37.38, lng: 128.66 },
+          description: "",
+          images: [],
+          wellnessTips: []
+        };
+        setFormData(newPlace);
+        setIsLoading(false);
+        return;
+      }
+
+      // 2. Fetch from Google Sheet
+      try {
+        const allPlaces = await getPlacesFromGoogleSheet('1Setffm27HQ8LyOM3N9o9V8eA0ihGbZeZgN763jkm1WU');
+        const targetPlace = allPlaces.find(p => p.id === Number(id));
+        
+        if (targetPlace) {
+          setFormData(targetPlace);
+          setImages(targetPlace.images || []);
+          setWellnessTips(targetPlace.wellnessTips || []);
+        } else {
+          // If not found in sheet, check if it's the 83rd or custom
+          setFormData({
+            id: Number(id),
+            name: "Unknown Asset",
+            category: "General",
+            coordinates: { lat: 37.38, lng: 128.66 },
+            description: "",
+            images: [],
+            wellnessTips: []
+          });
+        }
+      } catch (err) {
+        console.error("Failed to fetch sheet data", err);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    loadPlace();
+  }, [id, isNew]);
+
+  const handleInputChange = (field: string, value: any) => {
+    if (!formData) return;
+    if (field.includes('.')) {
+      const [parent, child] = field.split('.');
+      setFormData({
+        ...formData,
+        [parent]: { ...((formData as any)[parent]), [child]: value }
+      });
+    } else {
+      setFormData({ ...formData, [field]: value });
+    }
+  };
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64 = reader.result as string;
+        setImages(prev => [...prev, base64]);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const removeImage = (idx: number) => {
@@ -51,18 +111,74 @@ export default function PlaceEditForm() {
   };
 
   const handleAddTip = () => {
-      const newTip = prompt("Enter a new wellness insight/tip:");
-      if (newTip) setWellnessTips([...wellnessTips, newTip]);
+    const newTip = prompt("Enter a new wellness insight/tip:");
+    if (newTip) setWellnessTips([...wellnessTips, newTip]);
   };
 
   const removeTip = (idx: number) => {
-      setWellnessTips(wellnessTips.filter((_, i) => i !== idx));
+    setWellnessTips(wellnessTips.filter((_, i) => i !== idx));
   };
 
-  if (!place) return null;
+  const handleSave = () => {
+    if (!formData) return;
+    setIsSaving(true);
+    
+    // Final data construction
+    const finalData = {
+      ...formData,
+      images,
+      wellnessTips,
+      lastUpdated: new Date().toISOString()
+    };
+
+    // Simulate Network Delay and Persist to LocalStorage
+    setTimeout(() => {
+        localStorage.setItem(`aria_place_${id || 'new'}`, JSON.stringify(finalData));
+        
+        // Also update local list cache if needed
+        const localList = JSON.parse(localStorage.getItem('aria_local_places') || '[]');
+        const existingIdx = localList.findIndex((p: any) => p.id === finalData.id);
+        if (existingIdx >= 0) {
+          localList[existingIdx] = finalData;
+        } else {
+          localList.push(finalData);
+        }
+        localStorage.setItem('aria_local_places', JSON.stringify(localList));
+
+        setIsSaving(false);
+        setIsSuccess(true);
+        setTimeout(() => {
+          setIsSuccess(false);
+          router.push("/admin/places");
+        }, 1500);
+    }, 1500);
+  };
+
+  if (isLoading || !formData) {
+    return (
+      <div className="min-h-[60vh] flex flex-col items-center justify-center space-y-6">
+        <div className="w-12 h-12 border-4 border-accent/20 border-t-accent rounded-full animate-spin" />
+        <p className="text-white/40 font-black uppercase tracking-[0.3em] text-xs animate-pulse">Initializing Interface...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-4xl mx-auto space-y-12 pb-32">
+      <AnimatePresence>
+        {isSuccess && (
+          <motion.div 
+            initial={{ opacity: 0, y: -50 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -50 }}
+            className="fixed top-8 left-1/2 -translate-x-1/2 z-[200] px-8 py-4 bg-accent text-white rounded-2xl font-black shadow-2xl flex items-center gap-3 border border-white/20"
+          >
+            <CheckCircle2 className="w-5 h-5" />
+            System Override Successful: Asset synchronized with local database.
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <div className="flex items-center justify-between">
         <Link 
           href="/admin/places" 
@@ -74,21 +190,16 @@ export default function PlaceEditForm() {
           Return to Registry
         </Link>
         <button 
-          onClick={() => {
-            setIsSaving(true);
-            setTimeout(() => {
-                setIsSaving(false);
-                router.push("/admin/places");
-            }, 2000);
-          }}
-          className="px-10 py-4 bg-accent text-white rounded-[1.5rem] font-black flex items-center gap-3 shadow-xl shadow-accent/20 hover:scale-105 transition-all"
+          onClick={handleSave}
+          disabled={isSaving || isSuccess}
+          className="px-10 py-4 bg-accent text-white rounded-[1.5rem] font-black flex items-center gap-3 shadow-xl shadow-accent/20 hover:scale-105 transition-all disabled:opacity-50"
         >
           {isSaving ? (
             <div className="w-5 h-5 border-4 border-white/30 border-t-white rounded-full animate-spin" />
           ) : (
             <Save className="w-5 h-5" />
           )}
-          Commit Changes
+          {isSuccess ? "Asset Updated" : "Commit Changes"}
         </button>
       </div>
 
@@ -101,31 +212,65 @@ export default function PlaceEditForm() {
              <MapPin className="w-64 h-64 rotate-12" />
         </div>
 
-        <div className="relative z-10 space-y-10">
+        <div className="relative z-10 space-y-12">
           <header className="space-y-4">
              <div className="flex items-center gap-3 text-accent font-black uppercase text-[10px] tracking-[0.2em]">
                 <Sparkles className="w-4 h-4" />
-                Asset Configurator
+                Asset Configurator v2.5
              </div>
-             <h2 className="text-5xl font-black text-white tracking-tighter">Edit <span className="text-accent underline decoration-white/10">{place.name}</span></h2>
+              <h2 className="text-5xl font-black text-white tracking-tighter">
+                {isNew ? "Registry New" : "Edit"} <span className="text-accent underline decoration-white/10">{formData.name || "Asset"}</span>
+              </h2>
           </header>
 
-          <form className="grid grid-cols-1 md:grid-cols-2 gap-8">
-             <FormItem label="Asset Name" placeholder="e.g. Jeongseon Forest House" value={place.name} />
-             <FormItem label="Connectivity Category" placeholder="e.g. Nature, Culture" value={place.category} />
-             <FormItem label="Latitude Core" placeholder="e.g. 37.380000" value={String(place.coordinates.lat)} />
-             <FormItem label="Longitude Core" placeholder="e.g. 128.660000" value={String(place.coordinates.lng)} />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+             <FormItem 
+              label="Asset Name" 
+              placeholder="e.g. Jeongseon Forest House" 
+              value={formData.name} 
+              onChange={(v) => handleInputChange('name', v)}
+             />
+             <div className="space-y-4">
+                <label className="text-[10px] font-black uppercase tracking-widest text-accent px-1">Connectivity Category</label>
+                <select 
+                  value={formData.category}
+                  onChange={(e) => handleInputChange('category', e.target.value)}
+                  className="w-full px-6 py-5 bg-white/5 border border-white/10 rounded-2xl text-white outline-none focus:ring-2 focus:ring-accent transition-all font-bold appearance-none cursor-pointer"
+                >
+                  <option value="Nature">Nature</option>
+                  <option value="Culture">Culture</option>
+                  <option value="Wellness">Wellness</option>
+                  <option value="History">History</option>
+                  <option value="Food">Food</option>
+                </select>
+             </div>
+             <FormItem 
+              label="Latitude Core" 
+              type="number"
+              placeholder="37.380000" 
+              value={String(formData.coordinates.lat)} 
+              onChange={(v) => handleInputChange('coordinates.lat', Number(v))}
+             />
+             <FormItem 
+              label="Longitude Core" 
+              type="number"
+              placeholder="128.660000" 
+              value={String(formData.coordinates.lng)} 
+              onChange={(v) => handleInputChange('coordinates.lng', Number(v))}
+             />
              
              <div className="md:col-span-2 space-y-4">
                <label className="text-[10px] font-black uppercase tracking-widest text-accent px-1">Wellness Story (KO)</label>
                <textarea 
                  rows={4}
+                 value={formData.description}
+                 onChange={(e) => handleInputChange('description', e.target.value)}
                  className="w-full px-6 py-5 bg-white/5 border border-white/10 rounded-2xl text-white placeholder:text-white/40 focus:ring-2 focus:ring-accent outline-none transition-all font-bold resize-none"
-                 defaultValue={place.description}
+                 placeholder="Tell the wellness story of this asset..."
                />
              </div>
 
-             <div className="md:col-span-2 space-y-6 pt-6 border-t border-white/5">
+             <div className="md:col-span-2 space-y-6 pt-10 border-t border-white/5">
                 <div className="flex items-center justify-between">
                    <div className="space-y-1">
                       <p className="text-[10px] font-black uppercase tracking-widest text-accent px-1">Wellness Insights & Tips</p>
@@ -141,7 +286,7 @@ export default function PlaceEditForm() {
                 <div className="space-y-3">
                    {wellnessTips.map((tip, idx) => (
                       <div key={idx} className="flex gap-4 group">
-                          <div className="flex-1 px-6 py-4 bg-white/5 border border-white/10 rounded-2xl text-sm font-bold text-white/60">
+                          <div className="flex-1 px-6 py-4 bg-white/5 border border-white/10 rounded-2xl text-sm font-bold text-white/60 group-hover:text-white transition-colors">
                              {tip}
                           </div>
                           <button 
@@ -149,68 +294,81 @@ export default function PlaceEditForm() {
                              onClick={() => removeTip(idx)}
                              className="p-4 bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white rounded-2xl transition-all opacity-0 group-hover:opacity-100"
                           >
-                             <ArrowLeft className="w-4 h-4 rotate-45" />
+                             <X className="w-4 h-4" />
                           </button>
                       </div>
                    ))}
                 </div>
              </div>
 
-             <div className="md:col-span-2 space-y-6 pt-6 border-t border-white/5">
+             <div className="md:col-span-2 space-y-8 pt-10 border-t border-white/5">
                 <div className="flex items-center justify-between">
-                   <p className="text-[10px] font-black uppercase tracking-widest text-accent px-1">Visual Asset Mapping</p>
-                   <button 
-                    type="button"
-                    onClick={handleAddImage}
-                    className="px-6 py-2 bg-white/5 hover:bg-white/10 border border-white/5 text-[10px] font-black text-white/40 hover:text-white uppercase tracking-widest rounded-xl transition-all"
-                   >
-                    + Registry New Asset
-                   </button>
+                   <p className="text-[10px] font-black uppercase tracking-widest text-accent px-1">Visual Asset Registry</p>
+                   <div className="flex gap-2">
+                     <button 
+                      type="button"
+                      onClick={() => fileInputRef.current?.click()}
+                      className="px-6 py-3 bg-accent/10 hover:bg-accent text-accent hover:text-white text-[10px] font-black uppercase tracking-widest rounded-xl transition-all flex items-center gap-2"
+                     >
+                      <Upload className="w-4 h-4" />
+                      Upload File
+                     </button>
+                     <input 
+                      type="file" 
+                      ref={fileInputRef} 
+                      onChange={handleImageUpload} 
+                      accept="image/*" 
+                      className="hidden" 
+                     />
+                   </div>
                 </div>
-                <div className="relative group">
-                   <ImageIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20" />
-                   <input 
-                      type="text" 
-                      placeholder="Enter Unsplash keyword..."
-                      className="w-full pl-12 pr-6 py-4 bg-white/5 border border-white/10 rounded-2xl text-xs font-bold text-white outline-none focus:ring-2 focus:ring-accent/50 transition-all italic"
-                      value={unsplashKeyword}
-                      onChange={(e) => setUnsplashKeyword(e.target.value)}
-                   />
-                </div>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
                    {images.map((img, idx) => (
-                      <div key={idx} className="relative aspect-[16/10] bg-white/5 rounded-3xl border border-white/5 group overflow-hidden shadow-2xl">
-                         <img src={img} alt="Preview" className="w-full h-full object-cover grayscale opacity-40 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-1000" />
+                      <motion.div 
+                        key={idx} 
+                        layoutId={`img-${idx}`}
+                        className="relative aspect-video bg-white/5 rounded-3xl border border-white/10 group overflow-hidden shadow-2xl hover:border-accent/40 transition-all cursor-pointer"
+                      >
+                         <img src={img} alt="Preview" className="w-full h-full object-cover grayscale opacity-40 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700" />
                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500" />
-                         <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-all">
-                             <div 
-                              onClick={() => removeImage(idx)}
-                              className="p-2 bg-red-500/80 text-white rounded-xl shadow-xl cursor-pointer hover:bg-red-500"
-                             >
-                                <ArrowLeft className="w-4 h-4 rotate-45" />
-                             </div>
-                         </div>
-                      </div>
+                         <button 
+                            onClick={() => removeImage(idx)}
+                            className="absolute top-4 right-4 p-2 bg-red-500/80 text-white rounded-xl opacity-0 group-hover:opacity-100 transition-all hover:bg-red-500 shadow-xl"
+                          >
+                            <X className="w-4 h-4" />
+                         </button>
+                      </motion.div>
                    ))}
+                   <div 
+                    onClick={() => fileInputRef.current?.click()}
+                    className="aspect-video bg-white/5 border-2 border-dashed border-white/10 rounded-3xl flex flex-col items-center justify-center gap-3 text-white/20 hover:text-accent hover:border-accent/40 transition-all cursor-pointer group"
+                   >
+                     <div className="p-3 bg-white/5 rounded-2xl group-hover:bg-accent/10 transition-all">
+                       <ImageIcon className="w-6 h-6" />
+                     </div>
+                     <span className="text-[10px] font-black uppercase tracking-widest">Add New Image</span>
+                   </div>
                 </div>
              </div>
-          </form>
+          </div>
         </div>
       </motion.div>
     </div>
   );
 }
 
-function FormItem({ label, placeholder, value }: { label: string; placeholder: string; value?: string }) {
+function FormItem({ label, placeholder, value, onChange, type = "text" }: { label: string; placeholder: string; value: string; onChange: (v: string) => void; type?: string }) {
     return (
         <div className="space-y-4">
             <label className="text-[10px] font-black uppercase tracking-widest text-accent px-1">{label}</label>
             <div className="relative group">
                 <input 
-                    type="text" 
-                    defaultValue={value}
+                    type={type}
+                    value={value}
+                    onChange={(e) => onChange(e.target.value)}
                     placeholder={placeholder}
-                    className="w-full px-6 py-5 bg-white/5 border border-white/10 rounded-2xl text-white placeholder:text-white/40 focus:ring-2 focus:ring-accent outline-none transition-all font-bold"
+                    className="w-full px-6 py-5 bg-white/5 border border-white/10 rounded-2xl text-white placeholder:text-white/20 focus:ring-2 focus:ring-accent outline-none transition-all font-bold"
                 />
             </div>
         </div>
