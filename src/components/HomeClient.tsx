@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Sparkles, Mountain, Wind, Users, Map as MapIcon, Calendar, ArrowRight, Mail, HelpCircle, Globe, Compass } from "lucide-react";
+import Image from "next/image";
 import PlaceList from "@/components/PlaceList";
 import AriaHeader from "@/components/AriaHeader";
 import { Place } from "@/types/place";
@@ -131,11 +132,13 @@ export default function HomeClient({ places }: HomeClientProps) {
         
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-12 relative z-10">
           <div className="space-y-6">
-            <div className="flex items-center gap-3">
-              <Sparkles className="w-6 h-6 text-accent" />
+            <div className="flex items-center gap-4">
+              <div className="relative h-12 w-32 bg-white rounded-2xl p-2 shadow-xl shadow-black/20">
+                <Image src="/aria/images/logo.svg" alt="ARIA Logo" fill className="object-contain p-1" />
+              </div>
               <div className="flex flex-col">
                 <span className="text-xl font-black tracking-tighter">ARIA</span>
-                <span className="text-[10px] uppercase font-black tracking-[0.3em] text-white/50">Curation</span>
+                <span className="text-[10px] uppercase font-black tracking-[0.3em] text-accent">Curation</span>
               </div>
             </div>
             <p className="text-sm text-white/70 font-bold leading-relaxed">

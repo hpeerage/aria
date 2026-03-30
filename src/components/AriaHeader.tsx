@@ -42,11 +42,11 @@ export default function AriaHeader() {
         >
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3 group">
-            <div className={`relative transition-all duration-500 overflow-hidden rounded-xl ${
-              isScrolled ? "h-6 w-16" : "h-10 w-24"
+            <div className={`relative transition-all duration-500 overflow-hidden rounded-xl bg-white p-1.5 shadow-lg ${
+              isScrolled ? "h-8 w-20" : "h-12 w-32"
             }`}>
               <Image 
-                src="/aria/images/logo.jpeg" 
+                src="/aria/images/logo.svg" 
                 alt="Jeongseon Aria" 
                 fill
                 className="object-contain transition-transform duration-500 group-hover:scale-110"
