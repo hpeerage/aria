@@ -41,6 +41,16 @@ export default function HomeClient({ places }: HomeClientProps) {
         >
           <Wind size={100} />
         </motion.div>
+        
+        {/* Hero Background Logo (Watermark) */}
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 0.05, scale: 1.2, rotate: -5 }}
+          transition={{ duration: 3, ease: "easeOut" }}
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl opacity-5 pointer-events-none filter brightness-0 invert"
+        >
+          <Image src="/aria/images/logo.svg" alt="" width={800} height={400} className="w-full h-auto object-contain" />
+        </motion.div>
 
         <div className="relative z-10 text-center px-4 space-y-12 max-w-5xl">
           <motion.div 
@@ -133,8 +143,13 @@ export default function HomeClient({ places }: HomeClientProps) {
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-12 relative z-10">
           <div className="space-y-6">
             <div className="flex items-center gap-4">
-              <div className="relative h-12 w-32 bg-white rounded-2xl p-2 shadow-xl shadow-black/20">
-                <Image src="/aria/images/logo.svg" alt="ARIA Logo" fill className="object-contain p-1" />
+              <div className="relative h-12 w-32 transition-all">
+                <Image 
+                  src="/aria/images/logo.svg" 
+                  alt="ARIA Logo" 
+                  fill 
+                  className="object-contain filter brightness-0 invert opacity-40 hover:opacity-100 transition-opacity duration-700" 
+                />
               </div>
               <div className="flex flex-col">
                 <span className="text-xl font-black tracking-tighter">ARIA</span>
