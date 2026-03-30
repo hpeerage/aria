@@ -210,7 +210,7 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
               {cat === dict.common.nearMe && (
                 <Navigation className={`w-3.5 h-3.5 ${isLocating ? "animate-spin" : ""}`} />
               )}
-              {cat}
+              {(dict.categories as any)[cat.toLowerCase()] || cat}
             </motion.button>
           ))}
         </div>
@@ -263,7 +263,7 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
                     <div className="flex justify-between items-start">
                       <div className="inline-flex items-center text-[10px] font-black uppercase tracking-[0.1em] text-accent-light bg-accent/5 px-3 py-1 rounded-lg border border-accent/10">
                         <CustomTag className="w-3 h-3 mr-2" />
-                        {place.category}
+                        {(dict.categories as any)[place.category.toLowerCase()] || place.category}
                       </div>
                       {userLocation && (
                         <div className="flex items-center text-[10px] font-black uppercase tracking-[0.1em] text-accent font-mono ml-auto">

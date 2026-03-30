@@ -237,11 +237,13 @@ export default function PlaceEditForm({ isNew = false }: { isNew?: boolean }) {
                   onChange={(e) => handleInputChange('category', e.target.value)}
                   className="w-full px-6 py-5 bg-white/5 border border-white/10 rounded-2xl text-white outline-none focus:ring-2 focus:ring-accent transition-all font-bold appearance-none cursor-pointer"
                 >
-                  <option value="Nature">Nature</option>
-                  <option value="Culture">Culture</option>
-                  <option value="Wellness">Wellness</option>
-                  <option value="History">History</option>
-                  <option value="Food">Food</option>
+                  <option value="nature">Nature (자연)</option>
+                  <option value="culture">Culture (문화/전통)</option>
+                  <option value="wellness">Wellness (체험/웰니스)</option>
+                  <option value="history">History (역사/유적)</option>
+                  <option value="food">Food (맛집/식도락)</option>
+                  <option value="stay">Stay (숙소)</option>
+                  <option value="etc">ETC (기터)</option>
                 </select>
              </div>
              <FormItem 

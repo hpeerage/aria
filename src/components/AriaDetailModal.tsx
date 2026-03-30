@@ -81,7 +81,7 @@ export default function AriaDetailModal({ place, onClose, allPlaces }: AriaDetai
                 </h2>
                 <div className="flex items-center gap-2 text-white/60 font-bold text-sm">
                   <Tag className="w-4 h-4" />
-                  {dict.common.category}: {place.category}
+                  {dict.common.category}: {(dict.categories as any)[place.category.toLowerCase()] || place.category}
                 </div>
               </div>
 

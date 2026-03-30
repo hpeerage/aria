@@ -114,7 +114,7 @@ export default function PlaceDetailClient({ place, nearbyPlaces }: PlaceDetailCl
             animate={{ opacity: 1, scale: 1 }}
             className="inline-flex items-center gap-2 px-6 py-2 rounded-full border border-white/20 bg-white/5 backdrop-blur-md text-accent text-xs font-black tracking-widest uppercase"
           >
-            No. {displayPlace.id} • {displayPlace.category}
+            No. {displayPlace.id} • {(dict.categories as any)[displayPlace.category.toLowerCase()] || displayPlace.category}
           </motion.div>
           <motion.h1 
             initial={{ opacity: 0, y: 30 }}
@@ -238,7 +238,7 @@ export default function PlaceDetailClient({ place, nearbyPlaces }: PlaceDetailCl
               <h4 className="text-lg font-black text-forest uppercase tracking-widest border-b border-forest/5 pb-4">{dict.common.quickFact}</h4>
               <div className="space-y-6">
                 <SidebarItem label={dict.common.location} value="Jeongseon, Gangwon-do" />
-                <SidebarItem label={dict.common.category} value={displayPlace.category} />
+                <SidebarItem label={dict.common.category} value={(dict.categories as any)[displayPlace.category.toLowerCase()] || displayPlace.category} />
                 <SidebarItem label={dict.common.coordinates} value={`${displayPlace.coordinates.lat.toFixed(4)}, ${displayPlace.coordinates.lng.toFixed(4)}`} />
               </div>
               <div className="pt-6">
