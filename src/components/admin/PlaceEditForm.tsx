@@ -17,6 +17,7 @@ export default function PlaceEditForm({ isNew = false }: { isNew?: boolean }) {
   const [formData, setFormData] = useState<Place | null>(null);
   const [images, setImages] = useState<string[]>([]);
   const [wellnessTips, setWellnessTips] = useState<string[]>([]);
+  const [tipInput, setTipInput] = useState("");
   const [isSaving, setIsSaving] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -111,8 +112,10 @@ export default function PlaceEditForm({ isNew = false }: { isNew?: boolean }) {
   };
 
   const handleAddTip = () => {
-    const newTip = prompt("Enter a new wellness insight/tip:");
-    if (newTip) setWellnessTips([...wellnessTips, newTip]);
+    if (tipInput.trim()) {
+      setWellnessTips([...wellnessTips, tipInput.trim()]);
+      setTipInput("");
+    }
   };
 
   const removeTip = (idx: number) => {
@@ -273,16 +276,24 @@ export default function PlaceEditForm({ isNew = false }: { isNew?: boolean }) {
              </div>
 
              <div className="md:col-span-2 space-y-6 pt-10 border-t border-white/5">
-                <div className="flex items-center justify-between">
-                   <div className="space-y-1">
-                      <p className="text-[10px] font-black uppercase tracking-widest text-accent px-1">Wellness Insights & Tips</p>
+                <div className="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
+                   <div className="flex-1 w-full relative">
+                     <input 
+                       type="text"
+                       value={tipInput}
+                       onChange={(e) => setTipInput(e.target.value)}
+                       placeholder="Share a wellness insight (e.g., 'Best for morning meditation')"
+                       className="w-full px-6 py-5 bg-white/5 border border-white/10 rounded-2xl text-white placeholder:text-white/20 focus:ring-2 focus:ring-accent outline-none transition-all font-bold"
+                       onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddTip())}
+                     />
                    </div>
                    <button 
                     type="button"
                     onClick={handleAddTip}
-                    className="px-6 py-2 bg-white/5 hover:bg-white/10 border border-white/5 text-[10px] font-black text-white/60 hover:text-white uppercase tracking-widest rounded-xl transition-all"
+                    disabled={!tipInput.trim()}
+                    className="px-8 py-5 bg-accent/10 hover:bg-accent text-accent hover:text-white text-[10px] font-black uppercase tracking-widest rounded-2xl transition-all disabled:opacity-30"
                    >
-                    + Add Insight
+                    Add Insight
                    </button>
                 </div>
                 <div className="space-y-3">

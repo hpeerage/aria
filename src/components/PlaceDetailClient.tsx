@@ -190,11 +190,21 @@ export default function PlaceDetailClient({ place, nearbyPlaces }: PlaceDetailCl
                     Wellness Insight
                   </div>
                   <h3 className="text-2xl font-black text-forest">{dict.common.wellnessTip}</h3>
-                  <p className="text-forest/60 font-bold leading-relaxed">
-                    82개의 관광 자원 중 한 곳인 이곳은 특히 아침의 정운과 저녁의 노을이 아름다운 곳입니다. 
-                    스마트폰을 잠시 내려놓고 공간이 들려주는 소리에 집중해 보세요. 
-                    이곳의 기운은 당신의 지친 영혼에 새로운 질서를 부여할 것입니다.
-                  </p>
+                  <div className="space-y-3">
+                    {displayPlace.wellnessTips && displayPlace.wellnessTips.length > 0 ? (
+                      displayPlace.wellnessTips.map((tip, idx) => (
+                        <div key={idx} className="flex gap-3 text-sm font-bold text-forest/60 dark:text-white/60 leading-relaxed list-item list-inside marker:text-accent">
+                          {tip}
+                        </div>
+                      ))
+                    ) : (
+                      <p className="text-sm font-bold text-forest/60 dark:text-white/60 leading-relaxed">
+                        82개의 관광 자원 중 한 곳인 이곳은 특히 아침의 정운과 저녁의 노을이 아름다운 곳입니다. 
+                        스마트폰을 잠시 내려놓고 공간이 들려주는 소리에 집중해 보세요. 
+                        이곳의 기운은 당신의 지친 영혼에 새로운 질서를 부여할 것입니다.
+                      </p>
+                    )}
+                  </div>
                 </div>
               </div>
             </motion.div>
