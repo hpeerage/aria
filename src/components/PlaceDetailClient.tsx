@@ -14,9 +14,18 @@ interface PlaceDetailClientProps {
 
 export default function PlaceDetailClient({ place, nearbyPlaces }: PlaceDetailClientProps) {
   const { dict } = useLanguage();
+  const [displayPlace, setDisplayPlace] = useState<Place>(place);
   const [currentImgIndex, setCurrentImgIndex] = useState(0);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
-  const displayImages = place.images && place.images.length > 0 ? place.images : ["https://images.unsplash.com/photo-1542224566-6e85f2e6772f?q=80&w=1950"];
+
+  useEffect(() => {
+    const localData = localStorage.getItem(`aria_place_${place.id}`);
+    if (localData) {
+      setDisplayPlace(JSON.parse(localData));
+    }
+  }, [place.id]);
+
+  const displayImages = displayPlace.images && displayPlace.images.length > 0 ? displayPlace.images : ["https://images.unsplash.com/photo-1542224566-6e85f2e6772f?q=80&w=1950"];
 
   // Auto-play gallery
   useEffect(() => {
@@ -105,7 +114,7 @@ export default function PlaceDetailClient({ place, nearbyPlaces }: PlaceDetailCl
             animate={{ opacity: 1, scale: 1 }}
             className="inline-flex items-center gap-2 px-6 py-2 rounded-full border border-white/20 bg-white/5 backdrop-blur-md text-accent text-xs font-black tracking-widest uppercase"
           >
-            No. {place.id} • {place.category}
+            No. {displayPlace.id} • {displayPlace.category}
           </motion.div>
           <motion.h1 
             initial={{ opacity: 0, y: 30 }}
@@ -113,7 +122,7 @@ export default function PlaceDetailClient({ place, nearbyPlaces }: PlaceDetailCl
             transition={{ duration: 1, ease: "easeOut" }}
             className="text-6xl md:text-8xl font-black text-white tracking-tighter"
           >
-            {place.name}
+            {displayPlace.name}
           </motion.h1>
           <motion.div 
             initial={{ opacity: 0 }}
@@ -169,7 +178,7 @@ export default function PlaceDetailClient({ place, nearbyPlaces }: PlaceDetailCl
                   <h2 className="text-3xl font-black text-forest">{dict.common.story}</h2>
                 </div>
                 <p className="text-xl text-forest/70 font-bold leading-relaxed italic">
-                  {place.description || "이 장소의 깊은 역사와 웰니스 리듬을 발견할 수 있는 상세한 이야기가 준비되고 있습니다. 정선의 자연이 빚어낸 이곳에서 당신만의 새로운 아리아를 시작해 보세요."}
+                  {displayPlace.description || "이 장소의 깊은 역사와 웰니스 리듬을 발견할 수 있는 상세한 이야기가 준비되고 있습니다. 정선의 자연이 빚어낸 이곳에서 당신만의 새로운 아리아를 시작해 보세요."}
                 </p>
               </div>
 
@@ -229,8 +238,8 @@ export default function PlaceDetailClient({ place, nearbyPlaces }: PlaceDetailCl
               <h4 className="text-lg font-black text-forest uppercase tracking-widest border-b border-forest/5 pb-4">{dict.common.quickFact}</h4>
               <div className="space-y-6">
                 <SidebarItem label={dict.common.location} value="Jeongseon, Gangwon-do" />
-                <SidebarItem label={dict.common.category} value={place.category} />
-                <SidebarItem label={dict.common.coordinates} value={`${place.coordinates.lat.toFixed(4)}, ${place.coordinates.lng.toFixed(4)}`} />
+                <SidebarItem label={dict.common.category} value={displayPlace.category} />
+                <SidebarItem label={dict.common.coordinates} value={`${displayPlace.coordinates.lat.toFixed(4)}, ${displayPlace.coordinates.lng.toFixed(4)}`} />
               </div>
               <div className="pt-6">
                 <button className="w-full py-5 bg-forest text-white rounded-2xl font-black text-sm tracking-widest uppercase hover:bg-accent transition-all shadow-lg active:scale-95">

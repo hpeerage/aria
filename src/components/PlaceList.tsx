@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence, Variants } from "framer-motion";
 import { Place } from "@/types/place";
 import { Search, Filter, Compass, ArrowRight, Navigation } from "lucide-react";
@@ -40,13 +40,33 @@ const cardVariants: Variants = {
 
 export default function PlaceList({ initialPlaces }: PlaceListProps) {
   const { dict } = useLanguage();
+  const [places, setPlaces] = useState<Place[]>(initialPlaces);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState(dict.common.all);
   const [activePlace, setActivePlace] = useState<Place | null>(null);
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [isLocating, setIsLocating] = useState(false);
 
-  const categories = [dict.common.all, dict.common.nearMe, ...Array.from(new Set(initialPlaces.map((p) => p.category)))];
+  useEffect(() => {
+    // Merge with LocalStorage changes for real-time update in the same browser
+    const localData = localStorage.getItem('aria_local_places');
+    if (localData) {
+      const parsed = JSON.parse(localData);
+      const merged = [...initialPlaces];
+      
+      parsed.forEach((localPlace: Place) => {
+        const idx = merged.findIndex(p => p.id === localPlace.id);
+        if (idx >= 0) {
+          merged[idx] = localPlace;
+        } else {
+          merged.push(localPlace);
+        }
+      });
+      setPlaces(merged);
+    }
+  }, [initialPlaces]);
+
+  const categories = [dict.common.all, dict.common.nearMe, ...Array.from(new Set(places.map((p) => p.category)))];
 
   const handleLocateMe = () => {
     setIsLocating(true);
@@ -87,7 +107,7 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
     return R * c;
   };
 
-  const filteredPlaces = initialPlaces
+  const filteredPlaces = places
     .filter((place) => {
       const matchesSearch = place.name.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesCategory =
@@ -307,7 +327,7 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
       <AriaDetailModal 
         place={activePlace} 
         onClose={() => setActivePlace(null)} 
-        allPlaces={initialPlaces}
+        allPlaces={places}
       />
     </div>
   );
