@@ -136,24 +136,36 @@ export default function PlaceEditForm({ isNew = false }: { isNew?: boolean }) {
 
     // Simulate Network Delay and Persist to LocalStorage
     setTimeout(() => {
-        localStorage.setItem(`aria_place_${id || 'new'}`, JSON.stringify(finalData));
-        
-        // Also update local list cache if needed
-        const localList = JSON.parse(localStorage.getItem('aria_local_places') || '[]');
-        const existingIdx = localList.findIndex((p: any) => p.id === finalData.id);
-        if (existingIdx >= 0) {
-          localList[existingIdx] = finalData;
-        } else {
-          localList.push(finalData);
-        }
-        localStorage.setItem('aria_local_places', JSON.stringify(localList));
+        try {
+          localStorage.setItem(`aria_place_${id || 'new'}`, JSON.stringify(finalData));
+          
+          // Also update local list cache if needed
+          const localListStr = localStorage.getItem('aria_local_places');
+          const localList = localListStr ? JSON.parse(localListStr) : [];
+          const existingIdx = localList.findIndex((p: any) => p.id === finalData.id);
+          
+          if (existingIdx >= 0) {
+            localList[existingIdx] = finalData;
+          } else {
+            localList.push(finalData);
+          }
+          localStorage.setItem('aria_local_places', JSON.stringify(localList));
 
-        setIsSaving(false);
-        setIsSuccess(true);
-        setTimeout(() => {
-          setIsSuccess(false);
-          router.push("/admin/places");
-        }, 1500);
+          setIsSaving(false);
+          setIsSuccess(true);
+          setTimeout(() => {
+            setIsSuccess(false);
+            router.push("/admin/places");
+          }, 1500);
+        } catch (error: any) {
+          console.error("Save failed:", error);
+          setIsSaving(false);
+          if (error.name === 'QuotaExceededError') {
+            alert("저장 공간이 부족합니다. 이미지가 너무 크거나 개수가 많을 수 있습니다. 이미지를 줄이거나 삭제 후 다시 시도해 주세요.");
+          } else {
+            alert("저장 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.");
+          }
+        }
     }, 1500);
   };
 
