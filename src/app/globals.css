@@ -5,18 +5,22 @@
 :root {
   --background: #f8faf9; /* Soft Off-white for Wellness feel */
   --foreground: #1a432f; /* Deep Forest Green for primary text */
+  --foreground-muted: #4a6358;
   --forest-green: #1a432f;
   --vital-orange: #f26b38;
   --card-bg: #ffffff;
+  --card-accent-bg: rgba(242, 107, 56, 0.05); /* Light orange tint */
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #040A08; /* Deep Midnight Forest - More stable base */
-    --foreground: #E1E8E4; /* Silver Sage - High readability, less eye strain */
-    --card-bg: #0C1A14;    /* Layered Forest - Clearer card separation */
+    --background: #040A08; /* Deep Midnight Forest */
+    --foreground: #E1E8E4; /* Silver Sage - High readability */
+    --foreground-muted: #A0B0A8; /* Lower contrast for metadata */
+    --card-bg: #0C1A14;    /* Layered Forest */
+    --card-accent-bg: rgba(255, 255, 255, 0.05); /* Subtle white overlay for boxes */
     --forest-green: #1A3D2E;
-    --vital-orange: #FF7F50; /* Brighter coral for dark mode visibility */
+    --vital-orange: #FF7F50;
   }
 }
 
