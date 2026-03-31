@@ -3,10 +3,11 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence, Variants } from "framer-motion";
 import { Place } from "@/types/place";
-import { Search, Compass, ArrowRight, Navigation, LayoutGrid, Trees, Sparkles, UtensilsCrossed, Landmark, Home, MoreHorizontal, Palmtree } from "lucide-react";
+import { Search, Compass, ArrowRight, Navigation, LayoutGrid, Trees, Sparkles, UtensilsCrossed, Landmark, Home, MoreHorizontal, Palmtree, X } from "lucide-react";
 import AriaMap from "./AriaMap";
 import AriaDetailModal from "./AriaDetailModal";
 import Link from "next/link";
+import { useSearchParams, useRouter } from "next/navigation";
 import { useLanguage } from "@/lib/i18n/context";
 
 interface PlaceListProps {
@@ -66,6 +67,8 @@ const getCategoryConfig = (cat: string, dict: any) => {
 
 export default function PlaceList({ initialPlaces }: PlaceListProps) {
   const { dict } = useLanguage();
+  const searchParams = useSearchParams();
+  const router = useRouter();
   const scrollRef = useRef<HTMLDivElement>(null);
   const [places, setPlaces] = useState<Place[]>(initialPlaces);
   const [searchTerm, setSearchTerm] = useState("");
@@ -73,6 +76,20 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
   const [activePlace, setActivePlace] = useState<Place | null>(null);
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [isLocating, setIsLocating] = useState(false);
+
+  // Sync search term from URL param ?q=
+  useEffect(() => {
+    const q = searchParams.get("q");
+    if (q) {
+      setSearchTerm(decodeURIComponent(q));
+      setSelectedCategory(dict.common.all);
+    }
+  }, [searchParams, dict.common.all]);
+
+  const clearSearch = () => {
+    setSearchTerm("");
+    router.push("/");
+  };
 
   useEffect(() => {
     // Merge with LocalStorage changes for real-time update in the same browser
@@ -171,7 +188,7 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
     });
 
   return (
-    <div className="w-full max-w-7xl mx-auto px-4 py-12 space-y-12">
+    <div id="list" className="w-full max-w-7xl mx-auto px-4 py-12 space-y-12">
       
       {/* Interactive Map Section */}
       <motion.section 
@@ -225,18 +242,41 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
               placeholder={dict.common.searchPlaceholder}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-14 pr-6 py-4 rounded-[2rem] bg-forest/5 dark:bg-white/5 border-none focus:ring-2 focus:ring-accent outline-none transition-all placeholder:text-forest/30 dark:placeholder:text-white/30 font-bold dark:text-white"
+              className="w-full pl-14 pr-12 py-4 rounded-[2rem] bg-forest/5 dark:bg-white/5 border-none focus:ring-2 focus:ring-accent outline-none transition-all placeholder:text-forest/30 dark:placeholder:text-white/30 font-bold dark:text-white"
             />
+            {searchTerm && (
+              <button
+                onClick={clearSearch}
+                className="absolute right-5 top-1/2 -translate-y-1/2 p-1 rounded-full bg-forest/10 dark:bg-white/10 text-forest/50 dark:text-white/50 hover:bg-accent hover:text-white transition-all"
+              >
+                <X className="w-3 h-3" />
+              </button>
+            )}
           </div>
 
-          <motion.p 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="text-forest/60 dark:text-white/60 text-sm font-black tracking-widest uppercase flex items-center gap-3 px-6"
-          >
-            <div className="w-1.5 h-1.5 bg-accent rounded-full animate-pulse" />
-            {dict.common.placesFound.replace("{count}", filteredPlaces.length.toString())}
-          </motion.p>
+          <div className="flex items-center gap-4 px-6">
+            {searchTerm && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="flex items-center gap-2 px-4 py-2 bg-accent/10 border border-accent/20 rounded-2xl"
+              >
+                <Search className="w-3 h-3 text-accent" />
+                <span className="text-xs font-black text-accent">&quot;{searchTerm}&quot;</span>
+                <button onClick={clearSearch} className="ml-1 text-accent/60 hover:text-accent">
+                  <X className="w-3 h-3" />
+                </button>
+              </motion.div>
+            )}
+            <motion.p 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="text-forest/60 dark:text-white/60 text-sm font-black tracking-widest uppercase flex items-center gap-3"
+            >
+              <div className="w-1.5 h-1.5 bg-accent rounded-full animate-pulse" />
+              {dict.common.placesFound.replace("{count}", filteredPlaces.length.toString())}
+            </motion.p>
+          </div>
         </div>
 
         {/* Premium Icon-based Category Grid - Fixed for clipping with generous vertical padding */}
