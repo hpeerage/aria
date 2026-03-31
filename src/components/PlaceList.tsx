@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence, Variants } from "framer-motion";
 import { Place } from "@/types/place";
-import { Search, Filter, Compass, ArrowRight, Navigation } from "lucide-react";
+import { Search, Compass, ArrowRight, Navigation, LayoutGrid, Trees, Sparkles, UtensilsCrossed, Landmark, Home, MoreHorizontal, Palmtree } from "lucide-react";
 import AriaMap from "./AriaMap";
 import AriaDetailModal from "./AriaDetailModal";
 import Link from "next/link";
@@ -36,6 +36,32 @@ const cardVariants: Variants = {
       damping: 15
     }
   },
+};
+
+const getCategoryConfig = (cat: string, dict: any) => {
+  const c = cat.toLowerCase();
+  if (cat === dict.common.all) return { icon: LayoutGrid, label: dict.common.all, bg: "bg-forest/10 dark:bg-white/20", color: "text-forest dark:text-white" };
+  if (cat === dict.common.nearMe) return { icon: Navigation, label: dict.common.nearMe, bg: "bg-accent/10", color: "text-accent" };
+  
+  if (c.includes("nature") || c.includes("자연") || c.includes("산") || c.includes("숲")) 
+    return { icon: Trees, label: (dict.categories as any).nature || cat, bg: "bg-emerald-500/10", color: "text-emerald-500" };
+  
+  if (c.includes("wellness") || c.includes("웰니스") || c.includes("치유") || c.includes("체험")) 
+    return { icon: Sparkles, label: (dict.categories as any).wellness || cat, bg: "bg-rose-500/10", color: "text-rose-500" };
+  
+  if (c.includes("food") || c.includes("맛집") || c.includes("식도락") || c.includes("카페") || c.includes("식음")) 
+    return { icon: UtensilsCrossed, label: (dict.categories as any).food || cat, bg: "bg-orange-500/10", color: "text-orange-500" };
+
+  if (c.includes("culture") || c.includes("문화") || c.includes("전통")) 
+    return { icon: Palmtree, label: (dict.categories as any).culture || cat, bg: "bg-amber-500/10", color: "text-amber-500" };
+
+  if (c.includes("history") || c.includes("역사") || c.includes("유적")) 
+    return { icon: Landmark, label: (dict.categories as any).history || cat, bg: "bg-blue-500/10", color: "text-blue-500" };
+
+  if (c.includes("stay") || c.includes("숙소") || c.includes("숙박") || c.includes("펜션")) 
+    return { icon: Home, label: (dict.categories as any).stay || cat, bg: "bg-indigo-500/10", color: "text-indigo-500" };
+
+  return { icon: MoreHorizontal, label: (dict.categories as any).etc || cat, bg: "bg-slate-500/10", color: "text-slate-500" };
 };
 
 export default function PlaceList({ initialPlaces }: PlaceListProps) {
@@ -165,66 +191,92 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
         />
       </motion.section>
 
-      {/* Search and Filter Header */}
+      {/* Search and Advanced Filter Header */}
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        className="flex flex-col md:flex-row gap-4 items-center justify-between bg-white dark:bg-forest-dark p-6 rounded-[2.5rem] shadow-2xl border border-forest/5 sticky top-6 z-20 backdrop-blur-3xl bg-opacity-90 transition-all duration-500"
+        className="space-y-10"
       >
-        <div className="relative w-full md:w-96 group">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-forest/40 group-focus-within:text-accent transition-colors" />
-          <input
-            type="text"
-            placeholder={dict.common.searchPlaceholder}
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-12 pr-4 py-3 rounded-2xl bg-forest/5 dark:bg-white/5 border-none focus:ring-2 focus:ring-accent outline-none transition-all placeholder:text-forest/30 dark:placeholder:text-white/30 font-bold dark:text-white"
-          />
+        <div className="flex flex-col md:flex-row gap-6 items-center justify-between bg-white dark:bg-forest-dark p-6 rounded-[3rem] shadow-2xl border border-forest/5 backdrop-blur-3xl bg-opacity-90 transition-all duration-500">
+          <div className="relative w-full md:w-96 group">
+            <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-forest/40 group-focus-within:text-accent transition-colors" />
+            <input
+              type="text"
+              placeholder={dict.common.searchPlaceholder}
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-14 pr-6 py-4 rounded-[2rem] bg-forest/5 dark:bg-white/5 border-none focus:ring-2 focus:ring-accent outline-none transition-all placeholder:text-forest/30 dark:placeholder:text-white/30 font-bold dark:text-white"
+            />
+          </div>
+
+          <motion.p 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="text-forest/60 dark:text-white/60 text-sm font-black tracking-widest uppercase flex items-center gap-3 px-6"
+          >
+            <div className="w-1.5 h-1.5 bg-accent rounded-full animate-pulse" />
+            {dict.common.placesFound.replace("{count}", filteredPlaces.length.toString())}
+          </motion.p>
         </div>
 
-        <div className="flex items-center gap-2 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 scrollbar-hide">
-          <Filter className="w-5 h-5 text-forest/40 mr-2 flex-shrink-0" />
-          {categories.map((cat) => (
-            <motion.button
-              key={cat}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => {
-                if (cat === dict.common.nearMe) {
-                  if (!userLocation) {
-                    handleLocateMe();
+        {/* Premium Icon-based Category Grid */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-9 gap-4 md:gap-6 overflow-x-auto pb-4 scrollbar-hide px-2">
+          {categories.map((cat) => {
+            const config = getCategoryConfig(cat, dict);
+            const isActive = selectedCategory === cat;
+            const Icon = config.icon;
+
+            return (
+              <motion.button
+                key={cat}
+                whileHover={{ scale: 1.02, y: -5 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => {
+                  if (cat === dict.common.nearMe) {
+                    if (!userLocation) handleLocateMe();
+                    else setSelectedCategory(cat);
                   } else {
                     setSelectedCategory(cat);
                   }
-                } else {
-                  setSelectedCategory(cat);
-                }
-              }}
-              className={`px-6 py-2.5 rounded-2xl text-xs font-black transition-all whitespace-nowrap uppercase tracking-widest flex items-center gap-2 ${
-                selectedCategory === cat
-                  ? "bg-forest text-white shadow-xl shadow-forest/20 scale-105 dark:bg-accent dark:shadow-accent/20"
-                  : "bg-forest/5 text-forest/80 dark:bg-white/5 dark:text-white/60 hover:bg-forest/10 hover:text-forest dark:hover:text-white"
-              }`}
-            >
-              {cat === dict.common.nearMe && (
-                <Navigation className={`w-3.5 h-3.5 ${isLocating ? "animate-spin" : ""}`} />
-              )}
-              {(dict.categories as any)[cat.toLowerCase()] || cat}
-            </motion.button>
-          ))}
+                }}
+                className={`relative group flex flex-col items-center justify-center p-6 min-w-[120px] h-32 rounded-[2.5rem] transition-all duration-500 border-2 ${
+                  isActive 
+                    ? `bg-white dark:bg-forest shadow-2xl border-accent` 
+                    : "bg-white/40 dark:bg-white/5 border-transparent hover:border-forest/10 dark:hover:border-white/10"
+                }`}
+              >
+                {/* Accent Background Glow */}
+                {isActive && (
+                  <motion.div 
+                    layoutId="active-glow"
+                    className={`absolute inset-0 rounded-[2.5rem] blur-2xl opacity-20 ${config.bg}`}
+                  />
+                )}
+                
+                <div className={`p-4 rounded-2xl mb-3 transition-transform duration-500 group-hover:scale-110 relative z-10 ${
+                  isActive ? `${config.bg} ${config.color}` : "bg-forest/5 dark:bg-white/10 text-forest/40 dark:text-white/40"
+                }`}>
+                  <Icon className={`w-6 h-6 ${cat === dict.common.nearMe && isLocating ? "animate-spin" : ""}`} />
+                </div>
+                
+                <span className={`text-[10px] font-black uppercase tracking-widest text-center relative z-10 ${
+                  isActive ? "text-forest dark:text-white" : "text-forest/40 dark:text-white/40"
+                }`}>
+                  {config.label}
+                </span>
+
+                {isActive && (
+                  <motion.div 
+                    layoutId="active-indicator"
+                    className="absolute -bottom-2 w-1.5 h-1.5 bg-accent rounded-full"
+                  />
+                )}
+              </motion.button>
+            );
+          })}
         </div>
       </motion.div>
-
-      {/* Stats Summary */}
-      <motion.p 
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        className="text-forest/60 dark:text-white/60 text-sm font-bold tracking-tight px-4 flex items-center gap-2"
-      >
-        <div className="w-1.5 h-1.5 bg-accent rounded-full animate-pulse" />
-        {dict.common.placesFound.replace("{count}", filteredPlaces.length.toString())}
-      </motion.p>
 
       {/* Place Grid */}
       <motion.div 
