@@ -280,10 +280,10 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
         </div>
 
         {/* Premium Icon-based Category Grid - Fixed for clipping with generous vertical padding */}
-        <div className="relative -mx-4 -my-24 px-4 py-24 group/scroll">
+        <div className="relative -mx-4 -my-16 px-4 py-16 group/scroll">
           <div 
             ref={scrollRef}
-            className="flex gap-6 md:gap-10 overflow-x-auto py-16 scrollbar-hide snap-x px-12"
+            className="flex gap-4 md:gap-6 overflow-x-auto py-10 scrollbar-hide snap-x px-8"
           >
             {categories.map((cat) => {
               const config = getCategoryConfig(cat, dict);
@@ -307,7 +307,7 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
                       setSelectedCategory(cat);
                     }
                   }}
-                  className={`relative group flex-shrink-0 flex flex-col items-center justify-center p-8 min-w-[150px] h-44 rounded-[3.5rem] transition-all duration-700 border snap-center ${
+                  className={`relative group flex-shrink-0 flex flex-col items-center justify-center p-4 min-w-[110px] h-32 rounded-[2.5rem] transition-all duration-700 border snap-center ${
                     isActive 
                       ? `bg-white dark:bg-forest-light shadow-[0_40px_80px_-15px_rgba(26,67,47,0.4)] border-accent/40 z-20 backdrop-blur-2xl` 
                       : "bg-white/30 dark:bg-white/5 border-white/10 dark:border-white/5 hover:bg-white/50 dark:hover:bg-white/10 hover:border-forest/20 shadow-xl"
@@ -317,17 +317,17 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
                   {isActive && (
                     <motion.div 
                       layoutId="active-glow"
-                      className={`absolute inset-0 rounded-[3.5rem] blur-3xl opacity-40 transition-all duration-700 ${config.bg}`}
+                      className={`absolute inset-0 rounded-[2.5rem] blur-3xl opacity-40 transition-all duration-700 ${config.bg}`}
                     />
                   )}
                   
-                  <div className={`p-6 rounded-[2rem] mb-5 transition-all duration-500 group-hover:rotate-6 relative z-10 ${
+                  <div className={`p-3 rounded-[1.2rem] mb-3 transition-all duration-500 group-hover:rotate-6 relative z-10 ${
                     isActive ? `${config.bg} ${config.color} shadow-lg shadow-black/5` : "bg-forest/5 dark:bg-white/10 text-forest/40 dark:text-white/40"
                   }`}>
-                    <Icon className={`w-8 h-8 ${cat === dict.common.nearMe && isLocating ? "animate-spin" : ""}`} />
+                    <Icon className={`w-5 h-5 ${cat === dict.common.nearMe && isLocating ? "animate-spin" : ""}`} />
                   </div>
                   
-                  <span className={`text-[13px] font-black uppercase tracking-[0.2em] text-center relative z-10 whitespace-nowrap ${
+                  <span className={`text-[11px] font-black uppercase tracking-[0.2em] text-center relative z-10 whitespace-nowrap ${
                     isActive ? "text-forest dark:text-white" : "text-forest/30 dark:text-white/30"
                   }`}>
                     {config.label}
