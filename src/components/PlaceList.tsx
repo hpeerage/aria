@@ -220,9 +220,9 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
           </motion.p>
         </div>
 
-        {/* Premium Icon-based Category Grid - Fixed for clipping and responsive flow */}
-        <div className="relative -mx-4 -my-10 px-4 py-10 overflow-hidden">
-          <div className="flex gap-4 md:gap-6 overflow-x-auto pb-8 pt-2 scroll-smooth scrollbar-hide snap-x px-4">
+        {/* Premium Icon-based Category Grid - Fixed for clipping with generous vertical padding */}
+        <div className="relative -mx-4 -my-16 px-4 py-16 overflow-hidden">
+          <div className="flex gap-4 md:gap-8 overflow-x-auto py-12 scroll-smooth scrollbar-hide snap-x px-8">
             {categories.map((cat) => {
               const config = getCategoryConfig(cat, dict);
               const isActive = selectedCategory === cat;
@@ -231,7 +231,7 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
               return (
                 <motion.button
                   key={cat}
-                  whileHover={{ scale: 1.05, y: -8 }}
+                  whileHover={{ scale: 1.05, y: -12 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => {
                     if (cat === dict.common.nearMe) {
@@ -241,28 +241,28 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
                       setSelectedCategory(cat);
                     }
                   }}
-                  className={`relative group flex-shrink-0 flex flex-col items-center justify-center p-6 min-w-[130px] h-36 rounded-[2.5rem] transition-all duration-500 border-2 snap-center ${
+                  className={`relative group flex-shrink-0 flex flex-col items-center justify-center p-8 min-w-[140px] h-40 rounded-[3rem] transition-all duration-500 border-2 snap-center ${
                     isActive 
-                      ? `bg-white dark:bg-forest shadow-[0_20px_50px_-10px_rgba(26,67,47,0.2)] border-accent z-10` 
+                      ? `bg-white dark:bg-forest shadow-[0_30px_60px_-12px_rgba(26,67,47,0.25)] border-accent z-10` 
                       : "bg-white/40 dark:bg-white/5 border-transparent hover:border-forest/10 dark:hover:border-white/10"
                   }`}
                 >
-                  {/* Accent Background Glow - Expanded blur for premium feel */}
+                  {/* Accent Background Glow - High blur for premium depth */}
                   {isActive && (
                     <motion.div 
                       layoutId="active-glow"
-                      className={`absolute inset-0 rounded-[2.5rem] blur-3xl opacity-30 ${config.bg}`}
+                      className={`absolute inset-0 rounded-[3rem] blur-3xl opacity-30 ${config.bg}`}
                     />
                   )}
                   
-                  <div className={`p-4 rounded-2xl mb-3 transition-transform duration-500 group-hover:scale-110 relative z-10 ${
+                  <div className={`p-5 rounded-2xl mb-4 transition-transform duration-500 group-hover:scale-110 relative z-10 ${
                     isActive ? `${config.bg} ${config.color}` : "bg-forest/5 dark:bg-white/10 text-forest/40 dark:text-white/40"
                   }`}>
-                    <Icon className={`w-7 h-7 ${cat === dict.common.nearMe && isLocating ? "animate-spin" : ""}`} />
+                    <Icon className={`w-8 h-8 ${cat === dict.common.nearMe && isLocating ? "animate-spin" : ""}`} />
                   </div>
                   
-                  <span className={`text-[11px] font-black uppercase tracking-widest text-center relative z-10 whitespace-nowrap ${
-                    isActive ? "text-forest dark:text-white" : "text-forest/40 dark:text-white/40"
+                  <span className={`text-[12px] font-black uppercase tracking-[0.15em] text-center relative z-10 whitespace-nowrap ${
+                    isActive ? "text-forest dark:text-white font-black" : "text-forest/40 dark:text-white/40"
                   }`}>
                     {config.label}
                   </span>
@@ -270,7 +270,7 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
                   {isActive && (
                     <motion.div 
                       layoutId="active-indicator"
-                      className="absolute -bottom-1 w-2 h-2 bg-accent rounded-full shadow-[0_0_10px_rgba(26,117,78,0.5)]"
+                      className="absolute -bottom-1 w-2.5 h-2.5 bg-accent rounded-full shadow-[0_0_15px_rgba(26,117,78,0.6)]"
                     />
                   )}
                 </motion.button>
