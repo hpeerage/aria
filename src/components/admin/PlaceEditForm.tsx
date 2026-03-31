@@ -1,5 +1,3 @@
-"use client";
-
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, Save, MapPin, Tag, Sparkles, Image as ImageIcon, CheckCircle2, Upload, X } from "lucide-react";
 import Link from "next/link";
@@ -7,8 +5,10 @@ import { useState, useEffect, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { Place } from "@/types/place";
 import { getPlacesFromGoogleSheet } from "@/lib/google-sheets";
+import { useLanguage } from "@/lib/i18n/context";
 
 export default function PlaceEditForm({ isNew = false }: { isNew?: boolean }) {
+  const { dict } = useLanguage();
   const params = useParams();
   const router = useRouter();
   const id = params?.id;
@@ -41,7 +41,7 @@ export default function PlaceEditForm({ isNew = false }: { isNew?: boolean }) {
         const newPlace = {
           id: Date.now(),
           name: "",
-          category: "Nature",
+          category: "nature",
           coordinates: { lat: 37.38, lng: 128.66 },
           description: "",
           images: [],
@@ -66,7 +66,7 @@ export default function PlaceEditForm({ isNew = false }: { isNew?: boolean }) {
           setFormData({
             id: Number(id),
             name: "Unknown Asset",
-            category: "General",
+            category: "nature",
             coordinates: { lat: 37.38, lng: 128.66 },
             description: "",
             images: [],
@@ -161,7 +161,7 @@ export default function PlaceEditForm({ isNew = false }: { isNew?: boolean }) {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center space-y-6">
         <div className="w-12 h-12 border-4 border-accent/20 border-t-accent rounded-full animate-spin" />
-        <p className="text-white/40 font-black uppercase tracking-[0.3em] text-xs animate-pulse">Initializing Interface...</p>
+        <p className="text-white/40 font-black uppercase tracking-[0.3em] text-xs animate-pulse">{dict.admin.syncing}</p>
       </div>
     );
   }
@@ -177,7 +177,7 @@ export default function PlaceEditForm({ isNew = false }: { isNew?: boolean }) {
             className="fixed top-8 left-1/2 -translate-x-1/2 z-[200] px-8 py-4 bg-accent text-white rounded-2xl font-black shadow-2xl flex items-center gap-3 border border-white/20"
           >
             <CheckCircle2 className="w-5 h-5" />
-            System Override Successful: Asset synchronized with local database.
+            {dict.admin.saveSuccess}
           </motion.div>
         )}
       </AnimatePresence>
@@ -190,7 +190,7 @@ export default function PlaceEditForm({ isNew = false }: { isNew?: boolean }) {
           <div className="p-3 bg-white/5 rounded-2xl group-hover:bg-accent/10 transition-all">
             <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
           </div>
-          Return to Registry
+          {dict.common.backToList}
         </Link>
         <button 
           onClick={handleSave}
@@ -202,7 +202,7 @@ export default function PlaceEditForm({ isNew = false }: { isNew?: boolean }) {
           ) : (
             <Save className="w-5 h-5" />
           )}
-          {isSuccess ? "Asset Updated" : "Commit Changes"}
+          {isSaving ? dict.admin.saving : isSuccess ? dict.admin.saveSuccess : dict.admin.save}
         </button>
       </div>
 
@@ -222,42 +222,38 @@ export default function PlaceEditForm({ isNew = false }: { isNew?: boolean }) {
                 Asset Configurator v2.5
              </div>
               <h2 className="text-5xl font-black text-white tracking-tighter">
-                {isNew ? "Registry New" : "Edit"} <span className="text-accent underline decoration-white/10">{formData.name || "Asset"}</span>
+                {isNew ? dict.admin.addPlace : dict.admin.editPlace} <span className="text-accent underline decoration-white/10">{formData.name || "Asset"}</span>
               </h2>
           </header>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
              <FormItem 
-              label="Asset Name" 
-              placeholder="e.g. Jeongseon Forest House" 
+              label={dict.admin.name} 
+              placeholder={dict.admin.placeholderName} 
               value={formData.name} 
               onChange={(v) => handleInputChange('name', v)}
              />
              <div className="space-y-4">
-                <label className="text-[10px] font-black uppercase tracking-widest text-accent px-1">Connectivity Category</label>
+                <label className="text-[10px] font-black uppercase tracking-widest text-accent px-1">{dict.admin.category}</label>
                 <select 
                   value={formData.category}
                   onChange={(e) => handleInputChange('category', e.target.value)}
                   className="w-full px-6 py-5 bg-white/5 border border-white/10 rounded-2xl text-white outline-none focus:ring-2 focus:ring-accent transition-all font-bold appearance-none cursor-pointer"
                 >
-                  <option value="nature">Nature (자연)</option>
-                  <option value="culture">Culture (문화/전통)</option>
-                  <option value="wellness">Wellness (체험/웰니스)</option>
-                  <option value="history">History (역사/유적)</option>
-                  <option value="food">Food (맛집/식도락)</option>
-                  <option value="stay">Stay (숙소)</option>
-                  <option value="etc">ETC (기터)</option>
+                  {Object.entries(dict.categories).map(([key, label]) => (
+                    <option key={key} value={key} className="bg-forest-dark text-white">{label}</option>
+                  ))}
                 </select>
              </div>
              <FormItem 
-              label="Latitude Core" 
+              label={dict.admin.coordinates + " (LAT)"} 
               type="number"
               placeholder="37.380000" 
               value={String(formData.coordinates.lat)} 
               onChange={(v) => handleInputChange('coordinates.lat', Number(v))}
              />
              <FormItem 
-              label="Longitude Core" 
+              label={dict.admin.coordinates + " (LNG)"} 
               type="number"
               placeholder="128.660000" 
               value={String(formData.coordinates.lng)} 
@@ -265,24 +261,25 @@ export default function PlaceEditForm({ isNew = false }: { isNew?: boolean }) {
              />
              
              <div className="md:col-span-2 space-y-4">
-               <label className="text-[10px] font-black uppercase tracking-widest text-accent px-1">Wellness Story (KO)</label>
+               <label className="text-[10px] font-black uppercase tracking-widest text-accent px-1">{dict.admin.description}</label>
                <textarea 
                  rows={4}
                  value={formData.description}
                  onChange={(e) => handleInputChange('description', e.target.value)}
                  className="w-full px-6 py-5 bg-white/5 border border-white/10 rounded-2xl text-white placeholder:text-white/40 focus:ring-2 focus:ring-accent outline-none transition-all font-bold resize-none"
-                 placeholder="Tell the wellness story of this asset..."
+                 placeholder={dict.admin.placeholderDesc}
                />
              </div>
 
              <div className="md:col-span-2 space-y-6 pt-10 border-t border-white/5">
+                <label className="text-[10px] font-black uppercase tracking-widest text-accent px-1">{dict.admin.wellnessInsight}</label>
                 <div className="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
                    <div className="flex-1 w-full relative">
                      <input 
                        type="text"
                        value={tipInput}
                        onChange={(e) => setTipInput(e.target.value)}
-                       placeholder="Share a wellness insight (e.g., 'Best for morning meditation')"
+                       placeholder={dict.admin.placeholderInsight}
                        className="w-full px-6 py-5 bg-white/5 border border-white/10 rounded-2xl text-white placeholder:text-white/20 focus:ring-2 focus:ring-accent outline-none transition-all font-bold"
                        onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddTip())}
                      />
@@ -293,7 +290,7 @@ export default function PlaceEditForm({ isNew = false }: { isNew?: boolean }) {
                     disabled={!tipInput.trim()}
                     className="px-8 py-5 bg-accent/10 hover:bg-accent text-accent hover:text-white text-[10px] font-black uppercase tracking-widest rounded-2xl transition-all disabled:opacity-30"
                    >
-                    Add Insight
+                    {dict.admin.addInsight}
                    </button>
                 </div>
                 <div className="space-y-3">
@@ -316,7 +313,7 @@ export default function PlaceEditForm({ isNew = false }: { isNew?: boolean }) {
 
              <div className="md:col-span-2 space-y-8 pt-10 border-t border-white/5">
                 <div className="flex items-center justify-between">
-                   <p className="text-[10px] font-black uppercase tracking-widest text-accent px-1">Visual Asset Registry</p>
+                   <p className="text-[10px] font-black uppercase tracking-widest text-accent px-1">{dict.admin.assetRegistry}</p>
                    <div className="flex gap-2">
                      <button 
                       type="button"
@@ -324,7 +321,7 @@ export default function PlaceEditForm({ isNew = false }: { isNew?: boolean }) {
                       className="px-6 py-3 bg-accent/10 hover:bg-accent text-accent hover:text-white text-[10px] font-black uppercase tracking-widest rounded-xl transition-all flex items-center gap-2"
                      >
                       <Upload className="w-4 h-4" />
-                      Upload File
+                      {dict.admin.uploadImage}
                      </button>
                      <input 
                       type="file" 
@@ -360,7 +357,7 @@ export default function PlaceEditForm({ isNew = false }: { isNew?: boolean }) {
                      <div className="p-3 bg-white/5 rounded-2xl group-hover:bg-accent/10 transition-all">
                        <ImageIcon className="w-6 h-6" />
                      </div>
-                     <span className="text-[10px] font-black uppercase tracking-widest">Add New Image</span>
+                     <span className="text-[10px] font-black uppercase tracking-widest">{dict.admin.uploadImage}</span>
                    </div>
                 </div>
              </div>

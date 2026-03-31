@@ -5,18 +5,20 @@ import { LayoutDashboard, Map, Settings, Globe, LogOut, Compass, Sparkles, User,
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
+import { useLanguage } from "@/lib/i18n/context";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const { dict } = useLanguage();
 
   // 로그인 페이지는 레이아웃에서 제외하거나 별도로 처리해야 함
   if (pathname === "/admin/login") return <>{children}</>;
 
   const menuItems = [
-    { title: "Dashboard", icon: LayoutDashboard, href: "/admin/dashboard" },
-    { title: "Places", icon: Map, href: "/admin/places" },
-    { title: "i18n Settings", icon: Globe, href: "/admin/i18n" },
-    { title: "Configuration", icon: Settings, href: "/admin/settings" },
+    { title: dict.admin.dashboard, icon: LayoutDashboard, href: "/admin/dashboard" },
+    { title: dict.admin.places, icon: Map, href: "/admin/places" },
+    { title: `i18n ${dict.admin.settings}`, icon: Globe, href: "/admin/i18n" },
+    { title: dict.admin.settings, icon: Settings, href: "/admin/settings" },
   ];
 
   return (
@@ -43,19 +45,20 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           {menuItems.map((item) => {
             const isActive = pathname === item.href;
             return (
-              <Link 
-                key={item.href} 
-                href={item.href}
-                className={`flex items-center gap-4 px-6 py-4 rounded-[1.5rem] font-bold transition-all group ${
-                  isActive 
-                    ? "bg-forest/60 text-white border border-white/10 shadow-2xl shadow-black/40 translate-x-2" 
-                    : "text-white/40 hover:bg-white/5 hover:text-white"
-                }`}
-              >
-                <item.icon className={`w-5 h-5 ${isActive ? "text-accent" : "text-white/20 group-hover:text-accent"} transition-colors`} />
-                {item.title}
-                {isActive && <motion.div layoutId="activeDot" className="w-1.5 h-1.5 bg-accent rounded-full ml-auto" />}
-              </Link>
+              <motion.div key={item.href}>
+                <Link 
+                  href={item.href}
+                  className={`flex items-center gap-4 px-6 py-4 rounded-[1.5rem] font-bold transition-all group ${
+                    isActive 
+                      ? "bg-forest/60 text-white border border-white/10 shadow-2xl shadow-black/40 translate-x-2" 
+                      : "text-white/40 hover:bg-white/5 hover:text-white"
+                  }`}
+                >
+                  <item.icon className={`w-5 h-5 ${isActive ? "text-accent" : "text-white/20 group-hover:text-accent"} transition-colors`} />
+                  {item.title}
+                  {isActive && <motion.div layoutId="activeDot" className="w-1.5 h-1.5 bg-accent rounded-full ml-auto" />}
+                </Link>
+              </motion.div>
             );
           })}
         </nav>
@@ -77,7 +80,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               className="w-full py-3 bg-white/5 hover:bg-red-500/10 hover:text-red-400 rounded-xl transition-all flex items-center justify-center gap-2 text-xs font-black uppercase tracking-widest text-white/20"
             >
               <LogOut className="w-4 h-4" />
-              Terminate Session
+              {dict.admin.logout}
             </Link>
           </div>
         </div>
@@ -87,8 +90,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       <main className="flex-1 ml-80 p-12 overflow-x-hidden pt-16">
         <header className="flex justify-between items-center mb-16 relative">
           <div>
-            <h2 className="text-4xl font-black text-white tracking-tighter mb-2">Systems Overview</h2>
-            <p className="text-white/40 font-medium">Real-time status of Jeongseon Wellness Assets.</p>
+            <h2 className="text-4xl font-black text-white tracking-tighter mb-2">{dict.admin.explorerTitle}</h2>
+            <p className="text-white/40 font-medium">{dict.admin.explorerDesc}</p>
           </div>
           <div className="flex gap-4">
             <button className="p-4 bg-white/5 hover:bg-white/10 rounded-2xl border border-white/5 transition-all text-white/40 hover:text-accent">
