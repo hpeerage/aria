@@ -175,30 +175,30 @@ export default function PlaceDetailClient({ place, nearbyPlaces }: PlaceDetailCl
               <div className="space-y-8">
                 <div className="flex items-center gap-4">
                   <div className="w-1.5 h-10 bg-accent rounded-full" />
-                  <h2 className="text-3xl font-black text-foreground dark:text-white">{dict.common.story}</h2>
+                  <h2 className="text-3xl font-black text-foreground dark:text-white force-dark-text-white">{dict.common.story}</h2>
                 </div>
-                <p className="text-xl text-foreground/80 dark:text-white/80 font-bold leading-relaxed italic">
+                <p className="text-xl text-foreground/80 dark:text-white/80 force-dark-text-white font-bold leading-relaxed italic">
                   {displayPlace.description || "이 장소의 깊은 역사와 웰니스 리듬을 발견할 수 있는 상세한 이야기가 준비되고 있습니다. 정선의 자연이 빚어낸 이곳에서 당신만의 새로운 아리아를 시작해 보세요."}
                 </p>
               </div>
 
-              <div className="relative group bg-accent/[0.05] dark:bg-white/10 p-10 rounded-[3rem] border border-accent/20 dark:border-white/20 overflow-hidden shadow-lg shadow-black/10">
+              <div className="relative group bg-accent/[0.05] dark:bg-white/10 insight-box-contrast p-10 rounded-[3rem] border border-accent/20 dark:border-white/20 overflow-hidden shadow-lg shadow-black/10">
                 <Sparkles className="absolute -right-6 -bottom-6 w-32 h-32 text-accent/10 group-hover:rotate-12 transition-transform duration-1000" />
                 <div className="relative z-10 space-y-6">
                   <div className="inline-flex items-center gap-3 px-4 py-2 bg-accent/10 rounded-xl text-accent text-[10px] font-black uppercase tracking-[0.2em]">
                     <Sparkles className="w-4 h-4" />
                     Wellness Insight
                   </div>
-                  <h3 className="text-2xl font-black text-foreground dark:text-white">{dict.common.wellnessTip}</h3>
+                  <h3 className="text-2xl font-black text-foreground dark:text-white force-dark-text-white">{dict.common.wellnessTip}</h3>
                   <div className="space-y-3">
                     {displayPlace.wellnessTips && displayPlace.wellnessTips.length > 0 ? (
                       displayPlace.wellnessTips.map((tip, idx) => (
-                        <div key={idx} className="flex gap-3 text-sm font-bold text-foreground/70 dark:text-white/90 leading-relaxed list-item list-inside marker:text-accent">
+                        <div key={idx} className="flex gap-3 text-sm font-bold text-foreground/70 dark:text-white/90 force-dark-text-white leading-relaxed list-item list-inside marker:text-accent">
                           {tip}
                         </div>
                       ))
                     ) : (
-                      <p className="text-sm font-bold text-foreground/70 dark:text-white/90 leading-relaxed">
+                      <p className="text-sm font-bold text-foreground/70 dark:text-white/90 force-dark-text-white leading-relaxed">
                         82개의 관광 자원 중 한 곳인 이곳은 특히 아침의 정운과 저녁의 노을이 아름다운 곳입니다. 
                         스마트폰을 잠시 내려놓고 공간이 들려주는 소리에 집중해 보세요. 
                         이곳의 기운은 당신의 지친 영혼에 새로운 질서를 부여할 것입니다.

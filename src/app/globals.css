@@ -18,9 +18,18 @@
     --foreground: #E1E8E4; /* Silver Sage - High readability */
     --foreground-muted: #A0B0A8; /* Lower contrast for metadata */
     --card-bg: #0C1A14;    /* Layered Forest */
-    --card-accent-bg: rgba(255, 255, 255, 0.05); /* Subtle white overlay for boxes */
+    --card-accent-bg: rgba(255, 255, 255, 0.1); 
     --forest-green: #1A3D2E;
     --vital-orange: #FF7F50;
+  }
+
+  .force-dark-text-white {
+    color: #E1E8E4 !important;
+  }
+  
+  .insight-box-contrast {
+    background-color: rgba(255, 255, 255, 0.08) !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
   }
 }
 
