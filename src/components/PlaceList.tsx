@@ -240,10 +240,10 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
         </div>
 
         {/* Premium Icon-based Category Grid - Fixed for clipping with generous vertical padding */}
-        <div className="relative -mx-4 -my-16 px-4 py-16 overflow-hidden">
+        <div className="relative -mx-4 -my-24 px-4 py-24 group/scroll">
           <div 
             ref={scrollRef}
-            className="flex gap-4 md:gap-8 overflow-x-auto py-12 scroll-smooth scrollbar-hide snap-x px-8"
+            className="flex gap-6 md:gap-10 overflow-x-auto py-16 scrollbar-hide snap-x px-12"
           >
             {categories.map((cat) => {
               const config = getCategoryConfig(cat, dict);
@@ -253,8 +253,12 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
               return (
                 <motion.button
                   key={cat}
-                  whileHover={{ scale: 1.05, y: -12 }}
-                  whileTap={{ scale: 0.95 }}
+                  whileHover={{ 
+                    scale: 1.08, 
+                    y: -15,
+                    transition: { type: "spring", stiffness: 400, damping: 20 }
+                  }}
+                  whileTap={{ scale: 0.92 }}
                   onClick={() => {
                     if (cat === dict.common.nearMe) {
                       if (!userLocation) handleLocateMe();
@@ -263,28 +267,28 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
                       setSelectedCategory(cat);
                     }
                   }}
-                  className={`relative group flex-shrink-0 flex flex-col items-center justify-center p-8 min-w-[140px] h-40 rounded-[3rem] transition-all duration-500 border-2 snap-center ${
+                  className={`relative group flex-shrink-0 flex flex-col items-center justify-center p-8 min-w-[150px] h-44 rounded-[3.5rem] transition-all duration-700 border snap-center ${
                     isActive 
-                      ? `bg-white dark:bg-forest shadow-[0_30px_60px_-12px_rgba(26,67,47,0.25)] border-accent z-10` 
-                      : "bg-white/40 dark:bg-white/5 border-transparent hover:border-forest/10 dark:hover:border-white/10"
+                      ? `bg-white dark:bg-forest/80 shadow-[0_40px_80px_-15px_rgba(26,67,47,0.3)] border-accent/40 z-20 backdrop-blur-2xl` 
+                      : "bg-white/30 dark:bg-white/5 border-white/10 dark:border-white/5 hover:bg-white/50 dark:hover:bg-white/10 hover:border-forest/20 shadow-xl"
                   }`}
                 >
                   {/* Accent Background Glow - High blur for premium depth */}
                   {isActive && (
                     <motion.div 
                       layoutId="active-glow"
-                      className={`absolute inset-0 rounded-[3rem] blur-3xl opacity-30 ${config.bg}`}
+                      className={`absolute inset-0 rounded-[3.5rem] blur-3xl opacity-40 transition-all duration-700 ${config.bg}`}
                     />
                   )}
                   
-                  <div className={`p-5 rounded-2xl mb-4 transition-transform duration-500 group-hover:scale-110 relative z-10 ${
-                    isActive ? `${config.bg} ${config.color}` : "bg-forest/5 dark:bg-white/10 text-forest/40 dark:text-white/40"
+                  <div className={`p-6 rounded-[2rem] mb-5 transition-all duration-500 group-hover:rotate-6 relative z-10 ${
+                    isActive ? `${config.bg} ${config.color} shadow-lg shadow-black/5` : "bg-forest/5 dark:bg-white/10 text-forest/40 dark:text-white/40"
                   }`}>
                     <Icon className={`w-8 h-8 ${cat === dict.common.nearMe && isLocating ? "animate-spin" : ""}`} />
                   </div>
                   
-                  <span className={`text-[12px] font-black uppercase tracking-[0.15em] text-center relative z-10 whitespace-nowrap ${
-                    isActive ? "text-forest dark:text-white font-black" : "text-forest/40 dark:text-white/40"
+                  <span className={`text-[13px] font-black uppercase tracking-[0.2em] text-center relative z-10 whitespace-nowrap ${
+                    isActive ? "text-forest dark:text-white" : "text-forest/30 dark:text-white/30"
                   }`}>
                     {config.label}
                   </span>
@@ -292,12 +296,26 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
                   {isActive && (
                     <motion.div 
                       layoutId="active-indicator"
-                      className="absolute -bottom-1 w-2.5 h-2.5 bg-accent rounded-full shadow-[0_0_15px_rgba(26,117,78,0.6)]"
+                      className="absolute -bottom-2 w-3 h-3 bg-accent rounded-full shadow-[0_0_20px_rgba(255,127,80,0.8)]"
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ type: "spring", stiffness: 500, damping: 15 }}
                     />
                   )}
                 </motion.button>
               );
             })}
+          </div>
+          
+          {/* Subtle decoration to indicate scroll ability on desktop */}
+          <div className="absolute bottom-16 left-1/2 -translate-x-1/2 flex gap-1 opacity-0 group-hover/scroll:opacity-100 transition-opacity duration-1000">
+             <div className="w-12 h-1 bg-forest/5 rounded-full overflow-hidden">
+                <motion.div 
+                  className="w-1/3 h-full bg-accent/40"
+                  animate={{ x: ["-100%", "300%"] }}
+                  transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
+                />
+             </div>
           </div>
         </div>
       </motion.div>
