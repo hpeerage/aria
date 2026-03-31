@@ -220,61 +220,63 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
           </motion.p>
         </div>
 
-        {/* Premium Icon-based Category Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-9 gap-4 md:gap-6 overflow-x-auto pb-4 scrollbar-hide px-2">
-          {categories.map((cat) => {
-            const config = getCategoryConfig(cat, dict);
-            const isActive = selectedCategory === cat;
-            const Icon = config.icon;
+        {/* Premium Icon-based Category Grid - Fixed for clipping and responsive flow */}
+        <div className="relative -mx-4 -my-10 px-4 py-10 overflow-hidden">
+          <div className="flex gap-4 md:gap-6 overflow-x-auto pb-8 pt-2 scroll-smooth scrollbar-hide snap-x px-4">
+            {categories.map((cat) => {
+              const config = getCategoryConfig(cat, dict);
+              const isActive = selectedCategory === cat;
+              const Icon = config.icon;
 
-            return (
-              <motion.button
-                key={cat}
-                whileHover={{ scale: 1.02, y: -5 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => {
-                  if (cat === dict.common.nearMe) {
-                    if (!userLocation) handleLocateMe();
-                    else setSelectedCategory(cat);
-                  } else {
-                    setSelectedCategory(cat);
-                  }
-                }}
-                className={`relative group flex flex-col items-center justify-center p-6 min-w-[120px] h-32 rounded-[2.5rem] transition-all duration-500 border-2 ${
-                  isActive 
-                    ? `bg-white dark:bg-forest shadow-2xl border-accent` 
-                    : "bg-white/40 dark:bg-white/5 border-transparent hover:border-forest/10 dark:hover:border-white/10"
-                }`}
-              >
-                {/* Accent Background Glow */}
-                {isActive && (
-                  <motion.div 
-                    layoutId="active-glow"
-                    className={`absolute inset-0 rounded-[2.5rem] blur-2xl opacity-20 ${config.bg}`}
-                  />
-                )}
-                
-                <div className={`p-4 rounded-2xl mb-3 transition-transform duration-500 group-hover:scale-110 relative z-10 ${
-                  isActive ? `${config.bg} ${config.color}` : "bg-forest/5 dark:bg-white/10 text-forest/40 dark:text-white/40"
-                }`}>
-                  <Icon className={`w-6 h-6 ${cat === dict.common.nearMe && isLocating ? "animate-spin" : ""}`} />
-                </div>
-                
-                <span className={`text-[10px] font-black uppercase tracking-widest text-center relative z-10 ${
-                  isActive ? "text-forest dark:text-white" : "text-forest/40 dark:text-white/40"
-                }`}>
-                  {config.label}
-                </span>
+              return (
+                <motion.button
+                  key={cat}
+                  whileHover={{ scale: 1.05, y: -8 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => {
+                    if (cat === dict.common.nearMe) {
+                      if (!userLocation) handleLocateMe();
+                      else setSelectedCategory(cat);
+                    } else {
+                      setSelectedCategory(cat);
+                    }
+                  }}
+                  className={`relative group flex-shrink-0 flex flex-col items-center justify-center p-6 min-w-[130px] h-36 rounded-[2.5rem] transition-all duration-500 border-2 snap-center ${
+                    isActive 
+                      ? `bg-white dark:bg-forest shadow-[0_20px_50px_-10px_rgba(26,67,47,0.2)] border-accent z-10` 
+                      : "bg-white/40 dark:bg-white/5 border-transparent hover:border-forest/10 dark:hover:border-white/10"
+                  }`}
+                >
+                  {/* Accent Background Glow - Expanded blur for premium feel */}
+                  {isActive && (
+                    <motion.div 
+                      layoutId="active-glow"
+                      className={`absolute inset-0 rounded-[2.5rem] blur-3xl opacity-30 ${config.bg}`}
+                    />
+                  )}
+                  
+                  <div className={`p-4 rounded-2xl mb-3 transition-transform duration-500 group-hover:scale-110 relative z-10 ${
+                    isActive ? `${config.bg} ${config.color}` : "bg-forest/5 dark:bg-white/10 text-forest/40 dark:text-white/40"
+                  }`}>
+                    <Icon className={`w-7 h-7 ${cat === dict.common.nearMe && isLocating ? "animate-spin" : ""}`} />
+                  </div>
+                  
+                  <span className={`text-[11px] font-black uppercase tracking-widest text-center relative z-10 whitespace-nowrap ${
+                    isActive ? "text-forest dark:text-white" : "text-forest/40 dark:text-white/40"
+                  }`}>
+                    {config.label}
+                  </span>
 
-                {isActive && (
-                  <motion.div 
-                    layoutId="active-indicator"
-                    className="absolute -bottom-2 w-1.5 h-1.5 bg-accent rounded-full"
-                  />
-                )}
-              </motion.button>
-            );
-          })}
+                  {isActive && (
+                    <motion.div 
+                      layoutId="active-indicator"
+                      className="absolute -bottom-1 w-2 h-2 bg-accent rounded-full shadow-[0_0_10px_rgba(26,117,78,0.5)]"
+                    />
+                  )}
+                </motion.button>
+              );
+            })}
+          </div>
         </div>
       </motion.div>
 
