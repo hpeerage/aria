@@ -20,7 +20,7 @@ export default function HomeClient({ places }: HomeClientProps) {
     <main className="min-h-screen bg-[#F8FAF9] dark:bg-forest-dark overflow-x-hidden">
       <AriaHeader />
       {/* Hero Section with Animation */}
-      <section className="relative min-h-[90vh] md:h-[85vh] flex items-start md:items-center justify-center overflow-hidden bg-forest group pt-44 md:pt-20 pb-20 md:py-0">
+      <section className="relative min-h-[90vh] md:h-[85vh] flex items-start md:items-center justify-center overflow-hidden bg-forest group pt-56 md:pt-20 pb-20 md:py-0">
         <motion.div 
           animate={{ x: [-20, 20, -20], y: [-10, 10, -10] }}
           transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
@@ -108,7 +108,7 @@ export default function HomeClient({ places }: HomeClientProps) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 1.5, duration: 1 }}
-            className="hidden md:flex absolute bottom-10 left-1/2 -translate-x-1/2 flex-col items-center gap-2 text-white/40 pointer-events-none"
+            className="hidden md:flex absolute bottom-10 left-1/2 -translate-x-1/2 flex-col items-center gap-2 text-white/40 pointer-events-none z-0"
           >
             <div className="w-[1px] h-12 bg-gradient-to-t from-accent to-transparent" />
             <span className="text-[10px] font-black uppercase tracking-[0.4em]">Scroll</span>
