@@ -1,5 +1,6 @@
 "use client";
 
+import { Suspense } from "react";
 import { motion } from "framer-motion";
 import { Sparkles, Mountain, Wind, Users, Map as MapIcon, Calendar, ArrowRight, Mail, HelpCircle, Globe, Compass } from "lucide-react";
 import Image from "next/image";
@@ -133,7 +134,13 @@ export default function HomeClient({ places }: HomeClientProps) {
 
       {/* Dynamic Content: Place List */}
       <section className="relative py-20 px-4">
-        <PlaceList initialPlaces={places} />
+        <Suspense fallback={
+          <div className="flex justify-center items-center py-40">
+            <div className="w-12 h-12 border-4 border-accent/20 border-t-accent rounded-full animate-spin" />
+          </div>
+        }>
+          <PlaceList initialPlaces={places} />
+        </Suspense>
       </section>
 
       {/* Footer */}
