@@ -3,8 +3,10 @@
 import { motion } from "framer-motion";
 import { Settings, Save, Shield, Database, Bell, Layout, Palette, Sliders } from "lucide-react";
 import { useState } from "react";
+import { useLanguage } from "@/lib/i18n/context";
 
 export default function AdminSettingsPage() {
+  const { dict } = useLanguage();
   const [isSaving, setIsSaving] = useState(false);
 
   return (
@@ -14,12 +16,12 @@ export default function AdminSettingsPage() {
              <Settings className="w-48 h-48 rotate-12" />
         </div>
         <div className="space-y-3 relative z-10">
-          <div className="flex items-center gap-3 text-accent font-black uppercase text-[10px] tracking-[0.2em]">
-             <Sliders className="w-4 h-4" />
-             Core Configuration
-          </div>
-          <h3 className="text-4xl font-black text-white tracking-tighter">System Settings</h3>
-          <p className="text-white/40 text-sm font-bold max-w-md">Fine-tune the ARIA platform engine and administrative protocols.</p>
+           <div className="flex items-center gap-3 text-accent font-black uppercase text-[10px] tracking-[0.2em]">
+              <Sliders className="w-4 h-4" />
+              {dict.admin.coreConfig}
+           </div>
+           <h3 className="text-4xl font-black text-white tracking-tighter">{dict.admin.sysSettings}</h3>
+           <p className="text-white/40 text-sm font-bold max-w-md">{dict.admin.sysSettingsDesc}</p>
         </div>
         <button 
           onClick={() => {
@@ -33,33 +35,33 @@ export default function AdminSettingsPage() {
           ) : (
             <Save className="w-5 h-5" />
           )}
-          Update Protocols
+          {dict.admin.updateProtocols}
         </button>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <SettingsCard 
           icon={<Shield className="w-6 h-6 text-accent" />}
-          title="Security & Access"
-          description="Manage administrative keys and session termination protocols."
+          title={dict.admin.securityAccess}
+          description={dict.admin.securityDesc}
           options={["Multi-Factor Authentication", "Operator Permissions", "Audit Logging"]}
         />
         <SettingsCard 
           icon={<Database className="w-6 h-6 text-blue-400" />}
-          title="Data Synchronization"
-          description="Configure Google Sheets connectivity and caching frequency."
+          title={dict.admin.dataSync}
+          description={dict.admin.dataSyncDesc}
           options={["Sync Interval (60m)", "Cache Revalidation", "Error Reporting"]}
         />
         <SettingsCard 
           icon={<Palette className="w-6 h-6 text-purple-400" />}
-          title="Visual Interface"
-          description="Customize the platform aesthetics for different regions."
+          title={dict.admin.visualInterface}
+          description={dict.admin.visualDesc}
           options={["Dark Mode Priority", "Brand Color Mapping", "Asset Grid Layout"]}
         />
         <SettingsCard 
           icon={<Bell className="w-6 h-6 text-yellow-400" />}
-          title="System Notifications"
-          description="Set up alerts for data inconsistency or visitor peaks."
+          title={dict.admin.sysNotify}
+          description={dict.admin.sysNotifyDesc}
           options={["Data Integrity Alerts", "Traffic Monitoring", "Push Notifications"]}
         />
       </div>

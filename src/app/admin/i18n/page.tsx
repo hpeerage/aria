@@ -24,10 +24,10 @@ export default function AdminI18nPage() {
         <div className="space-y-3 relative z-10">
           <div className="flex items-center gap-3 text-accent font-black uppercase text-[10px] tracking-[0.2em]">
              <Languages className="w-4 h-4" />
-             Global Engine
+             {dict.admin.globalEngine}
           </div>
-          <h3 className="text-4xl font-black text-white tracking-tighter">Dictionary Manager</h3>
-          <p className="text-white/40 text-sm font-bold max-w-md">Synchronize premium translations across KO and EN interfaces in real-time.</p>
+          <h3 className="text-4xl font-black text-white tracking-tighter">{dict.admin.dictManager}</h3>
+          <p className="text-white/40 text-sm font-bold max-w-md">{dict.admin.dictManagerDesc}</p>
         </div>
         <button 
           onClick={() => {
@@ -41,14 +41,14 @@ export default function AdminI18nPage() {
           ) : (
             <Save className="w-5 h-5" />
           )}
-          Push Translations
+          {dict.admin.pushTranslations}
         </button>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-12">
         {/* Sidebar Tabs */}
         <aside className="space-y-4">
-           <div className="text-[10px] font-black uppercase tracking-widest text-white/20 px-6 mb-6">Namespace Selection</div>
+           <div className="text-[10px] font-black uppercase tracking-widest text-white/20 px-6 mb-6">{dict.admin.namespaceSelect}</div>
            {sections.map(section => (
              <button
                key={section}
@@ -71,7 +71,7 @@ export default function AdminI18nPage() {
               <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-white/20 group-focus-within:text-accent transition-colors" />
               <input 
                 type="text" 
-                placeholder={`Search keys in ${activeTab} namespace...`}
+                placeholder={`${dict.admin.searchKeys} (${activeTab})`}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full pl-16 pr-8 py-5 bg-white/5 border border-white/10 rounded-[2rem] text-white placeholder:text-white/20 focus:ring-2 focus:ring-accent outline-none transition-all font-bold"
@@ -82,7 +82,7 @@ export default function AdminI18nPage() {
               <div className="p-8 bg-white/[0.02] border-b border-white/5 flex items-center justify-between">
                  <h5 className="font-black text-white uppercase tracking-widest text-xs flex items-center gap-2">
                     <CheckCircle2 className="w-4 h-4 text-accent" />
-                    Editing: {activeTab.toUpperCase()} Namespace
+                    {dict.admin.editingNamespace} {activeTab.toUpperCase()}
                  </h5>
                  <HelpCircle className="w-5 h-5 text-white/20 cursor-help hover:text-white transition-colors" />
               </div>
@@ -126,7 +126,7 @@ export default function AdminI18nPage() {
               <div className="m-8 p-6 bg-yellow-400/5 border border-yellow-400/20 rounded-[1.5rem] flex items-center gap-4">
                  <AlertCircle className="w-6 h-6 text-yellow-400/60" />
                  <p className="text-[10px] font-bold text-yellow-400/60 leading-relaxed uppercase tracking-tighter">
-                    Warning: Changing dictionary keys might disrupt interface connectivity. Ensure key-string alignment before pushing to production.
+                    {dict.admin.warningDict}
                  </p>
               </div>
            </div>

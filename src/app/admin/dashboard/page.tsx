@@ -5,8 +5,10 @@ import { Map, Users, Sparkles, Calendar, ArrowUpRight, TrendingUp, Info } from "
 
 import { useEffect, useState } from "react";
 import { getPlacesFromGoogleSheet } from "@/lib/google-sheets";
+import { useLanguage } from "@/lib/i18n/context";
 
 export default function DashboardPage() {
+  const { dict } = useLanguage();
   const [placeCount, setPlaceCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -20,10 +22,10 @@ export default function DashboardPage() {
   }, []);
 
   const stats = [
-    { label: "Total Asset Count", value: isLoading ? "..." : String(placeCount), trend: "+4 this month", icon: Map, color: "text-accent" },
-    { label: "Active Exploration Paths", value: "12", trend: "Maintained", icon: TrendingUp, color: "text-blue-400" },
-    { label: "Wellness Vitality Score", value: "98%", trend: "+2% growth", icon: Sparkles, color: "text-purple-400" },
-    { label: "Registered Operators", value: "24", trend: "Stable", icon: Users, color: "text-white" },
+    { label: dict.admin.statsAssets, value: isLoading ? "..." : String(placeCount), trend: `+4 ${dict.stats.newPlaces}`, icon: Map, color: "text-accent" },
+    { label: dict.admin.statsPaths, value: "12", trend: dict.admin.statsTrendStable, icon: TrendingUp, color: "text-blue-400" },
+    { label: dict.admin.statsWellness, value: "98%", trend: `+2% ${dict.admin.statsTrendUp}`, icon: Sparkles, color: "text-purple-400" },
+    { label: dict.admin.statsOperators, value: "24", trend: dict.admin.statsTrendStable, icon: Users, color: "text-white" },
   ];
 
   return (
@@ -69,21 +71,20 @@ export default function DashboardPage() {
             <Sparkles className="w-32 h-32 rotate-12" />
           </div>
           <div className="relative z-10 space-y-6">
-            <h4 className="text-2xl font-black text-white tracking-tight">System Integrity Check</h4>
+            <h4 className="text-2xl font-black text-white tracking-tight">{dict.admin.sysIntegrity}</h4>
             <p className="text-white/60 leading-relaxed max-w-md">
-              Google Sheets (ID: 1Setffm...) 데이터와 실시간 동기화 상태입니다. 
-              최근 업데이트 이후 모든 치유 자산의 맵핑 데이터가 정상적으로 보호되고 있습니다.
+              {dict.admin.sysDesc}
             </p>
             <div className="space-y-4">
               <div className="flex justify-between items-center text-xs font-bold border-b border-white/5 pb-4">
-                <span className="text-white/60 uppercase tracking-widest (prefers-color-scheme: dark)">Connectivity Status</span>
+                <span className="text-white/60 uppercase tracking-widest">{dict.admin.sysConn}</span>
                 <span className="text-accent flex items-center gap-2">
                   <div className="w-2 h-2 bg-accent rounded-full animate-ping" />
-                  Stable Connection
+                  {dict.admin.sysStable}
                 </span>
               </div>
               <div className="flex justify-between items-center text-xs font-bold border-b border-white/5 pb-4">
-                <span className="text-white/60 uppercase tracking-widest (prefers-color-scheme: dark)">Last Database Sync</span>
+                <span className="text-white/60 uppercase tracking-widest">{dict.admin.sysLastSync}</span>
                 <span className="text-white">Today 21:30 PM</span>
               </div>
               <div className="flex justify-between items-center text-xs font-bold">
@@ -101,7 +102,7 @@ export default function DashboardPage() {
           className="p-10 bg-white/5 border border-white/10 rounded-[3rem] space-y-8 relative overflow-hidden hover:bg-white/[0.08] transition-all"
         >
           <div className="flex items-center justify-between">
-            <h4 className="text-2xl font-black text-white tracking-tight">Wellness Loop Analytics</h4>
+            <h4 className="text-2xl font-black text-white tracking-tight">{dict.admin.wellnessLoop}</h4>
             <div className="p-3 bg-white/5 rounded-2xl">
               <Calendar className="w-5 h-5 text-accent" />
             </div>
@@ -112,11 +113,11 @@ export default function DashboardPage() {
             </p>
             <div className="grid grid-cols-2 gap-6">
               <div className="p-6 bg-white/5 rounded-[2rem] border border-white/5 text-center">
-                <p className="text-[10px] font-black uppercase text-white/30 mb-2">Popular Region</p>
+                <p className="text-[10px] font-black uppercase text-white/30 mb-2">{dict.admin.popularRegion}</p>
                 <p className="text-xl font-black text-white">Jeongseon-eup</p>
               </div>
               <div className="p-6 bg-white/5 rounded-[2rem] border border-white/5 text-center">
-                <p className="text-[10px] font-black uppercase text-white/30 mb-2">Peak Time</p>
+                <p className="text-[10px] font-black uppercase text-white/30 mb-2">{dict.admin.peakTime}</p>
                 <p className="text-xl font-black text-white">14:00 - 16:00</p>
               </div>
             </div>
@@ -135,12 +136,12 @@ export default function DashboardPage() {
             <Info className="w-8 h-8" />
           </div>
           <div>
-            <h5 className="text-xl font-black tracking-tight">관리자 전용 운영 가이드 v2.0</h5>
+            <h5 className="text-xl font-black tracking-tight">{dict.admin.adminGuide} v2.0</h5>
             <p className="text-forest-dark/60 text-sm font-bold tracking-tight">장소 데이터 수정 시 다국어(영어) 필드 누락 여부를 반드시 확인해 주세요.</p>
           </div>
         </div>
         <button className="px-8 py-4 bg-forest-dark text-white rounded-[1.5rem] font-black text-xs uppercase tracking-widest hover:bg-black hover:scale-105 transition-all">
-          Download PDF Guide
+          {dict.admin.downloadGuide}
         </button>
       </motion.div>
     </div>
