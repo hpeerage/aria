@@ -269,7 +269,7 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
                   }}
                   className={`relative group flex-shrink-0 flex flex-col items-center justify-center p-8 min-w-[150px] h-44 rounded-[3.5rem] transition-all duration-700 border snap-center ${
                     isActive 
-                      ? `bg-white dark:bg-forest/80 shadow-[0_40px_80px_-15px_rgba(26,67,47,0.3)] border-accent/40 z-20 backdrop-blur-2xl` 
+                      ? `bg-white dark:bg-forest-light shadow-[0_40px_80px_-15px_rgba(26,67,47,0.4)] border-accent/40 z-20 backdrop-blur-2xl` 
                       : "bg-white/30 dark:bg-white/5 border-white/10 dark:border-white/5 hover:bg-white/50 dark:hover:bg-white/10 hover:border-forest/20 shadow-xl"
                   }`}
                 >

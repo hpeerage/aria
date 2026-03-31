@@ -122,13 +122,13 @@ export default function AriaDetailModal({ place, onClose, allPlaces }: AriaDetai
                   <div className="w-1 h-8 bg-accent rounded-full" />
                   <h4 className="text-2xl font-black text-forest dark:text-white">{dict.common.story}</h4>
                 </div>
-                <p className="text-lg text-forest/70 dark:text-white/70 font-bold leading-relaxed italic">
+                <p className="text-lg text-forest/70 dark:text-white/80 font-bold leading-relaxed italic">
                   {place.description || "이 장소의 깊은 역사와 웰니스 리듬을 발견할 수 있는 상세한 이야기가 준비되고 있습니다."}
                 </p>
               </section>
 
               {/* Wellness Tip */}
-              <section className="bg-accent/5 p-8 rounded-[2rem] border border-accent/10 relative overflow-hidden group hover:bg-accent/[0.08] transition-colors">
+              <section className="bg-accent/[0.03] dark:bg-accent/[0.07] p-8 rounded-[2rem] border border-accent/10 dark:border-accent/20 relative overflow-hidden group hover:bg-accent/[0.08] transition-colors">
                 <div className="absolute -right-8 -bottom-8 text-accent/10 group-hover:text-accent/20 transition-all duration-500">
                   <Sparkles className="w-32 h-32 rotate-12" />
                 </div>
@@ -141,12 +141,12 @@ export default function AriaDetailModal({ place, onClose, allPlaces }: AriaDetai
                   <div className="space-y-3">
                     {place.wellnessTips && place.wellnessTips.length > 0 ? (
                       place.wellnessTips.map((tip, idx) => (
-                        <div key={idx} className="flex gap-3 text-sm font-bold text-forest/60 dark:text-white/60 leading-relaxed list-item list-inside marker:text-accent">
+                        <div key={idx} className="flex gap-3 text-sm font-bold text-forest/60 dark:text-white/70 leading-relaxed list-item list-inside marker:text-accent">
                           {tip}
                         </div>
                       ))
                     ) : (
-                      <p className="text-sm font-bold text-forest/60 dark:text-white/60 leading-relaxed">
+                      <p className="text-sm font-bold text-forest/60 dark:text-white/70 leading-relaxed">
                         숨겨진 82개의 보물 중 하나인 이곳은 바쁜 일상을 잠시 잊고, 정선의 맑은 정기와 함께 영혼의 질서를 되찾기에 가장 최적화된 공간입니다. 30분 정도의 느린 걸음으로 공간의 정적을 느껴보세요.
                       </p>
                     )}
@@ -162,9 +162,9 @@ export default function AriaDetailModal({ place, onClose, allPlaces }: AriaDetai
                 </div>
                 <div className="grid grid-cols-1 gap-4">
                   {nearbyPlaces.map((np) => (
-                    <div key={np.id} className="flex items-center justify-between p-5 bg-white dark:bg-white/5 border border-forest/5 dark:border-white/10 rounded-[1.5rem] hover:border-accent/40 group transition-all hover:translate-x-2">
+                    <div key={np.id} className="flex items-center justify-between p-5 bg-white dark:bg-forest-light border border-forest/5 dark:border-white/5 rounded-[1.5rem] hover:border-accent/40 group transition-all hover:translate-x-2 shadow-sm">
                       <div className="flex items-center gap-4">
-                        <div className="p-3 bg-forest/5 dark:bg-white/10 text-forest dark:text-white group-hover:bg-accent group-hover:text-white rounded-xl transition-all">
+                        <div className="p-3 bg-forest/5 dark:bg-white/5 text-forest dark:text-white group-hover:bg-accent group-hover:text-white rounded-xl transition-all">
                           <MapPin className="w-4 h-4" />
                         </div>
                         <div>
@@ -172,7 +172,7 @@ export default function AriaDetailModal({ place, onClose, allPlaces }: AriaDetai
                           <p className="text-[10px] font-bold text-forest/40 dark:text-white/40 uppercase tracking-widest">{np.category}</p>
                         </div>
                       </div>
-                      <ArrowRight className="w-4 h-4 text-forest/10 group-hover:text-accent transition-colors" />
+                      <ArrowRight className="w-4 h-4 text-forest/10 dark:text-white/20 group-hover:text-accent transition-colors" />
                     </div>
                   ))}
                 </div>
