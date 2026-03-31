@@ -1,7 +1,7 @@
 export const dictionaries = {
   ko: {
     common: {
-      explore: "지금 탐험하기",
+      explore: "지금 여행하기",
       download: "내려받기",
       backToList: "목록으로 돌아가기",
       nearMe: "내 주변",
