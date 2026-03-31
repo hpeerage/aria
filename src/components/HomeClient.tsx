@@ -20,7 +20,7 @@ export default function HomeClient({ places }: HomeClientProps) {
     <main className="min-h-screen bg-[#F8FAF9] dark:bg-forest-dark overflow-x-hidden">
       <AriaHeader />
       {/* Hero Section with Animation */}
-      <section className="relative h-[85vh] flex items-center justify-center overflow-hidden bg-forest group">
+      <section className="relative min-h-[90vh] md:h-[85vh] flex items-start md:items-center justify-center overflow-hidden bg-forest group pt-44 md:pt-20 pb-20 md:py-0">
         <motion.div 
           animate={{ x: [-20, 20, -20], y: [-10, 10, -10] }}
           transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
@@ -53,12 +53,12 @@ export default function HomeClient({ places }: HomeClientProps) {
           <Image src="/aria/images/logo.svg" alt="" width={800} height={400} className="w-full h-auto object-contain" />
         </motion.div>
 
-        <div className="relative z-10 text-center px-4 space-y-12 max-w-5xl">
+        <div className="relative z-10 text-center px-6 space-y-4 md:space-y-12 max-w-5xl">
           <motion.div 
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, ease: "easeOut" }}
-            className="inline-flex items-center gap-2 px-6 py-2 rounded-full border border-white/20 bg-white/5 backdrop-blur-md text-accent text-sm font-black tracking-[0.3em] uppercase mb-4"
+            className="inline-flex items-center gap-2 px-6 py-2 rounded-full border border-white/20 bg-white/5 backdrop-blur-md text-accent text-[10px] sm:text-sm font-black tracking-[0.2em] sm:tracking-[0.3em] uppercase mb-2 md:mb-4"
           >
             <Sparkles className="w-4 h-4 animate-pulse" />
             {dict.hero.subtitle}
@@ -70,16 +70,16 @@ export default function HomeClient({ places }: HomeClientProps) {
               initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1.2, ease: "easeOut", delay: 0.2 }}
-              className="text-7xl md:text-9xl font-black text-white tracking-tighter leading-none"
+              className="text-4xl sm:text-7xl md:text-9xl font-black text-white tracking-tighter leading-[0.9]"
             >
               {dict.hero.title1} <br />
-              <span className="text-accent underline decoration-white/10 decoration-8 underline-offset-8">{dict.hero.title2}</span>
+              <span className="text-accent underline decoration-white/10 decoration-4 md:decoration-8 underline-offset-2 md:underline-offset-8">{dict.hero.title2}</span>
             </motion.h1>
             <motion.p 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 1.5, delay: 0.6 }}
-              className="text-xl md:text-2xl text-white/80 font-medium tracking-tight max-w-2xl mx-auto dark:text-white/90"
+              className="text-sm sm:text-xl md:text-2xl text-white/80 font-medium tracking-tight max-w-2xl mx-auto dark:text-white/90 px-0 sm:px-4 leading-relaxed"
             >
               {dict.hero.description}
             </motion.p>
@@ -89,16 +89,16 @@ export default function HomeClient({ places }: HomeClientProps) {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, delay: 1 }}
-            className="flex flex-col md:flex-row gap-6 justify-center pt-8"
+            className="flex flex-col md:flex-row gap-4 md:gap-6 justify-center pt-4 md:pt-8"
           >
-            <button className="px-10 py-5 bg-accent text-white rounded-3xl font-black text-lg hover:bg-white hover:text-forest transition-all duration-700 shadow-2xl shadow-accent/20 active:scale-95 group flex items-center gap-3 justify-center relative overflow-hidden group">
+            <button className="px-8 md:px-10 py-4 md:py-5 bg-accent text-white rounded-3xl font-black text-base md:text-lg hover:bg-white hover:text-forest transition-all duration-700 shadow-2xl shadow-accent/20 active:scale-95 group flex items-center gap-3 justify-center relative overflow-hidden group">
               <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-700" />
               <span className="relative z-10">{dict.common.explore}</span>
               <motion.div className="relative z-10" animate={{ x: [0, 5, 0] }} transition={{ repeat: Infinity, duration: 1.5 }}>
                 <ArrowRight className="w-5 h-5" />
               </motion.div>
             </button>
-            <button className="px-10 py-5 bg-white/5 backdrop-blur-3xl text-white border border-white/10 rounded-3xl font-black text-lg hover:bg-white/10 transition-all active:scale-95 border-b-4 border-white/5 active:border-b-0 active:translate-y-1">
+            <button className="px-8 md:px-10 py-4 md:py-5 bg-white/5 backdrop-blur-3xl text-white border border-white/10 rounded-3xl font-black text-base md:text-lg hover:bg-white/10 transition-all active:scale-95 border-b-4 border-white/5 active:border-b-0 active:translate-y-1">
               {dict.common.download}
             </button>
           </motion.div>
@@ -108,7 +108,7 @@ export default function HomeClient({ places }: HomeClientProps) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 1.5, duration: 1 }}
-            className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/40"
+            className="hidden md:flex absolute bottom-10 left-1/2 -translate-x-1/2 flex-col items-center gap-2 text-white/40 pointer-events-none"
           >
             <div className="w-[1px] h-12 bg-gradient-to-t from-accent to-transparent" />
             <span className="text-[10px] font-black uppercase tracking-[0.4em]">Scroll</span>
@@ -117,7 +117,7 @@ export default function HomeClient({ places }: HomeClientProps) {
       </section>
 
       {/* Statistics Bar */}
-      <section className="relative z-20 max-w-7xl mx-auto -mt-16 px-4">
+      <section className="relative z-20 max-w-7xl mx-auto -mt-10 md:-mt-16 px-4">
         <motion.div 
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
