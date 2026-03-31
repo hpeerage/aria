@@ -2,7 +2,7 @@ export const dictionaries = {
   ko: {
     common: {
       explore: "지금 탐험하기",
-      download: "기획서 내려받기",
+      download: "내려받기",
       backToList: "목록으로 돌아가기",
       nearMe: "내 주변",
       all: "전체",
@@ -119,7 +119,7 @@ export const dictionaries = {
   en: {
     common: {
       explore: "Explore Now",
-      download: "Download Plan",
+      download: "Download",
       backToList: "Back to List",
       nearMe: "Near Me",
       all: "All",
