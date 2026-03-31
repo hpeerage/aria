@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence, Variants } from "framer-motion";
 import { Place } from "@/types/place";
 import { Search, Compass, ArrowRight, Navigation, LayoutGrid, Trees, Sparkles, UtensilsCrossed, Landmark, Home, MoreHorizontal, Palmtree } from "lucide-react";
@@ -66,6 +66,7 @@ const getCategoryConfig = (cat: string, dict: any) => {
 
 export default function PlaceList({ initialPlaces }: PlaceListProps) {
   const { dict } = useLanguage();
+  const scrollRef = useRef<HTMLDivElement>(null);
   const [places, setPlaces] = useState<Place[]>(initialPlaces);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState(dict.common.all);
@@ -93,6 +94,24 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
   }, [initialPlaces]);
 
   const categories = [dict.common.all, dict.common.nearMe, ...Array.from(new Set(places.map((p) => p.category)))];
+
+  // Handle horizontal mouse wheel scroll
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+
+    const onWheel = (e: WheelEvent) => {
+      if (e.deltaY === 0) return;
+      e.preventDefault();
+      el.scrollTo({
+        left: el.scrollLeft + e.deltaY * 2,
+        behavior: "smooth"
+      });
+    };
+
+    el.addEventListener("wheel", onWheel);
+    return () => el.removeEventListener("wheel", onWheel);
+  }, []);
 
   const handleLocateMe = () => {
     setIsLocating(true);
@@ -222,7 +241,10 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
 
         {/* Premium Icon-based Category Grid - Fixed for clipping with generous vertical padding */}
         <div className="relative -mx-4 -my-16 px-4 py-16 overflow-hidden">
-          <div className="flex gap-4 md:gap-8 overflow-x-auto py-12 scroll-smooth scrollbar-hide snap-x px-8">
+          <div 
+            ref={scrollRef}
+            className="flex gap-4 md:gap-8 overflow-x-auto py-12 scroll-smooth scrollbar-hide snap-x px-8"
+          >
             {categories.map((cat) => {
               const config = getCategoryConfig(cat, dict);
               const isActive = selectedCategory === cat;
