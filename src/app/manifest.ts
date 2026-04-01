@@ -5,7 +5,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: '정선 아리아 (Jeongseon Aria)',
     short_name: '정선 아리아',
     description: '정선 웰니스 관광 큐레이션 플랫폼',
-    start_url: '/',
+    start_url: "/aria/",
     display: 'standalone',
     background_color: '#ffffff',
     theme_color: '#13342b',
