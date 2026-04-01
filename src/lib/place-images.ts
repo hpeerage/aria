@@ -52,5 +52,9 @@ export function getImagesByCategory(category: string, id: number): string[] {
   // 간단한 스왑을 통해 다양성 확보
   [result[0], result[seed]] = [result[seed], result[0]];
   
-  return result;
+  // 로컬 이미지 경로 우선 추가 (/aria/images/{id}_01.jpg)
+  // 파일 확장자 다양성(jpg, jpeg, webp)을 고려하여 기본적으로 jpg를 시도하고 필요시 프로젝트의 실제 파일들을 매핑
+  const localImg = `/aria/images/${String(id).padStart(2, '0')}_01.jpg`;
+  
+  return [localImg, ...result];
 }
