@@ -26,9 +26,26 @@ export const metadata: Metadata = {
     type: "website",
   },
   icons: {
-    icon: "/aria/icon.svg",
-    apple: "/aria/icon.svg",
+    icon: "/aria/favicon.svg",
+    apple: "/aria/apple-icon.png",
   },
+  manifest: "/aria/manifest.webmanifest",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "정선 아리아",
+  },
+  formatDetection: {
+    telephone: false,
+  },
+};
+
+export const viewport = {
+  themeColor: "#13342b",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
 };
 
 import { LanguageProvider } from "@/lib/i18n/context";
