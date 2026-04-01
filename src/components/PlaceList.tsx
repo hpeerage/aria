@@ -231,7 +231,7 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="space-y-10 sticky top-[80px] md:top-[110px] z-[40] transition-all duration-500 pointer-events-auto"
+        className="space-y-10 sticky top-[95px] md:top-[120px] z-[50] transition-all duration-500 pointer-events-auto"
       >
         <div className="flex flex-col md:flex-row gap-6 items-center justify-between bg-white/90 dark:bg-forest-dark/90 p-6 rounded-[3rem] shadow-2xl border border-forest/5 backdrop-blur-3xl transition-all duration-500">
           <div className="relative w-full md:w-96 group">
@@ -282,7 +282,7 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
         <div className="relative -mx-4 -my-8 md:-my-16 px-4 py-8 md:py-16 group/scroll">
           <div 
             ref={scrollRef}
-            className="flex gap-4 md:gap-6 overflow-x-auto py-6 md:py-10 scrollbar-hide snap-x px-8"
+            className="flex gap-4 md:gap-6 overflow-x-auto py-8 md:py-12 scrollbar-hide snap-x snap-proximity px-8 pb-20 md:pb-32"
           >
             {categories.map((cat) => {
               const config = getCategoryConfig(cat, dict);
@@ -292,12 +292,12 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
               return (
                 <motion.button
                   key={cat}
-                  whileHover={{ 
+                  whileHover={typeof window !== 'undefined' && window.innerWidth > 768 ? { 
                     scale: 1.08, 
-                    y: -15,
+                    y: -10,
                     transition: { type: "spring", stiffness: 400, damping: 20 }
-                  }}
-                  whileTap={{ scale: 0.92 }}
+                  } : { scale: 1.02 }}
+                  whileTap={{ scale: 0.95 }}
                   onClick={() => {
                     if (cat === dict.common.nearMe) {
                       if (!userLocation) handleLocateMe();
@@ -306,7 +306,7 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
                       setSelectedCategory(cat);
                     }
                   }}
-                  className={`relative group flex-shrink-0 flex flex-col items-center justify-center p-4 min-w-[110px] h-32 rounded-[2.5rem] transition-all duration-700 border snap-center ${
+                  className={`relative group flex-shrink-0 flex flex-col items-center justify-center p-6 md:p-8 min-w-[110px] md:min-w-[130px] h-36 md:h-40 rounded-[2.5rem] transition-all duration-700 border snap-center ${
                     isActive 
                       ? `bg-white dark:bg-forest-light shadow-[0_40px_80px_-15px_rgba(26,67,47,0.4)] border-accent/40 z-20 backdrop-blur-2xl` 
                       : "bg-white/30 dark:bg-white/5 border-white/10 dark:border-white/5 hover:bg-white/50 dark:hover:bg-white/10 hover:border-forest/20 shadow-xl"
