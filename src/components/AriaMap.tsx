@@ -1,8 +1,8 @@
 "use client";
 
-import { APIProvider, Map, Marker, InfoWindow, useMarkerRef } from "@vis.gl/react-google-maps";
+import { APIProvider, Map, Marker, InfoWindow, useMarkerRef, useMap } from "@vis.gl/react-google-maps";
 import { Place } from "@/types/place";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { MapPin, Info, ArrowRight } from "lucide-react";
 
 interface AriaMapProps {
@@ -14,9 +14,6 @@ interface AriaMapProps {
 export default function AriaMap({ places, onMarkerClick, userLocation }: AriaMapProps) {
   const [selectedPlace, setSelectedPlace] = useState<Place | null>(null);
   const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "";
-
-  // 정선 중심부 좌표
-  const defaultCenter = { lat: 37.3806, lng: 128.6608 };
 
   if (!apiKey) {
     return (
@@ -33,18 +30,19 @@ export default function AriaMap({ places, onMarkerClick, userLocation }: AriaMap
   }
 
   return (
-    <div className="w-full h-[600px] rounded-[3rem] overflow-hidden shadow-2xl border-4 border-white dark:border-forest-dark relative group">
+    <div key={`map-container-${places.length}`} className="w-full h-[600px] rounded-[3rem] overflow-hidden shadow-2xl border-4 border-white dark:border-forest-dark relative group">
       <APIProvider apiKey={apiKey}>
         <Map
-          defaultCenter={defaultCenter}
+          defaultCenter={{ lat: 37.3806, lng: 128.6608 }}
           defaultZoom={11}
           gestureHandling={"greedy"}
           disableDefaultUI={false}
           className="w-full h-full"
         >
+          <MapController places={places} />
           {places.map((place) => (
             <CustomMarker 
-              key={place.id} 
+              key={`${place.id}-${places.length}`} 
               place={place} 
               onClick={() => {
                 setSelectedPlace(place);
@@ -102,6 +100,26 @@ export default function AriaMap({ places, onMarkerClick, userLocation }: AriaMap
       </div>
     </div>
   );
+}
+
+function MapController({ places }: { places: Place[] }) {
+  const map = useMap();
+
+  useEffect(() => {
+    if (!map || places.length === 0) return;
+
+    // 만약 장소가 하나면 그곳으로 이동, 여러개면 전체를 다 보이게 하거나 첫 번째로 이동
+    if (places.length === 1) {
+      map.panTo(places[0].coordinates);
+      map.setZoom(15);
+    } else {
+      const bounds = new google.maps.LatLngBounds();
+      places.forEach(p => bounds.extend(p.coordinates));
+      map.fitBounds(bounds);
+    }
+  }, [map, places]);
+
+  return null;
 }
 
 function CustomMarker({ place, onClick }: { place: Place; onClick: () => void }) {

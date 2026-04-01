@@ -227,14 +227,14 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
         />
       </motion.section>
 
-      {/* Search and Advanced Filter Header */}
+      {/* Search and Advanced Filter Header - Made Sticky for better UX */}
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        className="space-y-10"
+        className="space-y-10 sticky top-[80px] md:top-[110px] z-30 transition-all duration-500"
       >
-        <div className="flex flex-col md:flex-row gap-6 items-center justify-between bg-white dark:bg-forest-dark p-6 rounded-[3rem] shadow-2xl border border-forest/5 backdrop-blur-3xl bg-opacity-90 transition-all duration-500">
+        <div className="flex flex-col md:flex-row gap-6 items-center justify-between bg-white/90 dark:bg-forest-dark/90 p-6 rounded-[3rem] shadow-2xl border border-forest/5 backdrop-blur-3xl transition-all duration-500">
           <div className="relative w-full md:w-96 group">
             <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-forest/40 group-focus-within:text-accent transition-colors" />
             <input
