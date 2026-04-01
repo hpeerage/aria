@@ -188,7 +188,7 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
     });
 
   return (
-    <div id="list" className="w-full max-w-7xl mx-auto px-4 py-12 space-y-12">
+    <div id="list" className="w-full max-w-7xl mx-auto px-4 py-12 space-y-12 scroll-mt-24 md:scroll-mt-32">
       
       {/* Interactive Map Section */}
       <motion.section 
@@ -280,10 +280,10 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
         </div>
 
         {/* Premium Icon-based Category Grid - Fixed for clipping with generous vertical padding */}
-        <div className="relative -mx-4 -my-16 px-4 py-16 group/scroll">
+        <div className="relative -mx-4 -my-8 md:-my-16 px-4 py-8 md:py-16 group/scroll">
           <div 
             ref={scrollRef}
-            className="flex gap-4 md:gap-6 overflow-x-auto py-10 scrollbar-hide snap-x px-8"
+            className="flex gap-4 md:gap-6 overflow-x-auto py-6 md:py-10 scrollbar-hide snap-x px-8"
           >
             {categories.map((cat) => {
               const config = getCategoryConfig(cat, dict);
