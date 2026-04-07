@@ -3,27 +3,30 @@
 import { APIProvider, Map, AdvancedMarker, InfoWindow, useMap } from "@vis.gl/react-google-maps";
 import { Place } from "@/types/place";
 import { useState, useEffect } from "react";
-import { MapPin, Info, ArrowRight, Mountain, Palette, Utensils, Sparkles, Landmark, Bed, Trees } from "lucide-react";
+import { MapPin, Info, ArrowRight, Mountain, Palette, Utensils, Sparkles, Landmark, Bed, Trees, Palmtree, Home, MoreHorizontal } from "lucide-react";
 
-const CATEGORY_CONFIG: Record<string, { icon: any, color: string, bg: string }> = {
-  nature: { icon: Trees, color: "#10b981", bg: "bg-emerald-500" },
-  culture: { icon: Palette, color: "#8b5cf6", bg: "bg-violet-500" },
-  wellness: { icon: Sparkles, color: "#f59e0b", bg: "bg-amber-500" },
-  food: { icon: Utensils, color: "#f43f5e", bg: "bg-rose-500" },
-  history: { icon: Landmark, color: "#64748b", bg: "bg-slate-500" },
-  stay: { icon: Bed, color: "#06b6d4", bg: "bg-cyan-500" },
-  etc: { icon: MapPin, color: "#f43f5e", bg: "bg-rose-500" },
-};
+const getMarkerConfig = (category: string) => {
+  const c = category.toLowerCase();
+  
+  if (c.includes("nature") || c.includes("자연") || c.includes("산") || c.includes("숲")) 
+    return { icon: Trees, color: "#10b981", bg: "bg-emerald-500" }; // Emerald-500
+  
+  if (c.includes("wellness") || c.includes("웰니스") || c.includes("치유") || c.includes("체험")) 
+    return { icon: Sparkles, color: "#f43f5e", bg: "bg-rose-500" }; // Rose-500
+  
+  if (c.includes("food") || c.includes("맛집") || c.includes("식도락") || c.includes("카페") || c.includes("식음")) 
+    return { icon: Utensils, color: "#f97316", bg: "bg-orange-500" }; // Orange-500
 
-// Google Sheet 한글 카테고리 매핑용 별칭
-const CATEGORY_MAP: Record<string, string> = {
-  "자연": "nature",
-  "문화/전통": "culture",
-  "체험/웰니스": "wellness",
-  "맛집": "food",
-  "역사/유적": "history",
-  "숙소": "stay",
-  "기타": "etc",
+  if (c.includes("culture") || c.includes("문화") || c.includes("전통")) 
+    return { icon: Palmtree, color: "#f59e0b", bg: "bg-amber-500" }; // Amber-500
+
+  if (c.includes("history") || c.includes("역사") || c.includes("유적")) 
+    return { icon: Landmark, color: "#3b82f6", bg: "bg-blue-500" }; // Blue-500
+
+  if (c.includes("stay") || c.includes("숙소") || c.includes("숙박") || c.includes("펜션")) 
+    return { icon: Home, color: "#6366f1", bg: "bg-indigo-500" }; // Indigo-500
+
+  return { icon: MoreHorizontal, color: "#64748b", bg: "bg-slate-500" }; // Slate-500
 };
 
 interface AriaMapProps {
@@ -139,8 +142,7 @@ function MapController({ places }: { places: Place[] }) {
 }
 
 function CustomMarker({ place, onClick }: { place: Place; onClick: () => void }) {
-  const categoryKey = CATEGORY_MAP[place.category] || place.category;
-  const config = CATEGORY_CONFIG[categoryKey] || CATEGORY_CONFIG.etc;
+  const config = getMarkerConfig(place.category);
   const Icon = config.icon;
 
   return (
