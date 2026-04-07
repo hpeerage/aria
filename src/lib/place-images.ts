@@ -71,3 +71,28 @@ export function getImagesByCategory(category: string, id: number): string[] {
   
   return result;
 }
+
+/**
+ * 이미지 경로 유효성 검증 및 레거시 데이터 보정 (Data Healing)
+ * 로컬 스토리지 등에 저장된 잘못된 이미지 경로(예: 65_01.jpg)를 실시간으로 교체합니다.
+ */
+export function validateImagePaths(images: string[], id: number, category: string = "기본"): string[] {
+  if (!images || images.length === 0) return getImagesByCategory(category, id);
+
+  return images.map(img => {
+    // 로컬 이미지 경로 패턴 감지 (/aria/images/XX_01.xxx)
+    const localMatch = img.match(/\/aria\/images\/(\d+)_01\.(jpg|jpeg|webp)/);
+    if (localMatch) {
+      const matchId = parseInt(localMatch[1], 10);
+      const ext = EXISTING_LOCAL_IMAGES[matchId];
+      
+      // 실제 존재하지 않는 ID이거나 확장자가 불일치하는 경우 Unsplash로 교체
+      if (!ext || localMatch[2] !== ext) {
+        // 해당 카테고리의 첫 번째 Unsplash 이미지로 대체
+        const fallbackSet = getImagesByCategory(category, matchId);
+        return fallbackSet.find(s => s.startsWith('https://')) || fallbackSet[0];
+      }
+    }
+    return img;
+  });
+}

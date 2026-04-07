@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { getPlacesFromGoogleSheet } from "@/lib/google-sheets";
 import AriaPlacesList from "@/components/admin/AriaPlacesList";
 import AriaMap from "@/components/AriaMap";
+import { validateImagePaths } from "@/lib/place-images";
 import Link from "next/link";
 import { Place } from "@/types/place";
 import { useLanguage } from "@/lib/i18n/context";
@@ -21,7 +22,10 @@ export default function AdminPlacesPage() {
         // Merge with LocalStorage changes
         const localData = localStorage.getItem('aria_local_places');
         if (localData) {
-          const parsed = JSON.parse(localData);
+          const parsed = JSON.parse(localData).map((p: Place) => ({
+            ...p,
+            images: validateImagePaths(p.images || [], p.id, p.category)
+          }));
           const merged = [...data];
           
           parsed.forEach((localPlace: Place) => {

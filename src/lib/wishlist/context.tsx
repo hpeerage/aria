@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { Place } from "@/types/place";
+import { validateImagePaths } from "@/lib/place-images";
 
 interface WishlistContextType {
   wishlist: Place[];
@@ -26,7 +27,12 @@ export function WishlistProvider({ children }: { children: React.ReactNode }) {
     const stored = localStorage.getItem("aria_wishlist");
     if (stored) {
       try {
-        setWishlist(JSON.parse(stored));
+        const parsed = JSON.parse(stored);
+        const healed = parsed.map((p: Place) => ({
+          ...p,
+          images: validateImagePaths(p.images || [], p.id, p.category)
+        }));
+        setWishlist(healed);
       } catch (e) {
         console.error("Failed to parse wishlist from LocalStorage", e);
       }
