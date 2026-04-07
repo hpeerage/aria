@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence, Variants } from "framer-motion";
 import { Place } from "@/types/place";
-import { Search, Compass, ArrowRight, Navigation, LayoutGrid, Trees, Sparkles, UtensilsCrossed, Landmark, Home, MoreHorizontal, Palmtree, X, Heart } from "lucide-react";
+import { Search, Compass, ArrowRight, Navigation, LayoutGrid, Trees, Sparkles, UtensilsCrossed, Landmark, Home, MoreHorizontal, Palmtree, X, Heart, Droplets } from "lucide-react";
 import AriaMap from "./AriaMap";
 import AriaDetailModal from "./AriaDetailModal";
 import Link from "next/link";
@@ -64,7 +64,7 @@ const getCategoryConfig = (cat: string, dict: any) => {
   if (c.includes("stay") || c.includes("숙소") || c.includes("숙박") || c.includes("펜션")) 
     return { icon: Home, label: (dict.categories as any).stay || cat, bg: "bg-indigo-500/10", color: "text-indigo-500" };
 
-  return { icon: MoreHorizontal, label: (dict.categories as any).etc || cat, bg: "bg-slate-500/10", color: "text-slate-500" };
+  return { icon: Droplets, label: (dict.categories as any).etc || cat, bg: "bg-sky-500/10", color: "text-sky-500" }; 
 };
 
 export default function PlaceList({ initialPlaces }: PlaceListProps) {

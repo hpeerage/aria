@@ -3,7 +3,7 @@
 import { APIProvider, Map, AdvancedMarker, InfoWindow, useMap } from "@vis.gl/react-google-maps";
 import { Place } from "@/types/place";
 import { useState, useEffect } from "react";
-import { MapPin, Info, ArrowRight, Mountain, Palette, Utensils, Sparkles, Landmark, Bed, Trees, Palmtree, Home, MoreHorizontal } from "lucide-react";
+import { MapPin, Info, ArrowRight, Mountain, Palette, Utensils, Sparkles, Landmark, Bed, Trees, Palmtree, Home, MoreHorizontal, Droplets } from "lucide-react";
 
 const getMarkerConfig = (category: string) => {
   const c = category.toLowerCase();
@@ -32,7 +32,11 @@ const getMarkerConfig = (category: string) => {
   if (c.includes("stay") || c.includes("숙소") || c.includes("숙박") || c.includes("펜션") || c.includes("호텔") || c.includes("리조트")) 
     return { icon: Home, color: "#6366f1", bg: "bg-indigo-500" }; // Indigo-500
 
-  return { icon: MoreHorizontal, color: "#64748b", bg: "bg-slate-500" }; // Slate-500
+  // 7. 동굴/수자원 (기본 fallback 포함)
+  if (c.includes("cave") || c.includes("동굴") || c.includes("강") || c.includes("계곡") || c.includes("샘") || c.includes("폭포") || c.includes("수자원") || c.includes("기타")) 
+    return { icon: Droplets, color: "#0ea5e9", bg: "bg-sky-500" }; // Sky-500
+
+  return { icon: Droplets, color: "#0ea5e9", bg: "bg-sky-500" }; 
 };
 
 interface AriaMapProps {

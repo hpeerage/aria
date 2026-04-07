@@ -144,7 +144,7 @@ export const dictionaries = {
       food: "Food",
       history: "History",
       stay: "Stay",
-      etc: "ETC"
+      etc: "Cave/Water"
     },
     hero: {
       subtitle: "Wellness Curation Platform",
