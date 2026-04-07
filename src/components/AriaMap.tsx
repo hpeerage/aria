@@ -1,6 +1,6 @@
 "use client";
 
-import { APIProvider, Map, Marker, InfoWindow, useMarkerRef, useMap } from "@vis.gl/react-google-maps";
+import { APIProvider, Map, AdvancedMarker, InfoWindow, useMap } from "@vis.gl/react-google-maps";
 import { Place } from "@/types/place";
 import { useState, useEffect } from "react";
 import { MapPin, Info, ArrowRight } from "lucide-react";
@@ -38,6 +38,7 @@ export default function AriaMap({ places, onMarkerClick, userLocation }: AriaMap
           gestureHandling={"greedy"}
           disableDefaultUI={false}
           className="w-full h-full"
+          mapId="aria_wellness_map" 
         >
           <MapController places={places} />
           {places.map((place) => (
@@ -51,18 +52,12 @@ export default function AriaMap({ places, onMarkerClick, userLocation }: AriaMap
           ))}
 
           {userLocation && (
-            <Marker
+            <AdvancedMarker
               position={userLocation}
               title="현재 위치"
-              icon={{
-                path: 0, // CIRCLE
-                scale: 10,
-                fillColor: "#4285F4",
-                fillOpacity: 1,
-                strokeWeight: 2,
-                strokeColor: "white",
-              } as google.maps.Symbol}
-            />
+            >
+              <div className="w-4 h-4 bg-blue-500 rounded-full border-2 border-white shadow-lg animate-pulse" />
+            </AdvancedMarker>
           )}
 
           {selectedPlace && (
@@ -123,14 +118,15 @@ function MapController({ places }: { places: Place[] }) {
 }
 
 function CustomMarker({ place, onClick }: { place: Place; onClick: () => void }) {
-  const [markerRef] = useMarkerRef();
-
   return (
-    <Marker
-      ref={markerRef}
+    <AdvancedMarker
       position={{ lat: place.coordinates.lat, lng: place.coordinates.lng }}
       onClick={onClick}
       title={place.name}
-    />
+    >
+       <div className="p-1 cursor-pointer transform hover:scale-125 transition-all duration-300">
+          <MapPin className="w-8 h-8 text-rose-500 fill-white drop-shadow-lg" />
+       </div>
+    </AdvancedMarker>
   );
 }
