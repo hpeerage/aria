@@ -8,22 +8,28 @@ import { MapPin, Info, ArrowRight, Mountain, Palette, Utensils, Sparkles, Landma
 const getMarkerConfig = (category: string) => {
   const c = category.toLowerCase();
   
-  if (c.includes("nature") || c.includes("자연") || c.includes("산") || c.includes("숲")) 
-    return { icon: Trees, color: "#10b981", bg: "bg-emerald-500" }; // Emerald-500
-  
-  if (c.includes("wellness") || c.includes("웰니스") || c.includes("치유") || c.includes("체험")) 
-    return { icon: Sparkles, color: "#f43f5e", bg: "bg-rose-500" }; // Rose-500
-  
-  if (c.includes("food") || c.includes("맛집") || c.includes("식도락") || c.includes("카페") || c.includes("식음")) 
-    return { icon: Utensils, color: "#f97316", bg: "bg-orange-500" }; // Orange-500
-
-  if (c.includes("culture") || c.includes("문화") || c.includes("전통")) 
+  // 1. 문화/전통 (우선순위 높임: 체험과 겹칠 경우 문화를 상위로)
+  if (c.includes("culture") || c.includes("문화") || c.includes("전통") || c.includes("예술") || c.includes("박물관") || c.includes("전시") || c.includes("공연")) 
     return { icon: Palmtree, color: "#f59e0b", bg: "bg-amber-500" }; // Amber-500
 
-  if (c.includes("history") || c.includes("역사") || c.includes("유적")) 
+  // 2. 역사/유적
+  if (c.includes("history") || c.includes("역사") || c.includes("유적") || c.includes("비석")) 
     return { icon: Landmark, color: "#3b82f6", bg: "bg-blue-500" }; // Blue-500
 
-  if (c.includes("stay") || c.includes("숙소") || c.includes("숙박") || c.includes("펜션")) 
+  // 3. 자연
+  if (c.includes("nature") || c.includes("자연") || c.includes("산") || c.includes("숲") || c.includes("파크") || c.includes("공원")) 
+    return { icon: Trees, color: "#10b981", bg: "bg-emerald-500" }; // Emerald-500
+  
+  // 4. 체험/웰니스 (체험 키워드가 광범위하므로 하단 배치)
+  if (c.includes("wellness") || c.includes("웰니스") || c.includes("치유") || c.includes("체험") || c.includes("명상")) 
+    return { icon: Sparkles, color: "#f43f5e", bg: "bg-rose-500" }; // Rose-500
+  
+  // 5. 맛집/식도락
+  if (c.includes("food") || c.includes("맛집") || c.includes("식도락") || c.includes("카페") || c.includes("식음") || c.includes("식당") || c.includes("음식") || c.includes("시장")) 
+    return { icon: Utensils, color: "#f97316", bg: "bg-orange-500" }; // Orange-500
+
+  // 6. 숙소/스테이
+  if (c.includes("stay") || c.includes("숙소") || c.includes("숙박") || c.includes("펜션") || c.includes("호텔") || c.includes("리조트")) 
     return { icon: Home, color: "#6366f1", bg: "bg-indigo-500" }; // Indigo-500
 
   return { icon: MoreHorizontal, color: "#64748b", bg: "bg-slate-500" }; // Slate-500
