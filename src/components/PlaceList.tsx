@@ -10,6 +10,7 @@ import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useLanguage } from "@/lib/i18n/context";
 import { useWishlist } from "@/lib/wishlist/context";
+import { validateImagePaths } from "@/lib/place-images";
 
 interface PlaceListProps {
   initialPlaces: Place[];
@@ -97,7 +98,10 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
     const syncLocalChanges = () => {
       const localData = localStorage.getItem('aria_local_places');
       if (localData) {
-        const parsed = JSON.parse(localData);
+        const parsed = JSON.parse(localData).map((p: Place) => ({
+          ...p,
+          images: validateImagePaths(p.images || [], p.id, p.category)
+        }));
         const merged = [...initialPlaces];
         
         parsed.forEach((localPlace: Place) => {
