@@ -26,10 +26,10 @@ export const metadata: Metadata = {
     type: "website",
   },
   icons: {
-    icon: "/favicon.svg",
-    apple: "/apple-icon.png",
+    icon: "/aria/favicon.svg",
+    apple: "/aria/apple-icon.png",
   },
-  manifest: "/manifest.json",
+  manifest: "/aria/manifest.json",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",

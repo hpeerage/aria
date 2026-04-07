@@ -122,7 +122,7 @@ export default function HomeClient({ places: initialPlaces }: HomeClientProps) {
           transition={{ duration: 3, ease: "easeOut" }}
           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl opacity-5 pointer-events-none filter brightness-0 invert"
         >
-          <Image src="/images/logo.svg" alt="" width={800} height={400} className="w-full h-auto object-contain" />
+          <Image src="/aria/images/logo.svg" alt="" width={800} height={400} className="w-full h-auto object-contain" />
         </motion.div>
 
         <div className="relative z-10 text-center px-6 space-y-4 md:space-y-12 max-w-5xl">
@@ -232,7 +232,7 @@ export default function HomeClient({ places: initialPlaces }: HomeClientProps) {
             <div className="flex items-center gap-4">
               <div className="relative h-12 w-32 transition-all">
                 <Image 
-                  src="/images/logo.svg" 
+                  src="/aria/images/logo.svg" 
                   alt="ARIA Logo" 
                   fill 
                   className="object-contain filter brightness-0 invert opacity-40 hover:opacity-100 transition-opacity duration-700" 
