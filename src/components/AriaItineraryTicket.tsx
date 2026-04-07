@@ -27,7 +27,7 @@ const AriaItineraryTicket = forwardRef<HTMLDivElement, AriaItineraryTicketProps>
         style={{ boxShadow: "0 0 40px rgba(0,0,0,0.1)" }}
       >
         {/* Texture Overlay */}
-        <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/felt.png')]" />
+        <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('/aria/images/felt.png')]" />
 
         <header className="border-b-2 border-forest/20 pb-8 mb-10 flex justify-between items-end relative z-10">
           <div className="space-y-2">

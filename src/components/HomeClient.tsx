@@ -9,6 +9,7 @@ import PlaceList from "@/components/PlaceList";
 import AriaHeader from "@/components/AriaHeader";
 import { Place } from "@/types/place";
 import { useLanguage } from "@/lib/i18n/context";
+import { validateImagePaths } from "@/lib/place-images";
 
 interface HomeClientProps {
   places: Place[];
@@ -24,7 +25,10 @@ export default function HomeClient({ places: initialPlaces }: HomeClientProps) {
     // Merge with LocalStorage changes for real-time map accuracy
     const localData = localStorage.getItem('aria_local_places');
     if (localData) {
-      const parsed = JSON.parse(localData);
+      const parsed = JSON.parse(localData).map((p: Place) => ({
+        ...p,
+        images: validateImagePaths(p.images || [], p.id, p.category)
+      }));
       const merged = [...initialPlaces];
       parsed.forEach((localPlace: Place) => {
         const idx = merged.findIndex(p => p.id === localPlace.id);

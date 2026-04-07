@@ -62,13 +62,15 @@ export function getImagesByCategory(category: string, id: number): string[] {
   // 간단한 스왑을 통해 다양성 확보
   [result[0], result[seed]] = [result[seed], result[0]];
   
-  // 로컬 이미지 경로 (실제로 존재하는 ID인 경우만 추가)
+  // 로컬 이미지 경로 (ID가 실제로 존재하는 경우만 엄격하게 추가)
   const ext = EXISTING_LOCAL_IMAGES[id];
   if (ext) {
     const localImg = `/aria/images/${String(id).padStart(2, '0')}_01.${ext}`;
+    // 로컬 이미지를 가장 앞에 배치하여 우선순위 부여
     return [localImg, ...result];
   }
   
+  // 존재하지 않는 ID이거나 매핑되지 않은 경우 Unsplash 이미지만 반환 (404 방지)
   return result;
 }
 

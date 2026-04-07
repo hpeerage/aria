@@ -1,5 +1,5 @@
 import { Place } from "@/types/place";
-import { getImagesByCategory } from "./place-images";
+import { getImagesByCategory, validateImagePaths } from "./place-images";
 
 /**
  * 구글 시트 데이터를 가져오는 유틸리티 (서버 전 전용)
@@ -56,7 +56,7 @@ export async function getPlacesFromGoogleSheet(sheetId: string, sheetName?: stri
             lng: Number(c[3]?.v) || 0,
           },
           description: `${c[4]?.v || ''} ${c[6]?.v || ''}`.trim(),
-          images: getImagesByCategory(category, id),
+          images: validateImagePaths(getImagesByCategory(category, id), id, category),
         };
       });
   } catch (error) {

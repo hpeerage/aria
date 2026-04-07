@@ -55,7 +55,11 @@ export function WishlistProvider({ children }: { children: React.ReactNode }) {
       if (exists) {
         return prev.filter((p) => Number(p.id) !== Number(place.id));
       }
-      return [...prev, place];
+      const healedPlace = {
+        ...place,
+        images: validateImagePaths(place.images || [], place.id, place.category)
+      };
+      return [...prev, healedPlace];
     });
   };
 
