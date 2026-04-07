@@ -1,6 +1,7 @@
 "use client";
 
-import { Suspense } from "react";
+import { useState, Suspense, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { Sparkles, Mountain, Wind, Users, Map as MapIcon, Calendar, ArrowRight, Mail, HelpCircle, Globe, Compass } from "lucide-react";
 import Image from "next/image";
@@ -13,8 +14,74 @@ interface HomeClientProps {
   places: Place[];
 }
 
-export default function HomeClient({ places }: HomeClientProps) {
+export default function HomeClient({ places: initialPlaces }: HomeClientProps) {
   const { dict } = useLanguage();
+  const router = useRouter();
+  const [places, setPlaces] = useState<Place[]>(initialPlaces);
+  const [isLocating, setIsLocating] = useState(false);
+
+  useEffect(() => {
+    // Merge with LocalStorage changes for real-time map accuracy
+    const localData = localStorage.getItem('aria_local_places');
+    if (localData) {
+      const parsed = JSON.parse(localData);
+      const merged = [...initialPlaces];
+      parsed.forEach((localPlace: Place) => {
+        const idx = merged.findIndex(p => p.id === localPlace.id);
+        if (idx >= 0) merged[idx] = localPlace;
+        else merged.push(localPlace);
+      });
+      setPlaces(merged);
+    }
+  }, [initialPlaces]);
+
+  const handleExplore = () => {
+    setIsLocating(true);
+    if (!navigator.geolocation) {
+      alert("브라우저가 위치 정보를 지원하지 않습니다.");
+      setIsLocating(false);
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const userLat = position.coords.latitude;
+        const userLng = position.coords.longitude;
+        
+        let closestPlace: Place | null = null;
+        let minDistance = Infinity;
+
+        places.forEach(place => {
+          const R = 6371; // km
+          const dLat = (place.coordinates.lat - userLat) * (Math.PI / 180);
+          const dLng = (place.coordinates.lng - userLng) * (Math.PI / 180);
+          const a =
+            Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(userLat * (Math.PI / 180)) *
+            Math.cos(place.coordinates.lat * (Math.PI / 180)) *
+            Math.sin(dLng / 2) *
+            Math.sin(dLng / 2);
+          const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+          const dist = R * c;
+
+          if (dist < minDistance) {
+            minDistance = dist;
+            closestPlace = place;
+          }
+        });
+
+        setIsLocating(false);
+        if (closestPlace) {
+          router.push(`/places/${closestPlace.id}`);
+        }
+      },
+      (error) => {
+        console.error("Geolocation error:", error);
+        alert("위치 정보를 가져오는 데 실패했습니다.");
+        setIsLocating(false);
+      }
+    );
+  };
 
   return (
     <main className="min-h-screen bg-[#F8FAF9] dark:bg-forest-dark overflow-x-hidden">
@@ -91,12 +158,20 @@ export default function HomeClient({ places }: HomeClientProps) {
             transition={{ duration: 0.8, delay: 1 }}
             className="flex flex-col md:flex-row gap-4 md:gap-6 justify-center pt-4 md:pt-8"
           >
-            <button className="px-8 md:px-10 py-4 md:py-5 bg-accent text-white rounded-3xl font-black text-base md:text-lg hover:bg-white hover:text-forest transition-all duration-700 shadow-2xl shadow-accent/20 active:scale-95 group flex items-center gap-3 justify-center relative overflow-hidden group">
+            <button 
+              onClick={handleExplore}
+              disabled={isLocating}
+              className="px-8 md:px-10 py-4 md:py-5 bg-accent text-white rounded-3xl font-black text-base md:text-lg hover:bg-white hover:text-forest transition-all duration-700 shadow-2xl shadow-accent/20 active:scale-95 group flex items-center gap-3 justify-center relative overflow-hidden disabled:opacity-80"
+            >
               <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-700" />
-              <span className="relative z-10">{dict.common.explore}</span>
-              <motion.div className="relative z-10" animate={{ x: [0, 5, 0] }} transition={{ repeat: Infinity, duration: 1.5 }}>
-                <ArrowRight className="w-5 h-5" />
-              </motion.div>
+              <span className="relative z-10">{isLocating ? "위치 파악 중..." : dict.common.explore}</span>
+              {isLocating ? (
+                <div className="relative z-10 w-5 h-5 border-2 border-white/50 border-t-white rounded-full animate-spin" />
+              ) : (
+                <motion.div className="relative z-10" animate={{ x: [0, 5, 0] }} transition={{ repeat: Infinity, duration: 1.5 }}>
+                  <ArrowRight className="w-5 h-5" />
+                </motion.div>
+              )}
             </button>
             <button className="px-8 md:px-10 py-4 md:py-5 bg-white/5 backdrop-blur-3xl text-white border border-white/10 rounded-3xl font-black text-base md:text-lg hover:bg-white/10 transition-all active:scale-95 border-b-4 border-white/5 active:border-b-0 active:translate-y-1">
               {dict.common.download}

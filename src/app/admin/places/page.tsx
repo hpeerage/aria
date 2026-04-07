@@ -17,7 +17,25 @@ export default function AdminPlacesPage() {
     async function loadPlaces() {
       try {
         const data = await getPlacesFromGoogleSheet('1Setffm27HQ8LyOM3N9o9V8eA0ihGbZeZgN763jkm1WU');
-        setPlaces(data);
+        
+        // Merge with LocalStorage changes
+        const localData = localStorage.getItem('aria_local_places');
+        if (localData) {
+          const parsed = JSON.parse(localData);
+          const merged = [...data];
+          
+          parsed.forEach((localPlace: Place) => {
+            const idx = merged.findIndex(p => p.id === localPlace.id);
+            if (idx >= 0) {
+              merged[idx] = localPlace;
+            } else {
+              merged.push(localPlace);
+            }
+          });
+          setPlaces(merged);
+        } else {
+          setPlaces(data);
+        }
       } catch (error) {
         console.error("Failed to fetch places:", error);
       } finally {
@@ -25,6 +43,11 @@ export default function AdminPlacesPage() {
       }
     }
     loadPlaces();
+    
+    // 이벤트를 통해 실시간 업데이트 반영 (선택적)
+    const handleStorageChange = () => loadPlaces();
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
 
   if (isLoading) {
@@ -59,7 +82,7 @@ export default function AdminPlacesPage() {
         <AriaMap places={places} />
       </div>
 
-      <AriaPlacesList initialPlaces={places} />
+      <AriaPlacesList places={places} setPlaces={setPlaces} />
     </div>
   );
 }

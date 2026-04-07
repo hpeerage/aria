@@ -3,12 +3,13 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence, Variants } from "framer-motion";
 import { Place } from "@/types/place";
-import { Search, Compass, ArrowRight, Navigation, LayoutGrid, Trees, Sparkles, UtensilsCrossed, Landmark, Home, MoreHorizontal, Palmtree, X } from "lucide-react";
+import { Search, Compass, ArrowRight, Navigation, LayoutGrid, Trees, Sparkles, UtensilsCrossed, Landmark, Home, MoreHorizontal, Palmtree, X, Heart } from "lucide-react";
 import AriaMap from "./AriaMap";
 import AriaDetailModal from "./AriaDetailModal";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useLanguage } from "@/lib/i18n/context";
+import { useWishlist } from "@/lib/wishlist/context";
 
 interface PlaceListProps {
   initialPlaces: Place[];
@@ -67,6 +68,7 @@ const getCategoryConfig = (cat: string, dict: any) => {
 
 export default function PlaceList({ initialPlaces }: PlaceListProps) {
   const { dict } = useLanguage();
+  const { togglePlace, isInWishlist } = useWishlist();
   const searchParams = useSearchParams();
   const router = useRouter();
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -92,22 +94,32 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
   };
 
   useEffect(() => {
-    // Merge with LocalStorage changes for real-time update in the same browser
-    const localData = localStorage.getItem('aria_local_places');
-    if (localData) {
-      const parsed = JSON.parse(localData);
-      const merged = [...initialPlaces];
-      
-      parsed.forEach((localPlace: Place) => {
-        const idx = merged.findIndex(p => p.id === localPlace.id);
-        if (idx >= 0) {
-          merged[idx] = localPlace;
-        } else {
-          merged.push(localPlace);
-        }
-      });
-      setPlaces(merged);
-    }
+    const syncLocalChanges = () => {
+      const localData = localStorage.getItem('aria_local_places');
+      if (localData) {
+        const parsed = JSON.parse(localData);
+        const merged = [...initialPlaces];
+        
+        parsed.forEach((localPlace: Place) => {
+          const idx = merged.findIndex(p => p.id === localPlace.id);
+          if (idx >= 0) {
+            merged[idx] = localPlace;
+          } else {
+            merged.push(localPlace);
+          }
+        });
+        setPlaces(merged);
+      } else {
+        setPlaces(initialPlaces);
+      }
+    };
+
+    // Initial sync
+    syncLocalChanges();
+
+    // Listen to storage changes across tabs for real-time map updates
+    window.addEventListener('storage', syncLocalChanges);
+    return () => window.removeEventListener('storage', syncLocalChanges);
   }, [initialPlaces]);
 
   const categories = [dict.common.all, dict.common.nearMe, ...Array.from(new Set(places.map((p) => p.category)))];
@@ -384,11 +396,25 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
                     style={{ backgroundImage: `url('${place.images?.[0] || 'https://images.unsplash.com/photo-1542224566-6e85f2e6772f?q=80&w=1950'}')` }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-forest/20 to-transparent" />
-                  <div className="absolute top-4 left-4">
+                  <div className="absolute top-4 left-4 flex gap-2">
                     <span className="text-[10px] uppercase tracking-[0.2em] font-black text-white bg-forest/40 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10">
                       No. {place.id}
                     </span>
                   </div>
+                  <button 
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      togglePlace(place);
+                    }}
+                    className={`absolute top-4 right-4 p-2.5 rounded-full backdrop-blur-md border transition-all duration-300 shadow-xl ${
+                      isInWishlist(place.id) 
+                        ? 'bg-rose-500 text-white border-rose-500/50 scale-110' 
+                        : 'bg-white/10 text-white/80 border-white/20 hover:bg-white/30 hover:scale-110'
+                    }`}
+                  >
+                    <Heart className={`w-4 h-4 ${isInWishlist(place.id) ? 'fill-current' : ''}`} />
+                  </button>
                 </div>
 
                 <div className="px-6 pb-8 flex-grow flex flex-col justify-between space-y-6 relative z-10">

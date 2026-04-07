@@ -49,6 +49,9 @@ export const viewport = {
 };
 
 import { LanguageProvider } from "@/lib/i18n/context";
+import { WishlistProvider } from "@/lib/wishlist/context";
+import FloatingCart from "@/components/FloatingCart";
+import WishlistPanel from "@/components/WishlistPanel";
 
 export default function RootLayout({
   children,
@@ -61,7 +64,11 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <LanguageProvider>
-          {children}
+          <WishlistProvider>
+            {children}
+            <FloatingCart />
+            <WishlistPanel />
+          </WishlistProvider>
         </LanguageProvider>
       </body>
     </html>

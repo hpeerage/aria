@@ -7,32 +7,13 @@ import Link from "next/link";
 import { Place } from "@/types/place";
 
 interface AriaPlacesListProps {
-  initialPlaces: Place[];
+  places: Place[];
+  setPlaces: (places: Place[]) => void;
 }
 
-export default function AriaPlacesList({ initialPlaces }: AriaPlacesListProps) {
-  const [places, setPlaces] = useState<Place[]>(initialPlaces);
+export default function AriaPlacesList({ places, setPlaces }: AriaPlacesListProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
-
-  useEffect(() => {
-    // Merge with LocalStorage changes
-    const localData = localStorage.getItem('aria_local_places');
-    if (localData) {
-      const parsed = JSON.parse(localData);
-      const merged = [...initialPlaces];
-      
-      parsed.forEach((localPlace: Place) => {
-        const idx = merged.findIndex(p => p.id === localPlace.id);
-        if (idx >= 0) {
-          merged[idx] = localPlace;
-        } else {
-          merged.push(localPlace);
-        }
-      });
-      setPlaces(merged);
-    }
-  }, [initialPlaces]);
 
   const categories = ["All", ...Array.from(new Set(places.map(p => p.category)))];
 
