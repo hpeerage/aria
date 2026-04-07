@@ -30,6 +30,16 @@ const CATEGORY_IMAGES: Record<string, string[]> = {
   ]
 };
 
+/**
+ * 실제로 존재하는 로컬 이미지 파일들 매핑 (ID : 확장자)
+ */
+const EXISTING_LOCAL_IMAGES: Record<number, string> = {
+  1: "jpg", 2: "jpg", 3: "jpg", 4: "jpg",
+  42: "jpeg", 73: "jpg", 
+  77: "webp", 78: "jpeg", 79: "jpg", 
+  80: "jpg", 81: "jpeg", 82: "jpeg", 84: "webp"
+};
+
 export function getImagesByCategory(category: string, id: number): string[] {
   // 카테고리별 매칭 (없으면 기본 이미지셋 사용)
   let images = CATEGORY_IMAGES["기본"];
@@ -52,9 +62,12 @@ export function getImagesByCategory(category: string, id: number): string[] {
   // 간단한 스왑을 통해 다양성 확보
   [result[0], result[seed]] = [result[seed], result[0]];
   
-  // 로컬 이미지 경로 우선 추가 (/aria/images/{id}_01.jpg)
-  // 파일 확장자 다양성(jpg, jpeg, webp)을 고려하여 기본적으로 jpg를 시도하고 필요시 프로젝트의 실제 파일들을 매핑
-  const localImg = `/aria/images/${String(id).padStart(2, '0')}_01.jpg`;
+  // 로컬 이미지 경로 (실제로 존재하는 ID인 경우만 추가)
+  const ext = EXISTING_LOCAL_IMAGES[id];
+  if (ext) {
+    const localImg = `/aria/images/${String(id).padStart(2, '0')}_01.${ext}`;
+    return [localImg, ...result];
+  }
   
-  return [localImg, ...result];
+  return result;
 }
