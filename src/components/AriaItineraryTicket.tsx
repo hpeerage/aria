@@ -27,7 +27,7 @@ const AriaItineraryTicket = forwardRef<HTMLDivElement, AriaItineraryTicketProps>
         style={{ boxShadow: "0 0 40px rgba(0,0,0,0.1)" }}
       >
         {/* Texture Overlay */}
-        <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('/aria/images/felt.png')]" />
+        <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('/images/felt.png')]" />
 
         <header className="border-b-2 border-forest/20 pb-8 mb-10 flex justify-between items-end relative z-10">
           <div className="space-y-2">
@@ -95,7 +95,7 @@ const AriaItineraryTicket = forwardRef<HTMLDivElement, AriaItineraryTicketProps>
           
           <div className="w-32 h-32 opacity-10 grayscale invert brightness-0">
             {/* Using img for html2canvas compatibility with local assets if needed */}
-            <img src="/aria/favicon.svg" alt="" className="w-full h-full object-contain" />
+            <img src="/favicon.svg" alt="" className="w-full h-full object-contain" />
           </div>
 
           <div className="text-right max-w-[200px]">

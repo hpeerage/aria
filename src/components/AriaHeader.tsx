@@ -114,7 +114,7 @@ export default function AriaHeader() {
                 isScrolled ? "h-8 w-20" : "h-12 w-32"
               }`}>
                 <Image 
-                  src="/aria/images/logo.svg" 
+                  src="/images/logo.svg" 
                   alt="Jeongseon Aria" 
                   fill
                   className={`object-contain transition-all duration-500 group-hover:scale-110 ${
