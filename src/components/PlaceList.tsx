@@ -407,7 +407,7 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
                       e.stopPropagation();
                       togglePlace(place);
                     }}
-                    className={`absolute top-4 right-4 p-2.5 rounded-full backdrop-blur-md border transition-all duration-300 shadow-xl ${
+                    className={`absolute top-4 right-4 p-2.5 rounded-full backdrop-blur-md border transition-all duration-300 shadow-xl z-50 ${
                       isInWishlist(place.id) 
                         ? 'bg-rose-500 text-white border-rose-500/50 scale-110' 
                         : 'bg-white/10 text-white/80 border-white/20 hover:bg-white/30 hover:scale-110'

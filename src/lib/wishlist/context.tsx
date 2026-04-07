@@ -45,21 +45,21 @@ export function WishlistProvider({ children }: { children: React.ReactNode }) {
 
   const togglePlace = (place: Place) => {
     setWishlist((prev) => {
-      const exists = prev.some((p) => p.id === place.id);
+      const exists = prev.some((p) => Number(p.id) === Number(place.id));
       if (exists) {
-        return prev.filter((p) => p.id !== place.id);
+        return prev.filter((p) => Number(p.id) !== Number(place.id));
       }
       return [...prev, place];
     });
   };
 
   const removePlace = (id: number) => {
-    setWishlist((prev) => prev.filter((p) => p.id !== id));
+    setWishlist((prev) => prev.filter((p) => Number(p.id) !== Number(id)));
   };
 
   const reorderPlace = (id: number, direction: "up" | "down") => {
     setWishlist((prev) => {
-      const idx = prev.findIndex((p) => p.id === id);
+      const idx = prev.findIndex((p) => Number(p.id) === Number(id));
       if (idx === -1) return prev;
 
       const newOrder = [...prev];
@@ -77,7 +77,7 @@ export function WishlistProvider({ children }: { children: React.ReactNode }) {
   };
 
   const isInWishlist = (id: number) => {
-    return wishlist.some((p) => p.id === id);
+    return wishlist.some((p) => Number(p.id) === Number(id));
   };
 
   return (
