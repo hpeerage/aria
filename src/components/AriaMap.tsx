@@ -6,13 +6,24 @@ import { useState, useEffect } from "react";
 import { MapPin, Info, ArrowRight, Mountain, Palette, Utensils, Sparkles, Landmark, Bed, Trees } from "lucide-react";
 
 const CATEGORY_CONFIG: Record<string, { icon: any, color: string, bg: string }> = {
-  nature: { icon: Trees, color: "#10b981", bg: "bg-emerald-500/10" },
-  culture: { icon: Palette, color: "#8b5cf6", bg: "bg-violet-500/10" },
-  wellness: { icon: Sparkles, color: "#f59e0b", bg: "bg-amber-500/10" },
-  food: { icon: Utensils, color: "#f43f5e", bg: "bg-rose-500/10" },
-  history: { icon: Landmark, color: "#64748b", bg: "bg-slate-500/10" },
-  stay: { icon: Bed, color: "#06b6d4", bg: "bg-cyan-500/10" },
-  etc: { icon: MapPin, color: "#f43f5e", bg: "bg-rose-500/10" },
+  nature: { icon: Trees, color: "#10b981", bg: "bg-emerald-500" },
+  culture: { icon: Palette, color: "#8b5cf6", bg: "bg-violet-500" },
+  wellness: { icon: Sparkles, color: "#f59e0b", bg: "bg-amber-500" },
+  food: { icon: Utensils, color: "#f43f5e", bg: "bg-rose-500" },
+  history: { icon: Landmark, color: "#64748b", bg: "bg-slate-500" },
+  stay: { icon: Bed, color: "#06b6d4", bg: "bg-cyan-500" },
+  etc: { icon: MapPin, color: "#f43f5e", bg: "bg-rose-500" },
+};
+
+// Google Sheet 한글 카테고리 매핑용 별칭
+const CATEGORY_MAP: Record<string, string> = {
+  "자연": "nature",
+  "문화/전통": "culture",
+  "체험/웰니스": "wellness",
+  "맛집": "food",
+  "역사/유적": "history",
+  "숙소": "stay",
+  "기타": "etc",
 };
 
 interface AriaMapProps {
@@ -128,7 +139,8 @@ function MapController({ places }: { places: Place[] }) {
 }
 
 function CustomMarker({ place, onClick }: { place: Place; onClick: () => void }) {
-  const config = CATEGORY_CONFIG[place.category] || CATEGORY_CONFIG.etc;
+  const categoryKey = CATEGORY_MAP[place.category] || place.category;
+  const config = CATEGORY_CONFIG[categoryKey] || CATEGORY_CONFIG.etc;
   const Icon = config.icon;
 
   return (
@@ -138,18 +150,19 @@ function CustomMarker({ place, onClick }: { place: Place; onClick: () => void })
       title={place.name}
     >
        <div className="relative group cursor-pointer">
-          {/* Animated Glow Effect */}
-          <div className={`absolute inset-0 rounded-full blur-md opacity-40 group-hover:opacity-100 transition-opacity duration-500 ${config.bg.replace('/10', '/40')}`} 
+          {/* Enhanced Glow Effect */}
+          <div className="absolute inset-0 rounded-full blur-lg opacity-40 group-hover:opacity-80 transition-opacity duration-500" 
                style={{ backgroundColor: config.color }} />
           
           <div 
-            className={`relative flex items-center justify-center w-10 h-10 rounded-full border-2 border-white shadow-2xl transform group-hover:scale-125 group-hover:-translate-y-1 transition-all duration-500 bg-white dark:bg-forest-dark`}
-            style={{ color: config.color }}
+            className={`relative flex items-center justify-center w-10 h-10 rounded-full border-[3px] border-white shadow-[0_10px_25px_-5px_rgba(0,0,0,0.3)] transform group-hover:scale-125 group-hover:-translate-y-2 transition-all duration-500 text-white`}
+            style={{ backgroundColor: config.color }}
           >
-             <Icon className="w-5 h-5 drop-shadow-sm" />
+             <Icon className="w-5 h-5 drop-shadow-md" />
              
-             {/* Small Pin Tail */}
-             <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 rotate-45 border-r border-b border-white bg-white dark:bg-forest-dark" />
+             {/* Vibrant Pin Tail */}
+             <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-3 h-3 rotate-45 bg-white shadow-sm" />
+             <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 rotate-45" style={{ backgroundColor: config.color }} />
           </div>
        </div>
     </AdvancedMarker>
