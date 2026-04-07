@@ -8,6 +8,7 @@ import { useParams, useRouter } from "next/navigation";
 import { Place } from "@/types/place";
 import { getPlacesFromGoogleSheet } from "@/lib/google-sheets";
 import { useLanguage } from "@/lib/i18n/context";
+import { compressImage } from "@/lib/image-compressor";
 
 export default function PlaceEditForm({ isNew = false }: { isNew?: boolean }) {
   const { dict } = useLanguage();
@@ -97,13 +98,20 @@ export default function PlaceEditForm({ isNew = false }: { isNew?: boolean }) {
     }
   };
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       const reader = new FileReader();
-      reader.onloadend = () => {
+      reader.onloadend = async () => {
         const base64 = reader.result as string;
-        setImages(prev => [...prev, base64]);
+        try {
+          // 최대 가로 1200px, 품질 0.7로 압축
+          const compressed = await compressImage(base64, 1200, 0.7);
+          setImages(prev => [...prev, compressed]);
+        } catch (err) {
+          console.error("Image compression failed:", err);
+          setImages(prev => [...prev, base64]); // 실패 시 원본이라도 추가
+        }
       };
       reader.readAsDataURL(file);
     }
@@ -163,9 +171,9 @@ export default function PlaceEditForm({ isNew = false }: { isNew?: boolean }) {
           console.error("Save failed:", error);
           setIsSaving(false);
           if (error.name === 'QuotaExceededError') {
-            alert("저장 공간이 부족합니다. 이미지가 너무 크거나 개수가 많을 수 있습니다. 이미지를 줄이거나 삭제 후 다시 시도해 주세요.");
+            alert("저장 공간이 부족합니다! ⚠️\n\n현재 LocalStorage 용량이 가득 찼습니다. 이미 저장된 장소 중 이미지가 너무 많은 항목을 삭제하거나, 사진 장수를 줄여서 다시 시도해 주세요.");
           } else {
-            alert("저장 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.");
+            alert("저장 중 예상치 못한 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.");
           }
         }
     }, 1500);
