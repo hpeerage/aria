@@ -3,7 +3,17 @@
 import { APIProvider, Map, AdvancedMarker, InfoWindow, useMap } from "@vis.gl/react-google-maps";
 import { Place } from "@/types/place";
 import { useState, useEffect } from "react";
-import { MapPin, Info, ArrowRight } from "lucide-react";
+import { MapPin, Info, ArrowRight, Mountain, Palette, Utensils, Sparkles, Landmark, Bed, Trees } from "lucide-react";
+
+const CATEGORY_CONFIG: Record<string, { icon: any, color: string, bg: string }> = {
+  nature: { icon: Trees, color: "#10b981", bg: "bg-emerald-500/10" },
+  culture: { icon: Palette, color: "#8b5cf6", bg: "bg-violet-500/10" },
+  wellness: { icon: Sparkles, color: "#f59e0b", bg: "bg-amber-500/10" },
+  food: { icon: Utensils, color: "#f43f5e", bg: "bg-rose-500/10" },
+  history: { icon: Landmark, color: "#64748b", bg: "bg-slate-500/10" },
+  stay: { icon: Bed, color: "#06b6d4", bg: "bg-cyan-500/10" },
+  etc: { icon: MapPin, color: "#f43f5e", bg: "bg-rose-500/10" },
+};
 
 interface AriaMapProps {
   places: Place[];
@@ -118,14 +128,29 @@ function MapController({ places }: { places: Place[] }) {
 }
 
 function CustomMarker({ place, onClick }: { place: Place; onClick: () => void }) {
+  const config = CATEGORY_CONFIG[place.category] || CATEGORY_CONFIG.etc;
+  const Icon = config.icon;
+
   return (
     <AdvancedMarker
       position={{ lat: place.coordinates.lat, lng: place.coordinates.lng }}
       onClick={onClick}
       title={place.name}
     >
-       <div className="p-1 cursor-pointer transform hover:scale-125 transition-all duration-300">
-          <MapPin className="w-8 h-8 text-rose-500 fill-white drop-shadow-lg" />
+       <div className="relative group cursor-pointer">
+          {/* Animated Glow Effect */}
+          <div className={`absolute inset-0 rounded-full blur-md opacity-40 group-hover:opacity-100 transition-opacity duration-500 ${config.bg.replace('/10', '/40')}`} 
+               style={{ backgroundColor: config.color }} />
+          
+          <div 
+            className={`relative flex items-center justify-center w-10 h-10 rounded-full border-2 border-white shadow-2xl transform group-hover:scale-125 group-hover:-translate-y-1 transition-all duration-500 bg-white dark:bg-forest-dark`}
+            style={{ color: config.color }}
+          >
+             <Icon className="w-5 h-5 drop-shadow-sm" />
+             
+             {/* Small Pin Tail */}
+             <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 rotate-45 border-r border-b border-white bg-white dark:bg-forest-dark" />
+          </div>
        </div>
     </AdvancedMarker>
   );
