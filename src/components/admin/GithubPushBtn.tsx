@@ -1,14 +1,23 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Globe, RefreshCcw, CheckCircle2, AlertCircle, Send } from "lucide-react";
+import { Globe, RefreshCcw, CheckCircle2, AlertCircle, Send, Lock } from "lucide-react";
 
 export default function GithubPushBtn() {
+  const [mounted, setMounted] = useState(false);
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [message, setMessage] = useState("");
 
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const isLocal = typeof window !== "undefined" && 
+    (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1");
+
   const handlePush = async () => {
+    if (!isLocal) return;
     if (status === "loading") return;
 
     setStatus("loading");
@@ -36,15 +45,19 @@ export default function GithubPushBtn() {
     }
   };
 
+  if (!mounted) return null;
+
   return (
     <div className="relative flex flex-col items-end gap-2">
       <motion.button
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.98 }}
+        whileHover={isLocal ? { scale: 1.02 } : {}}
+        whileTap={isLocal ? { scale: 0.98 } : {}}
         onClick={handlePush}
-        disabled={status === "loading"}
+        disabled={status === "loading" || !isLocal}
         className={`flex items-center gap-3 px-6 py-4 rounded-2xl font-black text-xs uppercase tracking-widest transition-all shadow-xl ${
-          status === "loading" 
+          !isLocal
+            ? "bg-white/5 text-white/20 border border-white/5 cursor-not-allowed"
+            : status === "loading" 
             ? "bg-accent text-white animate-pulse cursor-wait" 
             : status === "success"
             ? "bg-emerald-500 text-white"
@@ -54,7 +67,11 @@ export default function GithubPushBtn() {
         }`}
       >
         <AnimatePresence mode="wait">
-          {status === "loading" ? (
+          {!isLocal ? (
+            <motion.div key="lock">
+              <Lock className="w-5 h-5 opacity-40" />
+            </motion.div>
+          ) : status === "loading" ? (
             <motion.div
               key="loading"
               initial={{ rotate: 0 }}
@@ -82,8 +99,8 @@ export default function GithubPushBtn() {
           ) : (
             <motion.div key="idle" className="flex items-center gap-3">
               <Globe className="w-5 h-5" />
-              <span>Sync to Production</span>
-              <Send className="w-4 h-4 opacity-30" />
+              <span>{isLocal ? "Sync to Production" : "Local Development Only"}</span>
+              {isLocal && <Send className="w-4 h-4 opacity-30" />}
             </motion.div>
           )}
         </AnimatePresence>

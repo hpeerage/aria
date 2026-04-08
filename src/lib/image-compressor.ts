@@ -6,8 +6,8 @@
  */
 export async function compressImage(
   base64: string,
-  maxWidth: number = 1200,
-  quality: number = 0.7
+  maxWidth: number = 1000,
+  quality: number = 0.6
 ): Promise<string> {
   return new Promise((resolve, reject) => {
     const img = new Image();

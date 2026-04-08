@@ -105,8 +105,8 @@ export default function PlaceEditForm({ isNew = false }: { isNew?: boolean }) {
       reader.onloadend = async () => {
         const base64 = reader.result as string;
         try {
-          // 최대 가로 1200px, 품질 0.7로 압축
-          const compressed = await compressImage(base64, 1200, 0.7);
+          // 기본 압축 설정(1000px, 0.6) 적용
+          const compressed = await compressImage(base64);
           setImages(prev => [...prev, compressed]);
         } catch (err) {
           console.error("Image compression failed:", err);
@@ -149,15 +149,17 @@ export default function PlaceEditForm({ isNew = false }: { isNew?: boolean }) {
         try {
           localStorage.setItem(`aria_place_${id || 'new'}`, JSON.stringify(finalData));
           
-          // Also update local list cache if needed
+          // 2. 전체 목록 캐시 업데이트 (용량 절약을 위해 이미지는 제외하고 메타데이터만 저장)
+          const listData = { ...finalData, images: [] }; // 리스트에는 이미지를 포함하지 않음
+          
           const localListStr = localStorage.getItem('aria_local_places');
           const localList = localListStr ? JSON.parse(localListStr) : [];
           const existingIdx = localList.findIndex((p: any) => p.id === finalData.id);
           
           if (existingIdx >= 0) {
-            localList[existingIdx] = finalData;
+            localList[existingIdx] = listData;
           } else {
-            localList.push(finalData);
+            localList.push(listData);
           }
           localStorage.setItem('aria_local_places', JSON.stringify(localList));
 
