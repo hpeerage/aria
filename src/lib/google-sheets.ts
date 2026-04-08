@@ -10,9 +10,7 @@ export async function getPlacesFromGoogleSheet(sheetId: string, sheetName?: stri
   const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json${sheetName ? `&sheet=${sheetName}` : ''}`;
 
   try {
-    const response = await fetch(url, {
-      next: { revalidate: 3600 }, // 1시간 캐싱 (서버 컴포넌트 최적화)
-    });
+    const response = await fetch(url);
 
     if (!response.ok) {
       throw new Error(`Google Sheets fetch failed: ${response.statusText}`);
@@ -67,15 +65,9 @@ export async function getPlacesFromGoogleSheet(sheetId: string, sheetName?: stri
                      (window.location.hostname.includes('github.io') || window.location.hostname.includes('vercel.app'));
       const basePath = isProd ? '/aria' : '';
       
-      // 2. 캐시 무시를 위해 타임스탬프 추가 (Cache Busting)
+      // 2. 캐시 무시를 위해 타임스탬프 추가 (단, 빌드 시점에는 정적으로 작동하도록 처리)
       const timestamp = new Date().getTime();
-      const syncRes = await fetch(`${basePath}/data/places.json?t=${timestamp}`, { 
-        cache: 'no-store',
-        headers: {
-          'Pragma': 'no-cache',
-          'Cache-Control': 'no-cache'
-        }
-      });
+      const syncRes = await fetch(`${basePath}/data/places.json?t=${timestamp}`);
 
       if (syncRes.ok) {
         const syncedPlaces: Place[] = await syncRes.json();
