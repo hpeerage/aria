@@ -246,7 +246,7 @@ export default function PlaceEditForm({ isNew = false }: { isNew?: boolean }) {
                 Asset Configurator v2.5
              </div>
               <h2 className="text-5xl font-black text-white tracking-tighter">
-                {isNew ? dict.admin.addPlace : dict.admin.editPlace} <span className="text-accent underline decoration-white/10">{formData.name || "Asset"}</span>
+                {isNew ? dict.admin.addPlace : dict.admin.editPlace} <span className="text-accent">#{formData.id}</span> <span className="text-white underline decoration-white/10">{formData.name || "Asset"}</span>
               </h2>
           </header>
 
