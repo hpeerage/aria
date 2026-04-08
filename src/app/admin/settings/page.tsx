@@ -2,15 +2,37 @@
 
 import { motion } from "framer-motion";
 import { Settings, Save, Shield, Database, Bell, Layout, Palette, Sliders } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLanguage } from "@/lib/i18n/context";
 
 export default function AdminSettingsPage() {
   const { dict } = useLanguage();
   const [isSaving, setIsSaving] = useState(false);
+  const [config, setConfig] = useState({
+    token: "",
+    owner: "hpeerage",
+    repo: "aria",
+    branch: "main"
+  });
+
+  useEffect(() => {
+    const saved = localStorage.getItem("aria_github_config");
+    if (saved) {
+      setConfig(JSON.parse(saved));
+    }
+  }, []);
+
+  const handleSave = () => {
+    setIsSaving(true);
+    localStorage.setItem("aria_github_config", JSON.stringify(config));
+    setTimeout(() => {
+      setIsSaving(false);
+      alert("설정이 안전하게 저장되었습니다.");
+    }, 1000);
+  };
 
   return (
-    <div className="space-y-12 pb-32">
+    <div className="space-y-12 pb-32 font-sans">
       <div className="flex justify-between items-center bg-white/5 p-10 rounded-[3rem] border border-white/10 backdrop-blur-xl relative overflow-hidden shadow-2xl">
         <div className="absolute top-0 right-0 p-12 text-accent/5">
              <Settings className="w-48 h-48 rotate-12" />
@@ -24,11 +46,9 @@ export default function AdminSettingsPage() {
            <p className="text-white/40 text-sm font-bold max-w-md">{dict.admin.sysSettingsDesc}</p>
         </div>
         <button 
-          onClick={() => {
-            setIsSaving(true);
-            setTimeout(() => setIsSaving(false), 2000);
-          }}
-          className="px-10 py-5 bg-accent text-white rounded-[1.5rem] font-black flex items-center gap-3 shadow-xl shadow-accent/20 hover:scale-105 transition-all relative z-10"
+          onClick={handleSave}
+          disabled={isSaving}
+          className="px-10 py-5 bg-accent text-white rounded-[1.5rem] font-black flex items-center gap-3 shadow-xl shadow-accent/20 hover:scale-105 transition-all relative z-10 disabled:opacity-50"
         >
           {isSaving ? (
             <div className="w-5 h-5 border-4 border-white/30 border-t-white rounded-full animate-spin" />
@@ -40,12 +60,67 @@ export default function AdminSettingsPage() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <SettingsCard 
-          icon={<Shield className="w-6 h-6 text-accent" />}
-          title={dict.admin.securityAccess}
-          description={dict.admin.securityDesc}
-          options={["Multi-Factor Authentication", "Operator Permissions", "Audit Logging"]}
-        />
+        {/* GitHub Integration Card */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="p-10 bg-white/5 border border-white/10 rounded-[3rem] space-y-8 hover:bg-white/10 transition-all group lg:col-span-2 shadow-2xl"
+        >
+          <div className="flex items-center gap-4">
+            <div className="p-4 bg-accent/20 text-accent rounded-2xl group-hover:bg-accent group-hover:text-white transition-all">
+              <Shield className="w-6 h-6" />
+            </div>
+            <div>
+              <h4 className="text-2xl font-black text-white tracking-tight">Cloud Sync Integration</h4>
+              <p className="text-[10px] font-bold text-white/30 uppercase tracking-widest">{dict.admin.securityDesc}</p>
+            </div>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6 border-t border-white/5">
+             <div className="space-y-3">
+                <label className="text-[10px] font-black uppercase tracking-widest text-accent px-1">GitHub Personal Access Token (Classic)</label>
+                <input 
+                  type="password"
+                  value={config.token}
+                  onChange={(e) => setConfig({...config, token: e.target.value})}
+                  placeholder="ghp_xxxxxxxxxxxx"
+                  className="w-full px-6 py-5 bg-white/5 border border-white/10 rounded-2xl text-white placeholder:text-white/10 outline-none focus:ring-2 focus:ring-accent transition-all font-bold"
+                />
+                <p className="text-[10px] text-white/20 px-2 leading-relaxed">토큰은 브라우저에만 저장되며 외부로 전송되지 않습니다. 필요한 권한: [repo] 전체 권한.</p>
+             </div>
+             <div className="space-y-6">
+                <div className="space-y-3">
+                   <label className="text-[10px] font-black uppercase tracking-widest text-accent px-1">Repository Path (Owner/Repo)</label>
+                   <div className="flex gap-4">
+                      <input 
+                        type="text"
+                        value={config.owner}
+                        onChange={(e) => setConfig({...config, owner: e.target.value})}
+                        placeholder="Owner"
+                        className="flex-1 px-6 py-5 bg-white/5 border border-white/10 rounded-2xl text-white outline-none focus:ring-2 focus:ring-accent transition-all font-bold"
+                      />
+                      <input 
+                        type="text"
+                        value={config.repo}
+                        onChange={(e) => setConfig({...config, repo: e.target.value})}
+                        placeholder="Repo"
+                        className="flex-1 px-6 py-5 bg-white/5 border border-white/10 rounded-2xl text-white outline-none focus:ring-2 focus:ring-accent transition-all font-bold"
+                      />
+                   </div>
+                </div>
+                <div className="space-y-3">
+                   <label className="text-[10px] font-black uppercase tracking-widest text-accent px-1">Target Branch</label>
+                   <input 
+                      type="text"
+                      value={config.branch}
+                      onChange={(e) => setConfig({...config, branch: e.target.value})}
+                      placeholder="main"
+                      className="w-full px-6 py-5 bg-white/5 border border-white/10 rounded-2xl text-white outline-none focus:ring-2 focus:ring-accent transition-all font-bold"
+                   />
+                </div>
+             </div>
+          </div>
+        </motion.div>
         <SettingsCard 
           icon={<Database className="w-6 h-6 text-blue-400" />}
           title={dict.admin.dataSync}
