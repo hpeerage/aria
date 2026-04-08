@@ -82,6 +82,9 @@ export function validateImagePaths(images: string[], id: number, category: strin
   if (!images || images.length === 0) return getImagesByCategory(category, id);
 
   return images.map(img => {
+    // [v0.8.0] Base64 이미지(직접 업로드)는 검증 없이 즉시 최우선 적용
+    if (img.startsWith('data:image/')) return img;
+
     // 로컬 이미지 경로 패턴 감지 (/aria/images/XX_01.xxx)
     const localMatch = img.match(/\/aria\/images\/(\d+)_01\.(jpg|jpeg|webp)/);
     if (localMatch) {

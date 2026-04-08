@@ -58,37 +58,50 @@ export async function getPlacesFromGoogleSheet(sheetId: string, sheetName?: stri
         };
       });
 
-    // --- [v0.6.1] GitHub 동기화 데이터 병합 로직 고도화 ---
+    // --- [v0.8.0] GitHub 동기화 데이터 병합 및 빌드 시점 정합성 강화 ---
     try {
-      // 1. 배포 환경(GitHub Pages)과 로컬 환경에 따른 베이스 경로 처리
-      const isProd = typeof window !== 'undefined' && 
-                     (window.location.hostname.includes('github.io') || window.location.hostname.includes('vercel.app'));
-      const basePath = isProd ? '/aria' : '';
+      let syncedPlaces: Place[] = [];
+      const isServer = typeof window === 'undefined';
       
-      // 2. 캐시 무시를 위해 타임스탬프 추가 (단, 빌드 시점에는 정적으로 작동하도록 처리)
-      const timestamp = new Date().getTime();
-      const syncRes = await fetch(`${basePath}/data/places.json?t=${timestamp}`);
+      if (isServer) {
+        // 서버 측(빌드 타임)에서는 파일 시스템에서 직접 읽기 (가장 정확하고 빠름)
+        try {
+          const fs = await import('fs');
+          const path = await import('path');
+          const filePath = path.join(process.cwd(), 'public', 'data', 'places.json');
+          if (fs.existsSync(filePath)) {
+            const fileContent = fs.readFileSync(filePath, 'utf8');
+            syncedPlaces = JSON.parse(fileContent);
+          }
+        } catch (fsError) {
+          console.warn("Server-side file read failed, attempting fetch fallback:", fsError);
+        }
+      }
 
-      if (syncRes.ok) {
-        const syncedPlaces: Place[] = await syncRes.json();
-        
-        // ID를 기준으로 병합 (관리자가 명시적으로 저장한 데이터가 항상 우선)
+      // 서버 읽기에 실패했거나 브라우저 환경인 경우 fetch 시도
+      if (syncedPlaces.length === 0) {
+        const isProd = !isServer && 
+                      (window.location.hostname.includes('github.io') || window.location.hostname.includes('vercel.app'));
+        const basePath = isProd ? '/aria' : '';
+        const timestamp = new Date().getTime();
+        const syncRes = await fetch(`${basePath}/data/places.json?t=${timestamp}`);
+        if (syncRes.ok) {
+          syncedPlaces = await syncRes.json();
+        }
+      }
+
+      if (syncedPlaces.length > 0) {
         const combinedMap = new Map<number, Place>();
-        
-        // 시트 원본 데이터 먼저 채움
         sourcePlaces.forEach(p => combinedMap.set(p.id, p));
-        
-        // 동기화 데이터(Base64 이미지 포함)로 강력 덮어쓰기
         syncedPlaces.forEach(p => {
           if (p && p.id) {
             combinedMap.set(p.id, p);
           }
         });
-        
         return Array.from(combinedMap.values());
       }
     } catch (e) {
-      console.warn("Synced data fetch failed, falling back to Sheets only:", e);
+      console.warn("Synced data merge failed:", e);
     }
 
     return sourcePlaces;

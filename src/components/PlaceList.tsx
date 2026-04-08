@@ -396,10 +396,10 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
               >
                 <div className="relative h-48 w-full overflow-hidden rounded-[2rem] mb-4">
                   <div 
-                    className="absolute inset-0 bg-cover bg-center group-hover:scale-110 transition-transform duration-1000 grayscale-[0.3] group-hover:grayscale-0"
-                    style={{ backgroundImage: `url('${place.images?.[0] || 'https://images.unsplash.com/photo-1542224566-6e85f2e6772f?q=80&w=1950'}')` }}
+                    className="absolute inset-0 bg-cover bg-center group-hover:scale-110 transition-transform duration-1000"
+                    style={{ backgroundImage: `url('${(place.images && place.images.length > 0) ? place.images[0] : 'https://images.unsplash.com/photo-1542224566-6e85f2e6772f?q=80&w=1950'}')` }}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-forest/20 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-forest/40 to-transparent" />
                   <div className="absolute top-4 left-4 flex gap-2">
                     <span className="text-[10px] uppercase tracking-[0.2em] font-black text-white bg-forest/40 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10">
                       No. {place.id}

@@ -50,8 +50,8 @@ export default function AriaDetailModal({ place, onClose, allPlaces }: AriaDetai
           <div className="md:w-2/5 relative bg-forest overflow-hidden min-h-[300px] md:min-h-full">
             {/* Background Image */}
             <div 
-              className="absolute inset-0 bg-cover bg-center grayscale blur-xs opacity-40 scale-105"
-              style={{ backgroundImage: `url('${place.images?.[0] || 'https://images.unsplash.com/photo-1542224566-6e85f2e6772f?q=80&w=1950'}')` }}
+              className="absolute inset-0 bg-cover bg-center opacity-60 scale-105"
+              style={{ backgroundImage: `url('${(place.images && place.images.length > 0) ? place.images[0] : 'https://images.unsplash.com/photo-1542224566-6e85f2e6772f?q=80&w=1950'}')` }}
             />
             {/* Background Texture/Effect */}
             <div className="absolute inset-0 bg-gradient-to-br from-accent/20 to-transparent pointer-events-none" />
