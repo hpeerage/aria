@@ -26,7 +26,7 @@ export const dictionaries = {
       food: "맛집",
       history: "역사/유적",
       stay: "숙소",
-      etc: "기타"
+      etc: "동굴/수자원"
     },
     hero: {
       subtitle: "Wellness Curation Platform",

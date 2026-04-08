@@ -6,6 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useLanguage } from "@/lib/i18n/context";
+import GithubPushBtn from "@/components/admin/GithubPushBtn";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -93,13 +94,16 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <h2 className="text-4xl font-black text-white tracking-tighter mb-2">{dict.admin.explorerTitle}</h2>
             <p className="text-white/40 font-medium">{dict.admin.explorerDesc}</p>
           </div>
-          <div className="flex gap-4">
-            <button className="p-4 bg-white/5 hover:bg-white/10 rounded-2xl border border-white/5 transition-all text-white/40 hover:text-accent">
-              <HelpCircle className="w-5 h-5" />
-            </button>
-            <button className="p-4 bg-white/5 hover:bg-white/10 rounded-2xl border border-white/5 transition-all text-white/40 hover:text-accent">
-              <Sparkles className="w-5 h-5" />
-            </button>
+          <div className="flex items-center gap-4">
+            <GithubPushBtn />
+            <div className="flex gap-2">
+              <button className="p-4 bg-white/5 hover:bg-white/10 rounded-2xl border border-white/5 transition-all text-white/40 hover:text-accent">
+                <HelpCircle className="w-5 h-5" />
+              </button>
+              <button className="p-4 bg-white/5 hover:bg-white/10 rounded-2xl border border-white/5 transition-all text-white/40 hover:text-accent">
+                <Sparkles className="w-5 h-5" />
+              </button>
+            </div>
           </div>
         </header>
 
