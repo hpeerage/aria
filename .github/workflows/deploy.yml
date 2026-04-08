@@ -35,6 +35,12 @@ jobs:
           NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: ${{ secrets.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY }}
         run: |
           npm run build
+          # basePath(/aria) 때문에 out/aria가 생성되면 루트(out/)로 이동
+          if [ -d "out/aria" ]; then
+            cp -r out/aria/* out/
+            rm -rf out/aria
+          fi
+          touch out/.nojekyll
           cp out/index.html out/404.html
         
       - name: Upload artifact
