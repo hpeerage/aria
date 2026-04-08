@@ -35,8 +35,8 @@ export async function compressImage(
       // 이미지 그리기
       ctx.drawImage(img, 0, 0, width, height);
 
-      // 압축된 Base64 반환 (항상 JPEG로 변환하여 용량 최소화)
-      const compressedBase64 = canvas.toDataURL("image/jpeg", quality);
+      // 압축된 Base64 반환 (차세대 형식인 WebP로 변환하여 용량 극대화)
+      const compressedBase64 = canvas.toDataURL("image/webp", quality);
       resolve(compressedBase64);
     };
 
