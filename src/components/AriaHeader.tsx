@@ -207,18 +207,72 @@ export default function AriaHeader() {
               initial={{ opacity: 0, y: -20, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -20, scale: 0.95 }}
-              className="absolute top-24 left-6 right-6 p-8 bg-white dark:bg-forest rounded-[3rem] shadow-2xl border border-forest/5 z-[90] flex flex-col gap-6"
+              className="absolute top-24 left-6 right-6 p-8 bg-white dark:bg-forest rounded-[3rem] shadow-2xl border border-forest/5 z-[90] flex flex-col gap-8 max-h-[85vh] overflow-y-auto scrollbar-hide"
             >
-              {navItems.map((item) => (
-                <Link 
-                  key={item.title} 
-                  href={item.href}
-                  className="text-lg font-black text-forest hover:text-accent transition-colors py-2 border-b border-forest/5"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  {item.title}
-                </Link>
-              ))}
+              {/* Main Nav */}
+              <div className="flex flex-col gap-4">
+                <p className="text-[10px] font-black text-forest/30 dark:text-white/20 uppercase tracking-[0.3em] ml-1">Navigation</p>
+                {navItems.map((item) => (
+                  <Link 
+                    key={item.title} 
+                    href={item.href}
+                    className="text-2xl font-black text-forest dark:text-white hover:text-accent transition-colors py-2"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    {item.title}
+                  </Link>
+                ))}
+              </div>
+
+              {/* Divider */}
+              <div className="h-px bg-forest/5 dark:bg-white/5" />
+
+              {/* Categories Section */}
+              <div className="space-y-6">
+                <div className="flex items-center justify-between">
+                  <p className="text-[10px] font-black text-forest/30 dark:text-white/20 uppercase tracking-[0.3em] ml-1">Explore Categories</p>
+                  <TrendingUp className="w-3 h-3 text-accent animate-pulse" />
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  {quickLinks.map((link) => (
+                    <button
+                      key={link.query}
+                      onClick={() => {
+                        handleSearch(link.query);
+                        setIsMobileMenuOpen(false);
+                      }}
+                      className="flex items-center justify-between px-5 py-4 bg-forest/[0.03] dark:bg-white/[0.04] border border-forest/5 dark:border-white/5 rounded-2xl group hover:border-accent/30 hover:bg-accent/[0.02] transition-all text-left"
+                    >
+                      <span className="text-sm font-black text-forest/70 dark:text-white/70 group-hover:text-accent transition-colors">
+                        {link.label}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Language Switch for Mobile */}
+              <div className="flex items-center justify-between pt-4">
+                <p className="text-[10px] font-black text-forest/30 dark:text-white/20 uppercase tracking-[0.3em] ml-1">Language</p>
+                <div className="flex bg-forest/5 dark:bg-white/10 rounded-xl p-1">
+                  <button 
+                    onClick={() => setLocale("ko")}
+                    className={`px-4 py-2 rounded-lg text-[10px] font-black transition-all ${
+                      locale === "ko" ? "bg-forest dark:bg-accent text-white shadow-lg" : "text-forest/40 dark:text-white/40"
+                    }`}
+                  >
+                    KO
+                  </button>
+                  <button 
+                    onClick={() => setLocale("en")}
+                    className={`px-4 py-2 rounded-lg text-[10px] font-black transition-all ${
+                      locale === "en" ? "bg-forest dark:bg-accent text-white shadow-lg" : "text-forest/40 dark:text-white/40"
+                    }`}
+                  >
+                    EN
+                  </button>
+                </div>
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
