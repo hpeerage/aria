@@ -67,43 +67,36 @@ export async function getPlacesFromGoogleSheet(sheetId: string, sheetName?: stri
         };
       });
 
-    // --- [v0.8.0 / v0.8.2] GitHub 동기화 데이터 병합 및 빌드 시점 정합성 강화 ---
+    // --- [v0.8.0 / v0.8.3] GitHub 동기화 데이터 병합 및 빌드 시점 정합성 강화 ---
     try {
       let syncedPlaces: Place[] = [];
       const isServer = typeof window === 'undefined';
       
-      if (isServer) {
-        // 서버 측(빌드 타임)에서는 파일 시스템에서 직접 읽기 (가장 정확하고 빠름)
-        try {
-          const fs = await import('fs');
-          const path = await import('path');
-          const filePath = path.join(process.cwd(), 'public', 'data', 'places.json');
-          if (fs.existsSync(filePath)) {
-            const fileContent = fs.readFileSync(filePath, 'utf8');
-            syncedPlaces = JSON.parse(fileContent);
-          }
-        } catch (fsError) {
-          console.warn("Server-side file read failed, attempting fetch fallback:", fsError);
-        }
-      }
-
-      // 서버 읽기에 실패했거나 브라우저 환경인 경우 fetch 시도
-      if (syncedPlaces.length === 0) {
-        const isProd = !isServer && 
-                      (window.location.hostname.includes('github.io') || window.location.hostname.includes('vercel.app'));
-        const basePath = isProd ? '/aria' : '';
-        const timestamp = new Date().getTime();
+      // 서버/브라우저 환경 공통으로 fetch 시도 (캐시 무효화 포함)
+      const isProd = !isServer && 
+                    (window.location.hostname.includes('github.io') || window.location.hostname.includes('vercel.app'));
+      const basePath = isProd ? '/aria' : '';
+      const timestamp = new Date().getTime();
+      
+      // 빌드 시점에는 상대 경로 fetch가 실패할 수 있으므로 조용히 처리
+      try {
         const syncRes = await fetch(`${basePath}/data/places.json?t=${timestamp}`);
         if (syncRes.ok) {
           syncedPlaces = await syncRes.json();
         }
+      } catch (fetchErr) {
+        // 빌드 타임 환경 등에서 fetch 실패 시 로깅 생략 (폴백 작동)
       }
 
-      if (syncedPlaces.length > 0) {
+      if (syncedPlaces && syncedPlaces.length > 0) {
         const combinedMap = new Map<number, Place>();
         sourcePlaces.forEach(p => combinedMap.set(p.id, p));
         syncedPlaces.forEach(p => {
-          if (p && p.id) {
+          if (p && p.id && p.coordinates) {
+            // [v0.8.3] 병합 시에도 좌표 유효성 검사
+            if (!p.coordinates.lat || !p.coordinates.lng || p.coordinates.lat === 0 || p.coordinates.lng === 0) {
+              p.coordinates = JEONGSEON_CENTER;
+            }
             combinedMap.set(p.id, p);
           }
         });

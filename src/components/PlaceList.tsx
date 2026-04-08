@@ -131,8 +131,14 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
             });
           }
           
-          // 최종 이미지 검증 및 상태 업데이트
-          const validated = merged.map(p => ({
+          // [v0.8.3] 최종 좌표 유효성 검사 (0,0 방지)
+          const JEONGSEON_CENTER = { lat: 37.3806, lng: 128.6608 };
+          const validated = merged.map(p => {
+            if (!p.coordinates || !p.coordinates.lat || !p.coordinates.lng || p.coordinates.lat === 0 || p.coordinates.lng === 0) {
+              return { ...p, coordinates: JEONGSEON_CENTER };
+            }
+            return p;
+          }).map(p => ({
             ...p,
             images: validateImagePaths(p.images || [], p.id, p.category)
           }));
@@ -147,7 +153,13 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
       // 기존 폴백 로직 (로컬 스토리지 한정)
       const localData = localStorage.getItem('aria_local_places');
       if (localData) {
-        const parsed = JSON.parse(localData).map((p: Place) => ({
+        const JEONGSEON_CENTER = { lat: 37.3806, lng: 128.6608 };
+        const parsed = JSON.parse(localData).map((p: Place) => {
+          if (!p.coordinates || !p.coordinates.lat || !p.coordinates.lng || p.coordinates.lat === 0 || p.coordinates.lng === 0) {
+            return { ...p, coordinates: JEONGSEON_CENTER };
+          }
+          return p;
+        }).map((p: Place) => ({
           ...p,
           images: validateImagePaths(p.images || [], p.id, p.category)
         }));
