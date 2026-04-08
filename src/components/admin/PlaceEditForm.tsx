@@ -173,7 +173,7 @@ export default function PlaceEditForm({ isNew = false }: { isNew?: boolean }) {
           console.error("Save failed:", error);
           setIsSaving(false);
           if (error.name === 'QuotaExceededError') {
-            alert("저장 공간이 부족합니다! ⚠️\n\n현재 LocalStorage 용량이 가득 찼습니다. 이미 저장된 장소 중 이미지가 너무 많은 항목을 삭제하거나, 사진 장수를 줄여서 다시 시도해 주세요.");
+            alert("저장 공간이 부족합니다! ⚠️\n\n현재 브라우저의 저장 용량(5MB)이 가득 찼습니다.\n\n[해결 방법]\n1. 상단 [Cloud Sync] 버튼을 눌러 지금까지의 수정을 GitHub에 저장하세요.\n2. [Settings] 메뉴로 이동하여 'Clear Local Cache'를 클릭해 공간을 비워주세요.");
           } else {
             alert("저장 중 예상치 못한 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.");
           }

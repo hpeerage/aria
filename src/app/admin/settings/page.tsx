@@ -1,13 +1,14 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Settings, Save, Shield, Database, Bell, Layout, Palette, Sliders } from "lucide-react";
+import { Settings, Save, Shield, Database, Bell, Layout, Palette, Sliders, Trash2, HardDrive } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useLanguage } from "@/lib/i18n/context";
 
 export default function AdminSettingsPage() {
   const { dict } = useLanguage();
   const [isSaving, setIsSaving] = useState(false);
+  const [storageUsage, setStorageUsage] = useState({ used: 0, percent: 0 });
   const [config, setConfig] = useState({
     token: "",
     owner: "hpeerage",
@@ -20,6 +21,21 @@ export default function AdminSettingsPage() {
     if (saved) {
       setConfig(JSON.parse(saved));
     }
+
+    // 저장 공간 계산 (5MB 기준)
+    const calculateStorage = () => {
+      let total = 0;
+      for (let x in localStorage) {
+        if (localStorage.hasOwnProperty(x)) {
+          total += (localStorage[x].length + x.length) * 2; 
+        }
+      }
+      const usedMB = (total / 1024 / 1024).toFixed(2);
+      const percent = Math.min(Math.round((Number(usedMB) / 5) * 100), 100);
+      setStorageUsage({ used: Number(usedMB), percent });
+    };
+
+    calculateStorage();
   }, []);
 
   const handleSave = () => {
@@ -29,6 +45,17 @@ export default function AdminSettingsPage() {
       setIsSaving(false);
       alert("설정이 안전하게 저장되었습니다.");
     }, 1000);
+  };
+
+  const handleClearCache = () => {
+    if (confirm("정말로 로컬 캐시를 비우시겠습니까?\n\n이미 GitHub로 동기화(Push)된 데이터는 안전합니다. 하지만 동기화하지 않은 로컬 편집본은 모두 삭제됩니다.")) {
+      Object.keys(localStorage).forEach(key => {
+        if (key.startsWith('aria_place_') || key === 'aria_local_places') {
+          localStorage.removeItem(key);
+        }
+      });
+      window.location.reload();
+    }
   };
 
   return (
@@ -121,12 +148,49 @@ export default function AdminSettingsPage() {
              </div>
           </div>
         </motion.div>
-        <SettingsCard 
-          icon={<Database className="w-6 h-6 text-blue-400" />}
-          title={dict.admin.dataSync}
-          description={dict.admin.dataSyncDesc}
-          options={["Sync Interval (60m)", "Cache Revalidation", "Error Reporting"]}
-        />
+        {/* Storage Management Card */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="p-10 bg-white/5 border border-white/10 rounded-[3rem] space-y-8 hover:bg-white/10 transition-all group shadow-2xl"
+        >
+          <div className="flex items-center gap-4">
+            <div className="p-4 bg-blue-500/10 text-blue-400 rounded-2xl group-hover:bg-blue-500 group-hover:text-white transition-all">
+              <HardDrive className="w-6 h-6" />
+            </div>
+            <div>
+              <h4 className="text-xl font-black text-white tracking-tight">Storage Management</h4>
+              <p className="text-[10px] font-bold text-white/30 uppercase tracking-widest">Local Buffer Diagnostics</p>
+            </div>
+          </div>
+          
+          <div className="space-y-6 pt-6 border-t border-white/5">
+            <div className="space-y-4">
+               <div className="flex justify-between items-end px-1">
+                  <span className="text-[10px] font-black text-white/40 uppercase tracking-widest">LocalStorage Capacity (5MB Max)</span>
+                  <span className={`text-sm font-black ${storageUsage.percent > 80 ? 'text-rose-500' : 'text-accent'}`}>{storageUsage.used} MB / 5.00 MB</span>
+               </div>
+               <div className="h-4 bg-white/5 rounded-full overflow-hidden border border-white/5 p-0.5">
+                  <motion.div 
+                    initial={{ width: 0 }}
+                    animate={{ width: `${storageUsage.percent}%` }}
+                    className={`h-full rounded-full ${storageUsage.percent > 80 ? 'bg-rose-500' : 'bg-accent'} shadow-[0_0_20px_rgba(var(--accent-rgb),0.5)]`}
+                  />
+               </div>
+               <p className="text-[10px] text-white/20 px-1 italic">
+                 * 용량이 부족할 경우 이미지를 줄이거나 GitHub로 푸시 후 캐시를 비워주세요.
+               </p>
+            </div>
+            
+            <button 
+              onClick={handleClearCache}
+              className="w-full py-4 bg-rose-500/10 hover:bg-rose-500 text-rose-500 hover:text-white rounded-2xl font-black text-xs uppercase tracking-widest transition-all flex items-center justify-center gap-3 border border-rose-500/20"
+            >
+              <Trash2 className="w-4 h-4" />
+              Clear Local Cache
+            </button>
+          </div>
+        </motion.div>
         <SettingsCard 
           icon={<Palette className="w-6 h-6 text-purple-400" />}
           title={dict.admin.visualInterface}
