@@ -209,24 +209,6 @@ export default function AriaHeader() {
               exit={{ opacity: 0, y: -20, scale: 0.95 }}
               className="absolute top-24 left-6 right-6 p-8 bg-white dark:bg-forest rounded-[3rem] shadow-2xl border border-forest/5 z-[90] flex flex-col gap-8 max-h-[85vh] overflow-y-auto scrollbar-hide"
             >
-              {/* Main Nav */}
-              <div className="flex flex-col gap-4">
-                <p className="text-[10px] font-black text-forest/30 dark:text-white/20 uppercase tracking-[0.3em] ml-1">Navigation</p>
-                {navItems.map((item) => (
-                  <Link 
-                    key={item.title} 
-                    href={item.href}
-                    className="text-2xl font-black text-forest dark:text-white hover:text-accent transition-colors py-2"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    {item.title}
-                  </Link>
-                ))}
-              </div>
-
-              {/* Divider */}
-              <div className="h-px bg-forest/5 dark:bg-white/5" />
-
               {/* Categories Section */}
               <div className="space-y-6">
                 <div className="flex items-center justify-between">
