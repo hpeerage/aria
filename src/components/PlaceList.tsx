@@ -95,7 +95,56 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
   };
 
   useEffect(() => {
-    const syncLocalChanges = () => {
+    const syncLocalChanges = async () => {
+      // 1. [v0.8.1] 런타임 GitHub 서버 데이터 동동기화 (최우선)
+      try {
+        const isProd = typeof window !== 'undefined' && 
+                       (window.location.hostname.includes('github.io') || window.location.hostname.includes('vercel.app'));
+        const basePath = isProd ? '/aria' : '';
+        const timestamp = new Date().getTime();
+        const syncRes = await fetch(`${basePath}/data/places.json?t=${timestamp}`, { cache: 'no-store' });
+        
+        if (syncRes.ok) {
+          const syncedFromGithub: Place[] = await syncRes.json();
+          const merged = [...initialPlaces];
+          
+          syncedFromGithub.forEach((remotePlace: Place) => {
+            const idx = merged.findIndex(p => p.id === remotePlace.id);
+            if (idx >= 0) {
+              merged[idx] = remotePlace;
+            } else {
+              merged.push(remotePlace);
+            }
+          });
+          
+          // 2. LocalStorage 데이터 병합 (개발 중 미푸시 데이터용)
+          const localData = localStorage.getItem('aria_local_places');
+          if (localData) {
+            const parsed = JSON.parse(localData);
+            parsed.forEach((localPlace: Place) => {
+              const idx = merged.findIndex(p => p.id === localPlace.id);
+              if (idx >= 0) {
+                merged[idx] = localPlace;
+              } else {
+                merged.push(localPlace);
+              }
+            });
+          }
+          
+          // 최종 이미지 검증 및 상태 업데이트
+          const validated = merged.map(p => ({
+            ...p,
+            images: validateImagePaths(p.images || [], p.id, p.category)
+          }));
+          
+          setPlaces(validated);
+          return;
+        }
+      } catch (err) {
+        console.warn("Runtime github sync failed, fallback to local only:", err);
+      }
+
+      // 기존 폴백 로직 (로컬 스토리지 한정)
       const localData = localStorage.getItem('aria_local_places');
       if (localData) {
         const parsed = JSON.parse(localData).map((p: Place) => ({
