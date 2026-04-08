@@ -79,6 +79,7 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
   const [activePlace, setActivePlace] = useState<Place | null>(null);
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [isLocating, setIsLocating] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   // Sync search term from URL param ?q=
   useEffect(() => {
@@ -355,11 +356,91 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
           </div>
         </div>
 
-        {/* Premium Icon-based Category Grid - Fixed for clipping with generous vertical padding */}
+        {/* Category Filters - Responsive: Dropdown for Mobile, Icon Grid for Desktop */}
         <div className="relative -mx-4 -my-8 md:-my-16 px-4 py-8 md:py-16 group/scroll">
+          
+          {/* 📱 Mobile Dropdown View (md:hidden) */}
+          <div className="md:hidden px-4 relative z-[100]">
+            <button
+              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+              className="w-full flex items-center justify-between px-8 py-5 bg-white dark:bg-forest border border-forest/10 dark:border-white/10 rounded-3xl shadow-xl backdrop-blur-3xl group"
+            >
+              <div className="flex items-center gap-4">
+                <div className={`p-2.5 rounded-xl ${getCategoryConfig(selectedCategory, dict).bg} ${getCategoryConfig(selectedCategory, dict).color}`}>
+                  {(() => {
+                    const Icon = getCategoryConfig(selectedCategory, dict).icon;
+                    return <Icon className="w-5 h-5" />;
+                  })()}
+                </div>
+                <div className="text-left">
+                  <p className="text-[10px] font-black text-accent uppercase tracking-widest leading-none mb-1">Category</p>
+                  <p className="text-base font-black text-forest dark:text-white">{getCategoryConfig(selectedCategory, dict).label}</p>
+                </div>
+              </div>
+              <motion.div
+                animate={{ rotate: isDropdownOpen ? 180 : 0 }}
+                className="text-forest/30 dark:text-white/30"
+              >
+                <MoreHorizontal className="w-6 h-6" />
+              </motion.div>
+            </button>
+
+            <AnimatePresence>
+              {isDropdownOpen && (
+                <>
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    onClick={() => setIsDropdownOpen(false)}
+                    className="fixed inset-0 z-[-1] bg-black/5 backdrop-blur-sm"
+                  />
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.95, y: -20 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.95, y: -20 }}
+                    className="absolute top-[110%] left-4 right-4 bg-white/95 dark:bg-forest-dark/95 border border-forest/10 dark:border-white/10 rounded-[2.5rem] shadow-2xl backdrop-blur-3xl overflow-hidden p-3 space-y-2"
+                  >
+                    {categories.map((cat) => {
+                      const config = getCategoryConfig(cat, dict);
+                      const isActive = selectedCategory === cat;
+                      const Icon = config.icon;
+
+                      return (
+                        <button
+                          key={cat}
+                          onClick={() => {
+                            if (cat === dict.common.nearMe) {
+                              if (!userLocation) handleLocateMe();
+                              else setSelectedCategory(cat);
+                            } else {
+                              setSelectedCategory(cat);
+                            }
+                            setIsDropdownOpen(false);
+                          }}
+                          className={`w-full flex items-center gap-4 px-6 py-4 rounded-2xl transition-all ${
+                            isActive 
+                              ? "bg-accent text-white shadow-lg shadow-accent/20" 
+                              : "hover:bg-forest/5 dark:hover:bg-white/5 text-forest/70 dark:text-white/70"
+                          }`}
+                        >
+                          <div className={`p-2 rounded-lg ${isActive ? "bg-white/20 text-white" : `${config.bg} ${config.color}`}`}>
+                            <Icon className="w-4 h-4" />
+                          </div>
+                          <span className="text-sm font-black tracking-tight">{config.label}</span>
+                        </button>
+                      );
+                    })}
+                  </motion.div>
+                </>
+              )}
+            </AnimatePresence>
+          </div>
+
+          {/* 💻 Desktop Icon Grid View (hidden md:flex) */}
           <div 
             ref={scrollRef}
-            className="flex gap-4 md:gap-6 overflow-x-auto py-8 md:py-12 scrollbar-hide snap-x snap-proximity px-8 pb-20 md:pb-32"
+            className="hidden md:flex gap-4 md:gap-6 overflow-x-auto py-8 md:py-12 scrollbar-hide snap-x snap-proximity px-8 pb-20 md:pb-32"
           >
             {categories.map((cat) => {
               const config = getCategoryConfig(cat, dict);
@@ -369,11 +450,11 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
               return (
                 <motion.button
                   key={cat}
-                  whileHover={typeof window !== 'undefined' && window.innerWidth > 768 ? { 
+                  whileHover={{ 
                     scale: 1.08, 
                     y: -10,
                     transition: { type: "spring", stiffness: 400, damping: 20 }
-                  } : { scale: 1.02 }}
+                  }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => {
                     if (cat === dict.common.nearMe) {
@@ -424,7 +505,7 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
           </div>
           
           {/* Subtle decoration to indicate scroll ability on desktop */}
-          <div className="absolute bottom-16 left-1/2 -translate-x-1/2 flex gap-1 opacity-0 group-hover/scroll:opacity-100 transition-opacity duration-1000">
+          <div className="absolute bottom-16 left-1/2 -translate-x-1/2 hidden md:flex gap-1 opacity-0 group-hover/scroll:opacity-100 transition-opacity duration-1000">
              <div className="w-12 h-1 bg-forest/5 rounded-full overflow-hidden">
                 <motion.div 
                   className="w-1/3 h-full bg-accent/40"
