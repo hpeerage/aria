@@ -244,7 +244,7 @@ export default function AriaHeader() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -20, scale: 0.97 }}
               transition={{ type: "spring", stiffness: 400, damping: 30 }}
-              className="fixed top-6 left-1/2 -translate-x-1/2 w-full max-w-2xl z-[201] px-4"
+              className="fixed top-6 left-0 right-0 mx-auto w-[92vw] md:w-full md:max-w-2xl z-[201]"
             >
               <div className="bg-white dark:bg-[#0C1A14] rounded-[2.5rem] shadow-[0_40px_100px_-20px_rgba(0,0,0,0.5)] border border-forest/10 dark:border-white/10 overflow-hidden">
                 
