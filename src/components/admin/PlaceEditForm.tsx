@@ -149,8 +149,11 @@ export default function PlaceEditForm({ isNew = false }: { isNew?: boolean }) {
         try {
           localStorage.setItem(`aria_place_${id || 'new'}`, JSON.stringify(finalData));
           
-          // 2. 전체 목록 캐시 업데이트 (용량 절약을 위해 이미지는 제외하고 메타데이터만 저장)
-          const listData = { ...finalData, images: [] }; // 리스트에는 이미지를 포함하지 않음
+          // 2. 전체 목록 캐시 업데이트 (용량 절약을 위해 대표 이미지만 목록 데이터에 포함)
+          const listData = { 
+            ...finalData, 
+            images: finalData.images.length > 0 ? [finalData.images[0]] : [] 
+          }; 
           
           const localListStr = localStorage.getItem('aria_local_places');
           const localList = localListStr ? JSON.parse(localListStr) : [];
@@ -366,6 +369,13 @@ export default function PlaceEditForm({ isNew = false }: { isNew?: boolean }) {
                       >
                          <img src={img} alt="Preview" className="w-full h-full object-cover grayscale opacity-40 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700" />
                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500" />
+                         
+                         {idx === 0 && (
+                           <div className="absolute top-4 left-4 px-3 py-1.5 bg-accent text-white text-[10px] font-black uppercase tracking-widest rounded-lg shadow-xl border border-white/20 z-20">
+                             Preview
+                           </div>
+                         )}
+
                          <button 
                             onClick={() => removeImage(idx)}
                             className="absolute top-4 right-4 p-2 bg-red-500/80 text-white rounded-xl opacity-0 group-hover:opacity-100 transition-all hover:bg-red-500 shadow-xl"
