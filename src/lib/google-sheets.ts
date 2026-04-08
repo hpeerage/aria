@@ -37,6 +37,9 @@ export async function getPlacesFromGoogleSheet(sheetId: string, sheetName?: stri
       rows = rows.slice(1);
     }
 
+    // [v0.8.2] 정선군 기본 좌표 (좌표 누락 시 아프리카로 날아가는 것을 방지)
+    const JEONGSEON_CENTER = { lat: 37.3806, lng: 128.6608 };
+
     // 기본 데이터 매핑
     const sourcePlaces = rows
       .filter(row => row.c[1]?.v)
@@ -44,21 +47,27 @@ export async function getPlacesFromGoogleSheet(sheetId: string, sheetName?: stri
         const c = row.c;
         const category = String(c[5]?.v || '기타');
         const id = index + 1;
+        
+        let lat = Number(c[2]?.v);
+        let lng = Number(c[3]?.v);
+        
+        // 좌표가 0이거나 유효하지 않은 경우 정선군 기본 위치로 보정
+        if (!lat || !lng || lat === 0 || lng === 0) {
+          lat = JEONGSEON_CENTER.lat;
+          lng = JEONGSEON_CENTER.lng;
+        }
 
         return {
           id,
           name: String(c[1]?.v || '정선의 공간'),
           category,
-          coordinates: {
-            lat: Number(c[2]?.v) || 0,
-            lng: Number(c[3]?.v) || 0,
-          },
+          coordinates: { lat, lng },
           description: `${c[4]?.v || ''} ${c[6]?.v || ''}`.trim(),
           images: validateImagePaths(getImagesByCategory(category, id), id, category),
         };
       });
 
-    // --- [v0.8.0] GitHub 동기화 데이터 병합 및 빌드 시점 정합성 강화 ---
+    // --- [v0.8.0 / v0.8.2] GitHub 동기화 데이터 병합 및 빌드 시점 정합성 강화 ---
     try {
       let syncedPlaces: Place[] = [];
       const isServer = typeof window === 'undefined';
