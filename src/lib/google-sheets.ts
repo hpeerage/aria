@@ -39,8 +39,8 @@ export async function getPlacesFromGoogleSheet(sheetId: string, sheetName?: stri
       rows = rows.slice(1);
     }
 
-    // 유효한 데이터가 있는 행만 필터링 (장소명이 없는 빈 행 제외)
-    return rows
+    // 기본 데이터 매핑
+    const sourcePlaces = rows
       .filter(row => row.c[1]?.v)
       .map((row, index) => {
         const c = row.c;
@@ -59,6 +59,32 @@ export async function getPlacesFromGoogleSheet(sheetId: string, sheetName?: stri
           images: validateImagePaths(getImagesByCategory(category, id), id, category),
         };
       });
+
+    // --- [v0.6.0] GitHub 동기화 데이터 병합 로직 추가 ---
+    try {
+      // 배포 환경 및 로컬 환경에서 동기화된 JSON 파일 페칭
+      const syncRes = await fetch('/aria/data/places.json', { cache: 'no-store' });
+      if (syncRes.ok) {
+        const syncedPlaces: Place[] = await syncRes.json();
+        
+        // ID를 기준으로 병합 (동기화된 데이터가 우선권을 가짐)
+        const combinedMap = new Map<number, Place>();
+        
+        // 1. 기본 데이터 추가
+        sourcePlaces.forEach(p => combinedMap.set(p.id, p));
+        
+        // 2. 동기화 데이터로 덮어쓰기 또는 추가
+        syncedPlaces.forEach(p => {
+          combinedMap.set(p.id, p);
+        });
+        
+        return Array.from(combinedMap.values());
+      }
+    } catch (e) {
+      console.warn("Synced data not found or failed to fetch, using default sheets data.");
+    }
+
+    return sourcePlaces;
   } catch (error) {
     console.error("Error fetching places from Google Sheets:", error);
     return [];
