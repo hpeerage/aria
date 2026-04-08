@@ -60,28 +60,43 @@ export async function getPlacesFromGoogleSheet(sheetId: string, sheetName?: stri
         };
       });
 
-    // --- [v0.6.0] GitHub 동기화 데이터 병합 로직 추가 ---
+    // --- [v0.6.1] GitHub 동기화 데이터 병합 로직 고도화 ---
     try {
-      // 배포 환경 및 로컬 환경에서 동기화된 JSON 파일 페칭
-      const syncRes = await fetch('/aria/data/places.json', { cache: 'no-store' });
+      // 1. 배포 환경(GitHub Pages)과 로컬 환경에 따른 베이스 경로 처리
+      const isProd = typeof window !== 'undefined' && 
+                     (window.location.hostname.includes('github.io') || window.location.hostname.includes('vercel.app'));
+      const basePath = isProd ? '/aria' : '';
+      
+      // 2. 캐시 무시를 위해 타임스탬프 추가 (Cache Busting)
+      const timestamp = new Date().getTime();
+      const syncRes = await fetch(`${basePath}/data/places.json?t=${timestamp}`, { 
+        cache: 'no-store',
+        headers: {
+          'Pragma': 'no-cache',
+          'Cache-Control': 'no-cache'
+        }
+      });
+
       if (syncRes.ok) {
         const syncedPlaces: Place[] = await syncRes.json();
         
-        // ID를 기준으로 병합 (동기화된 데이터가 우선권을 가짐)
+        // ID를 기준으로 병합 (관리자가 명시적으로 저장한 데이터가 항상 우선)
         const combinedMap = new Map<number, Place>();
         
-        // 1. 기본 데이터 추가
+        // 시트 원본 데이터 먼저 채움
         sourcePlaces.forEach(p => combinedMap.set(p.id, p));
         
-        // 2. 동기화 데이터로 덮어쓰기 또는 추가
+        // 동기화 데이터(Base64 이미지 포함)로 강력 덮어쓰기
         syncedPlaces.forEach(p => {
-          combinedMap.set(p.id, p);
+          if (p && p.id) {
+            combinedMap.set(p.id, p);
+          }
         });
         
         return Array.from(combinedMap.values());
       }
     } catch (e) {
-      console.warn("Synced data not found or failed to fetch, using default sheets data.");
+      console.warn("Synced data fetch failed, falling back to Sheets only:", e);
     }
 
     return sourcePlaces;
