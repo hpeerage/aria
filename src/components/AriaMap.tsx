@@ -97,7 +97,7 @@ export default function AriaMap({ places, onMarkerClick, userLocation }: AriaMap
           gestureHandling={"greedy"}
           disableDefaultUI={false}
           className="w-full h-full"
-          mapId="aria_wellness_map" 
+          mapId="8c0d537b1e8dd38f35e7ec6e" 
           styles={ARIA_MAP_STYLES}
           clickableIcons={false}
         >
