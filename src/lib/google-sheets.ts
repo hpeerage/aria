@@ -4,7 +4,7 @@ import { getImagesByCategory, validateImagePaths } from "./place-images";
 /**
  * 원본 대화식 카테고리명을 시스템 표준 키로 변환합니다.
  */
-function normalizeCategory(rawCategory: string): string {
+export function normalizeCategory(rawCategory: string): string {
   const c = rawCategory.toLowerCase();
   
   // 1. 자연/숲

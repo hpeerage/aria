@@ -11,6 +11,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { useLanguage } from "@/lib/i18n/context";
 import { useWishlist } from "@/lib/wishlist/context";
 import { validateImagePaths } from "@/lib/place-images";
+import { normalizeCategory } from "@/lib/google-sheets";
 
 interface PlaceListProps {
   initialPlaces: Place[];
@@ -138,10 +139,14 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
               return { ...p, coordinates: JEONGSEON_CENTER };
             }
             return p;
-          }).map(p => ({
-            ...p,
-            images: validateImagePaths(p.images || [], p.id, p.category)
-          }));
+          }).map(p => {
+            const normalizedCategory = normalizeCategory(p.category);
+            return {
+              ...p,
+              category: normalizedCategory,
+              images: validateImagePaths(p.images || [], p.id, normalizedCategory)
+            };
+          });
           
           setPlaces(validated);
           return;
@@ -159,10 +164,14 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
             return { ...p, coordinates: JEONGSEON_CENTER };
           }
           return p;
-        }).map((p: Place) => ({
-          ...p,
-          images: validateImagePaths(p.images || [], p.id, p.category)
-        }));
+        }).map((p: Place) => {
+          const normalizedCategory = normalizeCategory(p.category);
+          return {
+            ...p,
+            category: normalizedCategory,
+            images: validateImagePaths(p.images || [], p.id, normalizedCategory)
+          };
+        });
         const merged = [...initialPlaces];
         
         parsed.forEach((localPlace: Place) => {
