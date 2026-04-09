@@ -41,18 +41,16 @@ const EXISTING_LOCAL_IMAGES: Record<number, string> = {
 };
 
 export function getImagesByCategory(category: string, id: number): string[] {
-  // 카테고리별 매칭 (없으면 기본 이미지셋 사용)
+  // 카테고리별 매칭 (정규화된 키를 사용하여 직접 매칭)
   let images = CATEGORY_IMAGES["기본"];
   
-  if (category.includes("맛집") || category.includes("정선맛집") || category.includes("food")) {
+  if (category === "food") {
     images = CATEGORY_IMAGES["정선맛집"];
-  } else if (category.includes("식음") || category.includes("카페") || category.includes("맛") || category.includes("restaurant")) {
-    images = CATEGORY_IMAGES["카페/식당"];
-  } else if (category.includes("문화") || category.includes("유적") || category.includes("전통") || category.includes("culture") || category.includes("history")) {
+  } else if (category === "culture" || category === "history") {
     images = CATEGORY_IMAGES["힐링/전통"];
-  } else if (category.includes("웰니스") || category.includes("자원") || category.includes("치유") || category.includes("nature") || category.includes("wellness")) {
+  } else if (category === "nature" || category === "wellness") {
     images = CATEGORY_IMAGES["관광"];
-  } else if (category.includes("숙박") || category.includes("펜션") || category.includes("호텔") || category.includes("stay") || category.includes("accommodation")) {
+  } else if (category === "stay") {
     images = CATEGORY_IMAGES["숙소"];
   }
 

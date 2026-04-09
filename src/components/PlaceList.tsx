@@ -46,22 +46,22 @@ const getCategoryConfig = (cat: string, dict: any) => {
   if (cat === dict.common.all) return { icon: LayoutGrid, label: dict.common.all, bg: "bg-forest/10 dark:bg-white/20", color: "text-forest dark:text-white" };
   if (cat === dict.common.nearMe) return { icon: Navigation, label: dict.common.nearMe, bg: "bg-accent/10", color: "text-accent" };
   
-  if (c.includes("nature") || c.includes("자연") || c.includes("산") || c.includes("숲")) 
+  if (c === "nature") 
     return { icon: Trees, label: (dict.categories as any).nature || cat, bg: "bg-emerald-500/10", color: "text-emerald-500" };
   
-  if (c.includes("wellness") || c.includes("웰니스") || c.includes("치유") || c.includes("체험")) 
+  if (c === "wellness") 
     return { icon: Sparkles, label: (dict.categories as any).wellness || cat, bg: "bg-rose-500/10", color: "text-rose-500" };
   
-  if (c.includes("food") || c.includes("맛집") || c.includes("식도락") || c.includes("카페") || c.includes("식음")) 
+  if (c === "food") 
     return { icon: UtensilsCrossed, label: (dict.categories as any).food || cat, bg: "bg-orange-500/10", color: "text-orange-500" };
 
-  if (c.includes("culture") || c.includes("문화") || c.includes("전통")) 
+  if (c === "culture") 
     return { icon: Palmtree, label: (dict.categories as any).culture || cat, bg: "bg-amber-500/10", color: "text-amber-500" };
 
-  if (c.includes("history") || c.includes("역사") || c.includes("유적")) 
+  if (c === "history") 
     return { icon: Landmark, label: (dict.categories as any).history || cat, bg: "bg-blue-500/10", color: "text-blue-500" };
 
-  if (c.includes("stay") || c.includes("숙소") || c.includes("숙박") || c.includes("펜션")) 
+  if (c === "stay") 
     return { icon: Home, label: (dict.categories as any).stay || cat, bg: "bg-indigo-500/10", color: "text-indigo-500" };
 
   return { icon: Droplets, label: (dict.categories as any).etc || cat, bg: "bg-sky-500/10", color: "text-sky-500" }; 

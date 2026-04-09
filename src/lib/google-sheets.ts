@@ -2,6 +2,34 @@ import { Place } from "@/types/place";
 import { getImagesByCategory, validateImagePaths } from "./place-images";
 
 /**
+ * 원본 대화식 카테고리명을 시스템 표준 키로 변환합니다.
+ */
+function normalizeCategory(rawCategory: string): string {
+  const c = rawCategory.toLowerCase();
+  
+  // 1. 맛집/식도락 (통합)
+  if (c.includes("food") || c.includes("맛집") || c.includes("식도락") || c.includes("카페") || c.includes("식음") || c.includes("식당") || c.includes("음식") || c.includes("시장")) return "food";
+  
+  // 2. 자연/치유
+  if (c.includes("nature") || c.includes("자연") || c.includes("산") || c.includes("숲") || c.includes("파크") || c.includes("공원")) return "nature";
+  
+  // 3. 체험/웰니스 (Wellness)
+  if (c.includes("wellness") || c.includes("웰니스") || c.includes("치유") || c.includes("체험") || c.includes("명상")) return "wellness";
+  
+  // 4. 문화/예술
+  if (c.includes("culture") || c.includes("문화") || c.includes("전통") || c.includes("예술") || c.includes("박물관") || c.includes("전시") || c.includes("공연")) return "culture";
+  
+  // 5. 역사/유적
+  if (c.includes("history") || c.includes("역사") || c.includes("유적") || c.includes("비석")) return "history";
+  
+  // 6. 숙소/스테이
+  if (c.includes("stay") || c.includes("숙소") || c.includes("숙박") || c.includes("펜션") || c.includes("호텔") || c.includes("리조트")) return "stay";
+  
+  // 7. 기타 (수자원, 동굴 등 포함)
+  return "etc";
+}
+
+/**
  * 구글 시트 데이터를 가져오는 유틸리티 (서버 전 전용)
  * @param sheetId 시트의 ID (브라우저 주소창에서 추출)
  * @param sheetName (선택) 시트 탭 이름
@@ -45,7 +73,8 @@ export async function getPlacesFromGoogleSheet(sheetId: string, sheetName?: stri
       .filter(row => row.c[1]?.v)
       .map((row, index) => {
         const c = row.c;
-        const category = String(c[5]?.v || '기타');
+        const rawCategory = String(c[5]?.v || '기타');
+        const category = normalizeCategory(rawCategory);
         const id = index + 1;
         
         let lat = Number(c[2]?.v);

@@ -6,20 +6,23 @@ import { Search, Filter, Edit2, Trash2, Eye, MapPin, Tag, Sparkles, AlertCircle,
 import Link from "next/link";
 import { Place } from "@/types/place";
 
+import { useLanguage } from "@/lib/i18n/context";
+
 interface AriaPlacesListProps {
   places: Place[];
   setPlaces: (places: Place[]) => void;
 }
 
 export default function AriaPlacesList({ places, setPlaces }: AriaPlacesListProps) {
+  const { dict } = useLanguage();
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [selectedCategory, setSelectedCategory] = useState(dict.common.all);
 
-  const categories = ["All", ...Array.from(new Set(places.map(p => p.category)))];
+  const categories = [dict.common.all, ...Array.from(new Set(places.map(p => p.category)))];
 
   const filteredPlaces = places.filter(place => {
     const matchesSearch = place.name.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = selectedCategory === "All" || place.category === selectedCategory;
+    const matchesCategory = selectedCategory === dict.common.all || place.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
 
@@ -67,7 +70,7 @@ export default function AriaPlacesList({ places, setPlaces }: AriaPlacesListProp
                   : "bg-white/5 text-white/60 hover:bg-white/10 hover:text-white"
               }`}
             >
-              {cat}
+              {cat === dict.common.all ? cat : (dict.categories as any)[cat] || cat}
             </button>
           ))}
         </div>
@@ -114,7 +117,7 @@ export default function AriaPlacesList({ places, setPlaces }: AriaPlacesListProp
                     <td className="px-8 py-6">
                       <div className="flex flex-wrap gap-2">
                         <span className="px-3 py-1 bg-forest/40 border border-white/10 rounded-full text-[10px] font-black text-white/50 uppercase tracking-widest shadow-sm">
-                          {place.category}
+                          {(dict.categories as any)[place.category] || place.category}
                         </span>
                         <div className="flex items-center gap-1 text-[10px] font-black text-accent/40 px-3 uppercase tracking-widest">
                           <Tag className="w-3 h-3" />
