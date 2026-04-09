@@ -79,12 +79,12 @@ export default function AriaHeader() {
   };
 
   const quickLinks = [
-    { label: "자연 · 산", query: "자연" },
-    { label: "웰니스 · 치유", query: "웰니스" },
-    { label: "맛집 · 식도락", query: "맛집" },
-    { label: "문화 · 전통", query: "문화" },
-    { label: "역사 · 유적", query: "역사" },
-    { label: "숙소 · 펜션", query: "숙소" },
+    { label: dict.categories.nature, query: "자연" },
+    { label: dict.categories.water, query: "동굴" },
+    { label: dict.categories.activity, query: "체험" },
+    { label: dict.categories.food, query: "맛집" },
+    { label: dict.categories.culture, query: "문화" },
+    { label: dict.categories.stay, query: "숙소" },
   ];
 
   const navItems = [

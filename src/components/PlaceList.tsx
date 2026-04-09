@@ -257,7 +257,14 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
 
   const filteredPlaces = places
     .filter((place) => {
-      const matchesSearch = place.name.toLowerCase().includes(searchTerm.toLowerCase());
+      const lowerSearch = searchTerm.toLowerCase();
+      const localizedCategory = (dict.categories as any)[place.category] || "";
+      
+      const matchesSearch = 
+        place.name.toLowerCase().includes(lowerSearch) ||
+        place.category.toLowerCase().includes(lowerSearch) ||
+        localizedCategory.toLowerCase().includes(lowerSearch);
+      
       const matchesCategory =
         selectedCategory === dict.common.all ||
         (selectedCategory === dict.common.nearMe && userLocation) ||
