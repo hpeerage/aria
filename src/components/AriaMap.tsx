@@ -35,8 +35,32 @@ const getMarkerConfig = (category: string) => {
  */
 const ARIA_MAP_STYLES: google.maps.MapTypeStyle[] = [
   {
-    featureType: "poi",
+    featureType: "poi.business",
     stylers: [{ visibility: "off" }]
+  },
+  {
+    featureType: "poi.attraction",
+    stylers: [{ visibility: "off" }]
+  },
+  {
+    featureType: "poi.medical",
+    stylers: [{ visibility: "off" }]
+  },
+  {
+    featureType: "poi.school",
+    stylers: [{ visibility: "off" }]
+  },
+  {
+    featureType: "poi.sports_complex",
+    stylers: [{ visibility: "off" }]
+  },
+  {
+    featureType: "poi.place_of_worship",
+    stylers: [{ visibility: "off" }]
+  },
+  {
+    featureType: "transit",
+    stylers: [{ visibility: "on" }]
   }
 ];
 
@@ -75,6 +99,7 @@ export default function AriaMap({ places, onMarkerClick, userLocation }: AriaMap
           className="w-full h-full"
           mapId="aria_wellness_map" 
           styles={ARIA_MAP_STYLES}
+          clickableIcons={false}
         >
           <MapController places={places} />
           {places.map((place) => (
