@@ -189,9 +189,9 @@ function CustomMarker({ place, onClick }: { place: Place; onClick: () => void })
       title={place.name}
     >
        <div className="relative group cursor-pointer">
-          {/* Enhanced Glow Effect */}
-          <div className="absolute inset-0 rounded-full blur-lg opacity-40 group-hover:opacity-80 transition-opacity duration-500" 
-               style={{ backgroundColor: config.color }} />
+          {/* Enhanced Glow Effect (Radial Gradient for smoothness) */}
+          <div className="absolute -inset-2 rounded-full opacity-30 group-hover:opacity-60 transition-opacity duration-500" 
+               style={{ background: `radial-gradient(circle, ${config.color} 0%, transparent 70%)` }} />
           
           <div 
             className={`relative flex items-center justify-center w-7 h-7 rounded-full border-2 border-white shadow-[0_5px_15px_-3px_rgba(0,0,0,0.3)] transform group-hover:scale-125 group-hover:-translate-y-2 transition-all duration-500 text-white`}
