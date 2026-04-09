@@ -39,6 +39,17 @@ const getMarkerConfig = (category: string) => {
   return { icon: Droplets, color: "#0ea5e9", bg: "bg-sky-500" }; 
 };
 
+/**
+ * 아리아 서비스 정보 외의 일반 POI(관광지, 음식점 등)만 숨기는 구글 맵 스타일
+ * 도로명, 행정구역, 대중교통 등 기초 지리 정보는 유지합니다.
+ */
+const ARIA_MAP_STYLES: google.maps.MapTypeStyle[] = [
+  {
+    featureType: "poi",
+    stylers: [{ visibility: "off" }]
+  }
+];
+
 interface AriaMapProps {
   places: Place[];
   onMarkerClick?: (place: Place) => void;
@@ -73,6 +84,7 @@ export default function AriaMap({ places, onMarkerClick, userLocation }: AriaMap
           disableDefaultUI={false}
           className="w-full h-full"
           mapId="aria_wellness_map" 
+          styles={ARIA_MAP_STYLES}
         >
           <MapController places={places} />
           {places.map((place) => (
@@ -180,3 +192,4 @@ function CustomMarker({ place, onClick }: { place: Place; onClick: () => void })
     </AdvancedMarker>
   );
 }
+
