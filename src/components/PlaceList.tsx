@@ -388,8 +388,8 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
         {/* Category Filters - Responsive: Dropdown for Mobile, Icon Grid for Desktop */}
         <div className="relative -mx-4 -my-8 md:-my-16 px-4 py-8 md:py-16 group/scroll">
           
-          {/* 📱 Mobile Dropdown View (md:hidden) */}
-          <div className="md:hidden px-4 relative z-[100]">
+          {/* 📱 Mobile Dropdown View (Hidden per user request - "not working properly") */}
+          <div className="hidden px-4 relative z-[100]">
             <button
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
               className="w-full flex items-center justify-between px-8 py-5 bg-white dark:bg-forest border border-forest/10 dark:border-white/10 rounded-3xl shadow-xl backdrop-blur-3xl group"
