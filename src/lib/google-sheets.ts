@@ -7,26 +7,25 @@ import { getImagesByCategory, validateImagePaths } from "./place-images";
 function normalizeCategory(rawCategory: string): string {
   const c = rawCategory.toLowerCase();
   
-  // 1. 맛집/식도락 (통합)
-  if (c.includes("food") || c.includes("맛집") || c.includes("식도락") || c.includes("카페") || c.includes("식음") || c.includes("식당") || c.includes("음식") || c.includes("시장")) return "food";
+  // 1. 자연/숲
+  if (c.includes("자연") || c.includes("숲") || c.includes("nature")) return "nature";
   
-  // 2. 자연/치유
-  if (c.includes("nature") || c.includes("자연") || c.includes("산") || c.includes("숲") || c.includes("파크") || c.includes("공원")) return "nature";
+  // 2. 동굴/수자원
+  if (c.includes("동굴") || c.includes("수자원") || c.includes("water") || c.includes("cave")) return "water";
   
-  // 3. 체험/웰니스 (Wellness)
-  if (c.includes("wellness") || c.includes("웰니스") || c.includes("치유") || c.includes("체험") || c.includes("명상")) return "wellness";
+  // 3. 체험/액티비티
+  if (c.includes("체험") || c.includes("액티비티") || c.includes("activity")) return "activity";
   
-  // 4. 문화/예술
-  if (c.includes("culture") || c.includes("문화") || c.includes("전통") || c.includes("예술") || c.includes("박물관") || c.includes("전시") || c.includes("공연")) return "culture";
+  // 4. 맛집
+  if (c.includes("맛집") || c.includes("food") || c.includes("식당") || c.includes("카페")) return "food";
   
-  // 5. 역사/유적
-  if (c.includes("history") || c.includes("역사") || c.includes("유적") || c.includes("비석")) return "history";
+  // 5. 문화/시장/기타 (기존 문화, 시장, 역사 등 통합)
+  if (c.includes("문화") || c.includes("시장") || c.includes("전통") || c.includes("culture") || c.includes("history") || c.includes("유적")) return "culture";
   
-  // 6. 숙소/스테이
-  if (c.includes("stay") || c.includes("숙소") || c.includes("숙박") || c.includes("펜션") || c.includes("호텔") || c.includes("리조트")) return "stay";
+  // 6. 숙소
+  if (c.includes("숙소") || c.includes("숙박") || c.includes("stay") || c.includes("호텔")) return "stay";
   
-  // 7. 기타 (수자원, 동굴 등 포함)
-  return "etc";
+  return "culture"; // 기본값 (기타가 포함된 문화로 수렴)
 }
 
 /**

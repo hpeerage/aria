@@ -48,7 +48,7 @@ export function getImagesByCategory(category: string, id: number): string[] {
     images = CATEGORY_IMAGES["정선맛집"];
   } else if (category === "culture" || category === "history") {
     images = CATEGORY_IMAGES["힐링/전통"];
-  } else if (category === "nature" || category === "wellness") {
+  } else if (category === "nature" || category === "activity" || category === "water" || category === "wellness") {
     images = CATEGORY_IMAGES["관광"];
   } else if (category === "stay") {
     images = CATEGORY_IMAGES["숙소"];

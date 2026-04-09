@@ -49,24 +49,23 @@ const getCategoryConfig = (cat: string, dict: any) => {
   if (c === "nature") 
     return { icon: Trees, label: (dict.categories as any).nature || cat, bg: "bg-emerald-500/10", color: "text-emerald-500" };
   
-  if (c === "wellness") 
-    return { icon: Sparkles, label: (dict.categories as any).wellness || cat, bg: "bg-rose-500/10", color: "text-rose-500" };
+  if (c === "water") 
+    return { icon: Droplets, label: (dict.categories as any).water || cat, bg: "bg-sky-500/10", color: "text-sky-500" };
+  
+  if (c === "activity") 
+    return { icon: Sparkles, label: (dict.categories as any).activity || cat, bg: "bg-rose-500/10", color: "text-rose-500" };
   
   if (c === "food") 
     return { icon: UtensilsCrossed, label: (dict.categories as any).food || cat, bg: "bg-orange-500/10", color: "text-orange-500" };
-
+  
   if (c === "culture") 
     return { icon: Palmtree, label: (dict.categories as any).culture || cat, bg: "bg-amber-500/10", color: "text-amber-500" };
-
-  if (c === "history") 
-    return { icon: Landmark, label: (dict.categories as any).history || cat, bg: "bg-blue-500/10", color: "text-blue-500" };
-
+  
   if (c === "stay") 
     return { icon: Home, label: (dict.categories as any).stay || cat, bg: "bg-indigo-500/10", color: "text-indigo-500" };
-
-  return { icon: Droplets, label: (dict.categories as any).etc || cat, bg: "bg-sky-500/10", color: "text-sky-500" }; 
+  
+  return { icon: Droplets, label: (dict.categories as any).etc || cat, bg: "bg-slate-500/10", color: "text-slate-500" }; 
 };
-
 export default function PlaceList({ initialPlaces }: PlaceListProps) {
   const { dict } = useLanguage();
   const { togglePlace, isInWishlist } = useWishlist();
@@ -262,6 +261,20 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
         const distB = calculateDistance(userLocation.lat, userLocation.lng, b.coordinates.lat, b.coordinates.lng);
         return distA - distB;
       }
+      
+      // [v0.8.6] "전체" 탭에서 카테고리별 그룹화 정렬 (시트 순서와 관계없이 묶어서 표시)
+      if (selectedCategory === dict.common.all) {
+        const categoryOrder = ["nature", "water", "activity", "food", "culture", "stay"];
+        const orderA = categoryOrder.indexOf(a.category);
+        const orderB = categoryOrder.indexOf(b.category);
+        
+        if (orderA !== orderB) {
+          return (orderA === -1 ? 99 : orderA) - (orderB === -1 ? 99 : orderB);
+        }
+        // 같은 카테고리 내에서는 ID 순서(기본 시트 순서) 유지
+        return a.id - b.id;
+      }
+      
       return 0;
     });
 

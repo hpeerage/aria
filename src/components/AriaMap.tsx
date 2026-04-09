@@ -8,25 +8,25 @@ import { MapPin, Info, ArrowRight, Mountain, Palette, Utensils, Sparkles, Landma
 const getMarkerConfig = (category: string) => {
   const c = category.toLowerCase();
   
-  if (c === "culture") 
-    return { icon: Palmtree, color: "#f59e0b", bg: "bg-amber-500" }; // Amber-500
-
-  if (c === "history") 
-    return { icon: Landmark, color: "#3b82f6", bg: "bg-blue-500" }; // Blue-500
-
   if (c === "nature") 
     return { icon: Trees, color: "#10b981", bg: "bg-emerald-500" }; // Emerald-500
+
+  if (c === "water") 
+    return { icon: Droplets, color: "#0ea5e9", bg: "bg-sky-500" }; // Sky-500
   
-  if (c === "wellness") 
+  if (c === "activity") 
     return { icon: Sparkles, color: "#f43f5e", bg: "bg-rose-500" }; // Rose-500
   
   if (c === "food") 
     return { icon: Utensils, color: "#f97316", bg: "bg-orange-500" }; // Orange-500
 
+  if (c === "culture") 
+    return { icon: Palmtree, color: "#f59e0b", bg: "bg-amber-500" }; // Amber-500
+
   if (c === "stay") 
     return { icon: Home, color: "#6366f1", bg: "bg-indigo-500" }; // Indigo-500
 
-  return { icon: Droplets, color: "#0ea5e9", bg: "bg-sky-500" }; 
+  return { icon: Droplets, color: "#64748b", bg: "bg-slate-500" }; // Gray fallback
 };
 
 /**

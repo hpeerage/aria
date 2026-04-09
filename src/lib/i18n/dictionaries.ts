@@ -20,13 +20,12 @@ export const dictionaries = {
       copyRight: "© 2026 정선 웰니스 관광 프로젝트. All Rights Reserved."
     },
     categories: {
-      nature: "자연",
-      culture: "문화/전통",
-      wellness: "체험/웰니스",
+      nature: "자연/숲",
+      water: "동굴/수자원",
+      activity: "체험/액티비티",
       food: "맛집",
-      history: "역사/유적",
-      stay: "숙소",
-      etc: "동굴/수자원"
+      culture: "문화/시장/기타",
+      stay: "숙소"
     },
     hero: {
       subtitle: "Wellness Curation Platform",
@@ -138,13 +137,12 @@ export const dictionaries = {
       copyRight: "© 2026 Jeongseon Wellness Tourism Project. All Rights Reserved."
     },
     categories: {
-      nature: "Nature",
-      culture: "Culture",
-      wellness: "Wellness",
+      nature: "Nature/Forest",
+      water: "Cave/Water",
+      activity: "Activity",
       food: "Food",
-      history: "History",
-      stay: "Stay",
-      etc: "Cave/Water"
+      culture: "Culture/Market",
+      stay: "Stay"
     },
     hero: {
       subtitle: "Wellness Curation Platform",
