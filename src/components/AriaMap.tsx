@@ -194,14 +194,14 @@ function CustomMarker({ place, onClick }: { place: Place; onClick: () => void })
                style={{ backgroundColor: config.color }} />
           
           <div 
-            className={`relative flex items-center justify-center w-10 h-10 rounded-full border-[3px] border-white shadow-[0_10px_25px_-5px_rgba(0,0,0,0.3)] transform group-hover:scale-125 group-hover:-translate-y-2 transition-all duration-500 text-white`}
+            className={`relative flex items-center justify-center w-7 h-7 rounded-full border-2 border-white shadow-[0_5px_15px_-3px_rgba(0,0,0,0.3)] transform group-hover:scale-125 group-hover:-translate-y-2 transition-all duration-500 text-white`}
             style={{ backgroundColor: config.color }}
           >
-             <Icon className="w-5 h-5 drop-shadow-md" />
+             <Icon className="w-3.5 h-3.5 drop-shadow-sm" />
              
              {/* Vibrant Pin Tail */}
-             <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-3 h-3 rotate-45 bg-white shadow-sm" />
-             <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 rotate-45" style={{ backgroundColor: config.color }} />
+             <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 rotate-45 bg-white shadow-sm" />
+             <div className="absolute -bottom-0.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rotate-45" style={{ backgroundColor: config.color }} />
           </div>
        </div>
     </AdvancedMarker>
