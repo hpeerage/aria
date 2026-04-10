@@ -90,7 +90,9 @@ export default function HomeClient({ places: initialPlaces }: HomeClientProps) {
 
   return (
     <main className="min-h-screen bg-[#F8FAF9] dark:bg-forest-dark overflow-x-hidden">
-      <AriaHeader />
+      <Suspense fallback={<div className="h-20 bg-forest" />}>
+        <AriaHeader />
+      </Suspense>
       {/* Hero Section with Animation */}
       <section className="relative min-h-[90vh] md:h-[85vh] flex items-start md:items-center justify-center overflow-hidden bg-forest group pt-56 md:pt-20 pb-20 md:py-0">
         <motion.div 

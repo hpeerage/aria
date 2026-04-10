@@ -9,7 +9,10 @@ import { useSearchParams } from "next/navigation";
 import { Place } from "@/types/place";
 import { useLanguage } from "@/lib/i18n/context";
 
-export default function AdminPlacesPage() {
+import { Suspense } from "react";
+import { Placeholder } from "@/components/Placeholder"; // Assuming a placeholder component exists or I'll use a local div
+
+function AdminPlacesContent() {
   const { dict } = useLanguage();
   const searchParams = useSearchParams();
   const [places, setPlaces] = useState<Place[]>([]);
@@ -138,5 +141,18 @@ export default function AdminPlacesPage() {
         setSelectedCategory={setSelectedCategory}
       />
     </div>
+  );
+}
+
+export default function AdminPlacesPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-[60vh] flex flex-col items-center justify-center space-y-6">
+        <div className="w-12 h-12 border-4 border-accent/20 border-t-accent rounded-full animate-spin" />
+        <p className="text-white/40 font-black uppercase tracking-[0.3em] text-xs animate-pulse">Initializing Console...</p>
+      </div>
+    }>
+      <AdminPlacesContent />
+    </Suspense>
   );
 }
