@@ -29,6 +29,7 @@ const item = {
 
 export default function DashboardPage() {
   const { dict } = useLanguage();
+  const [mounted, setMounted] = useState(false);
   const [stats, setStats] = useState({
     total: 0,
     modified: 0,
@@ -38,7 +39,14 @@ export default function DashboardPage() {
   });
   const [isLoading, setIsLoading] = useState(true);
 
+  // v0.12.2: Hydration Guard
   useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
+
     async function calculateStats() {
       setIsLoading(true);
       try {
@@ -48,9 +56,11 @@ export default function DashboardPage() {
         // 2. Load Local Data (Defensive Parsing)
         let localPlaces: Place[] = [];
         try {
-          const localData = localStorage.getItem('aria_local_places');
-          if (localData) {
-            localPlaces = JSON.parse(localData);
+          if (typeof window !== 'undefined') {
+            const localData = localStorage.getItem('aria_local_places');
+            if (localData) {
+              localPlaces = JSON.parse(localData);
+            }
           }
         } catch (e) {
           console.warn("Failed to parse local places", e);
@@ -63,37 +73,45 @@ export default function DashboardPage() {
 
         // Merge logic to find modified/new
         const serverMap = new Map<number, Place>();
-        serverPlaces.forEach(p => {
-          if (p && p.id) serverMap.set(p.id, p);
-        });
+        if (serverPlaces && Array.isArray(serverPlaces)) {
+          serverPlaces.forEach(p => {
+            if (p && p.id) serverMap.set(p.id, p);
+          });
+        }
 
-        localPlaces.forEach(lp => {
-          if (!lp || !lp.id) return;
+        if (Array.isArray(localPlaces)) {
+          localPlaces.forEach(lp => {
+            if (!lp || !lp.id) return;
 
-          const sp = serverMap.get(lp.id);
-          if (!sp) {
-            newCount++;
-          } else {
-            // Defensive comparison for coordinates
-            const lpCoords = lp.coordinates || { lat: 0, lng: 0 };
-            const spCoords = sp.coordinates || { lat: 0, lng: 0 };
-            
-            const isSame = 
-              lp.name === sp.name && 
-              lp.category === sp.category && 
-              Number(lpCoords.lat || 0).toFixed(6) === Number(spCoords.lat || 0).toFixed(6) &&
-              Number(lpCoords.lng || 0).toFixed(6) === Number(spCoords.lng || 0).toFixed(6);
-            
-            if (!isSame) modifiedCount++;
-          }
-        });
+            const sp = serverMap.get(lp.id);
+            if (!sp) {
+              newCount++;
+            } else {
+              // Defensive comparison for coordinates
+              const lpCoords = lp.coordinates || { lat: 0, lng: 0 };
+              const spCoords = sp.coordinates || { lat: 0, lng: 0 };
+              
+              const isSame = 
+                lp.name === sp.name && 
+                lp.category === sp.category && 
+                Number(lpCoords.lat || 0).toFixed(6) === Number(spCoords.lat || 0).toFixed(6) &&
+                Number(lpCoords.lng || 0).toFixed(6) === Number(spCoords.lng || 0).toFixed(6);
+              
+              if (!isSame) modifiedCount++;
+            }
+          });
+        }
 
         // Combined unique places for total count & category distribution
         const combinedMap = new Map<number, Place>();
-        serverPlaces.forEach(p => combinedMap.set(p.id, p));
-        localPlaces.forEach(p => {
-          if (p && p.id) combinedMap.set(p.id, p);
-        });
+        if (serverPlaces && Array.isArray(serverPlaces)) {
+          serverPlaces.forEach(p => combinedMap.set(p.id, p));
+        }
+        if (Array.isArray(localPlaces)) {
+          localPlaces.forEach(p => {
+            if (p && p.id) combinedMap.set(p.id, p);
+          });
+        }
         
         const allPlaces = Array.from(combinedMap.values());
         allPlaces.forEach(p => {
@@ -102,7 +120,7 @@ export default function DashboardPage() {
           }
         });
 
-        const integrity = serverPlaces.length > 0 
+        const integrity = serverPlaces && serverPlaces.length > 0 
           ? Math.max(0, Math.min(100, Math.round(((serverPlaces.length - modifiedCount) / serverPlaces.length) * 100)))
           : 100;
 
@@ -110,7 +128,7 @@ export default function DashboardPage() {
           total: allPlaces.length,
           modified: modifiedCount,
           new: newCount,
-          integrity,
+          integrity: isNaN(integrity) ? 100 : integrity,
           categories: categoryMap
         });
       } catch (err) {
@@ -121,8 +139,9 @@ export default function DashboardPage() {
     }
     
     calculateStats();
-  }, []);
+  }, [mounted]);
 
+  // Safe dictionary access guards
   const metricCards = [
     { label: "Total Assets", value: stats.total, trend: "Master Registry", icon: Database, color: "text-white", bg: "bg-white/5" },
     { label: "Sync Pending", value: stats.modified, trend: "Modified", icon: RefreshCcw, color: "text-orange-400", bg: "bg-orange-500/10" },
@@ -139,7 +158,8 @@ export default function DashboardPage() {
     stay: { icon: Home, color: "text-indigo-400" },
   };
 
-  if (isLoading) {
+  // Prevent rendering anything if not mounted (Hydration Guard)
+  if (!mounted || isLoading) {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center space-y-6">
         <div className="w-12 h-12 border-4 border-accent/20 border-t-accent rounded-full animate-spin" />
@@ -147,6 +167,10 @@ export default function DashboardPage() {
       </div>
     );
   }
+
+  // Safety fallback for dictionaries in case of partial load
+  const categoriesDict = dict?.categories || {};
+  const adminDict = dict?.admin || {};
 
   return (
     <motion.div 
@@ -196,7 +220,7 @@ export default function DashboardPage() {
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-            {Object.entries(dict.categories).map(([key, label]) => {
+            {Object.entries(categoriesDict).map(([key, label]) => {
               const count = stats.categories[key] || 0;
               const config = categoryConfigs[key] || { icon: Map, color: "text-white" };
               const Icon = config.icon;
@@ -211,7 +235,7 @@ export default function DashboardPage() {
                     <span className="text-xl font-black text-white">{count}</span>
                   </div>
                   <div className="space-y-2">
-                    <p className="text-xs font-bold text-white/60">{label}</p>
+                    <p className="text-xs font-bold text-white/60">{String(label)}</p>
                     <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
                       <motion.div 
                         initial={{ width: 0 }}
@@ -233,7 +257,7 @@ export default function DashboardPage() {
           className="p-10 bg-white/[0.03] border border-white/10 rounded-[3.5rem] space-y-10 relative overflow-hidden backdrop-blur-3xl"
         >
           <div className="space-y-4">
-            <h4 className="text-2xl font-black text-white tracking-tight">{dict.admin.sysIntegrity}</h4>
+            <h4 className="text-2xl font-black text-white tracking-tight">{String(adminDict?.sysIntegrity || "System Integrity")}</h4>
             <p className="text-sm text-white/40 leading-relaxed">
               현재 로컬 브라우저와 클라우드 저장소 간의 데이터 불일치 여부를 모니터링합니다.
             </p>
