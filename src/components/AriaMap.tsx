@@ -67,7 +67,7 @@ export default function AriaMap({ places, onMarkerClick, userLocation, focusedPl
           gestureHandling={"greedy"}
           disableDefaultUI={false}
           className="w-full h-full"
-          mapId="8c0d537b1e8dd38f35e7ec6e" 
+          mapId="cfbaaba5db65c27fc5138e79" 
           clickableIcons={false}
         >
           <MapController places={places} focusedPlace={focusedPlace} />
