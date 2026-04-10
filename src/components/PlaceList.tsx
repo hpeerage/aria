@@ -118,14 +118,21 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
             }
           });
           
-          // 2. LocalStorage 데이터 병합 (개발 중 미푸시 데이터용)
+          // 2. LocalStorage 데이터 병합 (서버 데이터보다 최신일 경우에만 우선순위)
           const localData = localStorage.getItem('aria_local_places');
           if (localData) {
             const parsed = JSON.parse(localData);
             parsed.forEach((localPlace: Place) => {
               const idx = merged.findIndex(p => p.id === localPlace.id);
               if (idx >= 0) {
-                merged[idx] = localPlace;
+                // [v0.9.7] 서버 데이터와 로컬 데이터 중 더 최신 업데이트된 것을 선택
+                const serverPlace = merged[idx];
+                const serverTime = new Date(serverPlace.lastUpdated || 0).getTime();
+                const localTime = new Date(localPlace.lastUpdated || 0).getTime();
+                
+                if (localTime >= serverTime) {
+                  merged[idx] = localPlace;
+                }
               } else {
                 merged.push(localPlace);
               }

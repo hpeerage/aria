@@ -11,12 +11,29 @@ import { useLanguage } from "@/lib/i18n/context";
 interface AriaPlacesListProps {
   places: Place[];
   setPlaces: (places: Place[]) => void;
+  serverPlaces: Place[];
 }
 
-export default function AriaPlacesList({ places, setPlaces }: AriaPlacesListProps) {
+export default function AriaPlacesList({ places, setPlaces, serverPlaces }: AriaPlacesListProps) {
   const { dict } = useLanguage();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState(dict.common.all);
+
+  const getSyncStatus = (place: Place) => {
+    const serverPlace = serverPlaces.find(p => p.id === place.id);
+    if (!serverPlace) return "new";
+    
+    const isSameCoords = 
+      place.coordinates.lat.toFixed(6) === serverPlace.coordinates.lat.toFixed(6) && 
+      place.coordinates.lng.toFixed(6) === serverPlace.coordinates.lng.toFixed(6);
+      
+    const isSameData = 
+      place.name === serverPlace.name && 
+      place.category === serverPlace.category && 
+      isSameCoords;
+      
+    return isSameData ? "synced" : "modified";
+  };
 
   const categories = [dict.common.all, ...Array.from(new Set(places.map(p => p.category)))];
 
@@ -133,10 +150,27 @@ export default function AriaPlacesList({ places, setPlaces }: AriaPlacesListProp
                     </td>
                     <td className="px-8 py-6">
                       <div className="flex justify-center">
-                        <div className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-xl border border-white/5">
-                          <CheckCircle2 className="w-4 h-4 text-accent" />
-                          <span className="text-[10px] font-black text-accent uppercase tracking-widest">Verified</span>
-                        </div>
+                        {(() => {
+                          const status = getSyncStatus(place);
+                          if (status === "synced") return (
+                            <div className="flex items-center gap-2 px-4 py-2 bg-accent/5 rounded-xl border border-accent/20">
+                              <CheckCircle2 className="w-4 h-4 text-accent" />
+                              <span className="text-[10px] font-black text-accent uppercase tracking-widest">Synced</span>
+                            </div>
+                          );
+                          if (status === "modified") return (
+                            <div className="flex items-center gap-2 px-4 py-2 bg-orange-500/5 rounded-xl border border-orange-500/20">
+                              <AlertCircle className="w-4 h-4 text-orange-500" />
+                              <span className="text-[10px] font-black text-orange-500 uppercase tracking-widest">Modified</span>
+                            </div>
+                          );
+                          return (
+                            <div className="flex items-center gap-2 px-4 py-2 bg-emerald-500/5 rounded-xl border border-emerald-500/20">
+                              <Sparkles className="w-4 h-4 text-emerald-500" />
+                              <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest">New</span>
+                            </div>
+                          );
+                        })()}
                       </div>
                     </td>
                     <td className="px-8 py-6 text-right">

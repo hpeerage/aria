@@ -53,6 +53,10 @@ export default function GithubPushBtn() {
 
       setStatus("success");
       setMessage("성공적으로 동기화되었습니다!");
+      
+      // [v0.9.7] 동기화 성공 후 로컬 변경 이력 마킹 (선택적: 사이트에서 서버 데이터를 우선하도록 유도)
+      localStorage.setItem('aria_last_sync', new Date().toISOString());
+      
       setTimeout(() => setStatus("idle"), 3000);
     } catch (err: any) {
       console.error(err);
@@ -114,10 +118,15 @@ export default function GithubPushBtn() {
               <AlertCircle className="w-5 h-5" />
             </motion.div>
           ) : (
-            <motion.div key="idle" className="flex items-center gap-3">
+            <motion.div key="idle" className="flex items-center gap-3 relative">
               {hasCloudToken ? <Cloud className="w-5 h-5" /> : <Globe className="w-5 h-5" />}
               <span>{hasCloudToken ? "Cloud Sync to GitHub" : isLocal ? "Local Push to Git" : "Setup Cloud Sync"}</span>
               {(isLocal || hasCloudToken) && <Send className="w-4 h-4 opacity-30" />}
+              
+              {/* [v0.9.7] Unsynced changes indicator dot */}
+              {mounted && localStorage.getItem('aria_local_places') && (
+                <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-rose-500 rounded-full border-2 border-forest ring-4 ring-rose-500/20 animate-pulse" />
+              )}
             </motion.div>
           )}
         </AnimatePresence>

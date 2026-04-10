@@ -12,21 +12,39 @@ import { useLanguage } from "@/lib/i18n/context";
 export default function AdminPlacesPage() {
   const { dict } = useLanguage();
   const [places, setPlaces] = useState<Place[]>([]);
+  const [serverPlaces, setServerPlaces] = useState<Place[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function loadPlaces() {
       try {
-        const data = await getPlacesFromGoogleSheet('1Setffm27HQ8LyOM3N9o9V8eA0ihGbZeZgN763jkm1WU');
+        // 1. Fetch from Google Sheet (Source of Truth for Admin)
+        const sheetData = await getPlacesFromGoogleSheet('1Setffm27HQ8LyOM3N9o9V8eA0ihGbZeZgN763jkm1WU');
         
-        // Merge with LocalStorage changes
+        // 2. Fetch from GitHub Server (To compare sync status)
+        const isProd = typeof window !== 'undefined' && 
+                       (window.location.hostname.includes('github.io') || window.location.hostname.includes('vercel.app'));
+        const basePath = isProd ? '/aria' : '';
+        const timestamp = new Date().getTime();
+        
+        try {
+          const syncRes = await fetch(`${basePath}/data/places.json?t=${timestamp}`, { cache: 'no-store' });
+          if (syncRes.ok) {
+            const synced = await syncRes.json();
+            setServerPlaces(synced);
+          }
+        } catch (e) {
+          console.warn("Failed to fetch server data for comparison");
+        }
+
+        // 3. Merge with LocalStorage changes
         const localData = localStorage.getItem('aria_local_places');
         if (localData) {
           const parsed = JSON.parse(localData).map((p: Place) => ({
             ...p,
             images: validateImagePaths(p.images || [], p.id, p.category)
           }));
-          const merged = [...data];
+          const merged = [...sheetData];
           
           parsed.forEach((localPlace: Place) => {
             const idx = merged.findIndex(p => p.id === localPlace.id);
@@ -38,7 +56,7 @@ export default function AdminPlacesPage() {
           });
           setPlaces(merged);
         } else {
-          setPlaces(data);
+          setPlaces(sheetData);
         }
       } catch (error) {
         console.error("Failed to fetch places:", error);
@@ -86,7 +104,11 @@ export default function AdminPlacesPage() {
         <AriaMap places={places} />
       </div>
 
-      <AriaPlacesList places={places} setPlaces={setPlaces} />
+      <AriaPlacesList 
+        places={places} 
+        setPlaces={setPlaces} 
+        serverPlaces={serverPlaces}
+      />
     </div>
   );
 }
