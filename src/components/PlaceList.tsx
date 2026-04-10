@@ -3,7 +3,12 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence, Variants } from "framer-motion";
 import { Place } from "@/types/place";
-import { Search, Compass, ArrowRight, Navigation, LayoutGrid, Trees, Sparkles, UtensilsCrossed, Landmark, Home, MoreHorizontal, Palmtree, X, Heart, Droplets } from "lucide-react";
+import { 
+  Search, Compass, ArrowRight, Navigation, LayoutGrid, Trees, Sparkles, 
+  UtensilsCrossed, Landmark, Home, MoreHorizontal, Palmtree, X, Heart, 
+  Droplets, Star, Camera, Bed, Mountain, Palette, MapPin, Coffee, 
+  ShoppingBag, Ticket, Flag, Flame, Wind, Sunrise 
+} from "lucide-react";
 import AriaMap from "./AriaMap";
 import AriaDetailModal from "./AriaDetailModal";
 import Link from "next/link";
