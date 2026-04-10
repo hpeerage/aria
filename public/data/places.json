@@ -103,20 +103,5 @@
     ],
     "wellnessTips": [],
     "lastUpdated": "2026-04-08T05:37:07.268Z"
-  },
-  {
-    "id": 4,
-    "name": "로미지안 가든",
-    "category": "자연/숲",
-    "coordinates": {
-      "lat": 37.4427518,
-      "lng": 128.6412691
-    },
-    "description": "강원도 정선군 로미지안 가든  #치유 #명상 #사유의숲",
-    "images": [
-      "/aria/images/04_01.jpg"
-    ],
-    "wellnessTips": [],
-    "lastUpdated": "2026-04-08T05:37:38.263Z"
   }
 ]
