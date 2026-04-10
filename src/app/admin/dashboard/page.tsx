@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { 
-  Map, Sparkles, ArrowUpRight, TrendingUp, Info, 
+  Map as MapIcon, Sparkles, ArrowUpRight, TrendingUp, Info, 
   Database, RefreshCcw, PlusSquare, AlertTriangle,
   Trees, Droplets, Utensils, Palmtree, Home, Activity
 } from "lucide-react";
@@ -223,7 +223,7 @@ export default function DashboardPage() {
           <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
             {Object.entries(categoriesDict).map(([key, label]) => {
               const count = stats.categories[key] || 0;
-              const catConfig = categoryConfigs[key] || { icon: Map, color: "text-white" };
+              const catConfig = categoryConfigs[key] || { icon: MapIcon, color: "text-white" };
               const Icon = catConfig.icon;
               const percentage = stats.total > 0 ? (count / stats.total) * 100 : 0;
 
