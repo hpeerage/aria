@@ -529,9 +529,9 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
                       setSelectedCategory(cat);
                     }
                   }}
-                  className={`relative group flex-shrink-0 flex flex-col items-center justify-center p-8 md:p-10 min-w-[140px] md:min-w-[160px] h-40 md:h-44 rounded-[3rem] transition-all duration-700 border snap-center ${
+                  className={`relative group flex-shrink-0 flex flex-col items-center justify-center p-6 md:p-8 min-w-[120px] md:min-w-[140px] h-32 md:h-36 rounded-[2.5rem] transition-all duration-700 border snap-center ${
                     isActive 
-                      ? `bg-white dark:bg-white/10 shadow-[0_45px_100px_-15px_rgba(26,67,47,0.15)] dark:shadow-[0_45px_100px_-15px_rgba(0,0,0,0.5)] border-forest/10 dark:border-white/20 z-20 backdrop-blur-3xl` 
+                      ? `bg-white dark:bg-white/10 shadow-[0_30px_60px_-15px_rgba(26,67,47,0.15)] dark:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.5)] border-forest/10 dark:border-white/20 z-20 backdrop-blur-3xl` 
                       : "bg-forest/[0.03] dark:bg-white/[0.02] border-forest/5 dark:border-white/[0.03] hover:bg-forest/[0.08] dark:hover:bg-white/[0.08] hover:border-forest/10 dark:hover:border-white/10 shadow-xl backdrop-blur-md"
                   }`}
                 >
@@ -539,17 +539,17 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
                   {isActive && (
                     <motion.div 
                       layoutId="active-glow"
-                      className={`absolute inset-0 rounded-[3rem] blur-[60px] opacity-40 transition-all duration-1000 ${catConfig.bg}`}
+                      className={`absolute inset-0 rounded-[2.5rem] blur-[40px] opacity-30 transition-all duration-1000 ${catConfig.bg}`}
                     />
                   )}
                   
-                  <div className={`p-4 rounded-[1.5rem] mb-4 transition-all duration-500 group-hover:rotate-12 relative z-10 ${
+                  <div className={`p-3 rounded-[1.2rem] mb-3 transition-all duration-500 group-hover:rotate-12 relative z-10 ${
                     isActive ? `${catConfig.bg} ${catConfig.color} shadow-[0_10px_30px_rgba(0,0,0,0.2)]` : "bg-forest/[0.05] dark:bg-white/5 text-forest/20 dark:text-white/20 group-hover:text-forest/60 dark:group-hover:text-white/60"
                   }`}>
-                    <Icon className={`w-7 h-7 ${cat === dict.common.nearMe && isLocating ? "animate-spin" : ""}`} />
+                    <Icon className={`w-6 h-6 ${cat === dict.common.nearMe && isLocating ? "animate-spin" : ""}`} />
                   </div>
                   
-                  <span className={`text-[13px] font-black uppercase tracking-[0.25em] text-center relative z-10 whitespace-nowrap transition-colors duration-500 ${
+                  <span className={`text-[11px] font-black uppercase tracking-[0.25em] text-center relative z-10 whitespace-nowrap transition-colors duration-500 ${
                     isActive ? "text-forest dark:text-white" : "text-forest/30 dark:text-white/10 group-hover:text-forest/60 dark:group-hover:text-white/40"
                   }`}>
                     {catConfig.label}
