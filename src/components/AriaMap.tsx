@@ -33,9 +33,10 @@ interface AriaMapProps {
   places: Place[];
   onMarkerClick?: (place: Place) => void;
   userLocation?: { lat: number; lng: number } | null;
+  focusedPlace?: Place | null;
 }
 
-export default function AriaMap({ places, onMarkerClick, userLocation }: AriaMapProps) {
+export default function AriaMap({ places, onMarkerClick, userLocation, focusedPlace }: AriaMapProps) {
   const [selectedPlace, setSelectedPlace] = useState<Place | null>(null);
   const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "";
 
@@ -65,7 +66,7 @@ export default function AriaMap({ places, onMarkerClick, userLocation }: AriaMap
           mapId="8c0d537b1e8dd38f35e7ec6e" 
           clickableIcons={false}
         >
-          <MapController places={places} />
+          <MapController places={places} focusedPlace={focusedPlace} />
           {places.map((place) => (
             <CustomMarker 
               key={`${place.id}-${places.length}`} 
@@ -122,13 +123,20 @@ export default function AriaMap({ places, onMarkerClick, userLocation }: AriaMap
   );
 }
 
-function MapController({ places }: { places: Place[] }) {
+function MapController({ places, focusedPlace }: { places: Place[], focusedPlace?: Place | null }) {
   const map = useMap();
 
   useEffect(() => {
     if (!map || places.length === 0) return;
 
-    // 만약 장소가 하나면 그곳으로 이동, 여러개면 전체를 다 보이게 하거나 첫 번째로 이동
+    // [v0.9.8] 강제 포커스 요청이 있는 경우 해당 지점으로 즉시 이동 및 확대
+    if (focusedPlace) {
+      map.panTo(focusedPlace.coordinates);
+      map.setZoom(17); // 좌표 검증을 위해 매우 가깝게 확대
+      return;
+    }
+
+    // 만약 장소가 하나면 그곳으로 이동, 여러개면 전체를 다 보이게 함
     if (places.length === 1) {
       map.panTo(places[0].coordinates);
       map.setZoom(15);
@@ -137,7 +145,7 @@ function MapController({ places }: { places: Place[] }) {
       places.forEach(p => bounds.extend(p.coordinates));
       map.fitBounds(bounds);
     }
-  }, [map, places]);
+  }, [map, places, focusedPlace]);
 
   return null;
 }

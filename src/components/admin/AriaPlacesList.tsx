@@ -12,9 +12,10 @@ interface AriaPlacesListProps {
   places: Place[];
   setPlaces: (places: Place[]) => void;
   serverPlaces: Place[];
+  onFocus?: (place: Place) => void;
 }
 
-export default function AriaPlacesList({ places, setPlaces, serverPlaces }: AriaPlacesListProps) {
+export default function AriaPlacesList({ places, setPlaces, serverPlaces, onFocus }: AriaPlacesListProps) {
   const { dict } = useLanguage();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState(dict.common.all);
@@ -118,11 +119,21 @@ export default function AriaPlacesList({ places, setPlaces, serverPlaces }: Aria
                   >
                     <td className="px-8 py-6">
                       <div className="flex items-center gap-4">
-                        <div className="p-3 bg-white/5 rounded-2xl border border-white/10 group-hover:border-accent/40 transition-colors">
-                          <MapPin className="w-4 h-4 text-accent" />
-                        </div>
+                        <button 
+                          onClick={() => onFocus?.(place)}
+                          className="p-3 bg-white/5 rounded-2xl border border-white/10 hover:border-accent hover:bg-accent/10 group/focus transition-all relative overflow-hidden"
+                          title="Focus on Map"
+                        >
+                          <Search className="w-4 h-4 text-accent group-hover/focus:scale-125 transition-transform" />
+                          <div className="absolute inset-0 bg-accent/5 opacity-0 group-hover/focus:opacity-100 transition-opacity" />
+                        </button>
                         <div>
-                          <p className="font-black text-white text-lg tracking-tight mb-1">{place.name}</p>
+                          <p 
+                            className="font-black text-white text-lg tracking-tight mb-1 cursor-pointer hover:text-accent transition-colors"
+                            onClick={() => onFocus?.(place)}
+                          >
+                            {place.name}
+                          </p>
                           <p className="text-[10px] font-bold text-white/50 uppercase tracking-widest flex items-center gap-2">
                             ID: {String(place.id).padStart(3, '0')}
                             <span className="w-1 h-1 bg-white/40 rounded-full" />
