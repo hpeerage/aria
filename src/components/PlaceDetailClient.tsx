@@ -183,8 +183,7 @@ export default function AriaPlaceDetail({ place, nearbyPlaces }: AriaPlaceDetail
               viewport={{ once: true }}
               className="bg-white dark:bg-forest-light p-10 md:p-16 rounded-[4rem] shadow-2xl border border-forest/5 dark:border-white/5 space-y-10 shadow-black/20"
             >
-              <div className="flex justify-between items-center">
-                <div className="flex-1" /> {/* Spacer for alignment */}
+              <div className="flex justify-end items-center mb-6">
                 <div className="flex gap-4">
                   <button 
                     onClick={handleDirections}
