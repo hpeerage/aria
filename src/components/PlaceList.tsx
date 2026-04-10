@@ -560,6 +560,8 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
                 </motion.button>
               );
             })}
+            {/* [v0.12.9] Spacer to ensure padding-right is respected in horizontal scroll */}
+            <div className="flex-shrink-0 w-12 h-1" aria-hidden="true" />
           </div>
           
           {/* Subtle decoration to indicate scroll ability on desktop */}
