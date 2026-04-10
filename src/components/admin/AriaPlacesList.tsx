@@ -7,6 +7,7 @@ import Link from "next/link";
 import { Place } from "@/types/place";
 
 import { useLanguage } from "@/lib/i18n/context";
+import { normalizeCategory } from "@/lib/google-sheets";
 
 interface AriaPlacesListProps {
   places: Place[];
@@ -44,7 +45,14 @@ export default function AriaPlacesList({ places, setPlaces, serverPlaces, onFocu
     return isSameData ? "synced" : "modified";
   };
 
-  const categories = [dict.common.all, ...Array.from(new Set(places.map(p => p.category)))];
+  const categories = [
+    dict.common.all, 
+    ...Array.from(new Set(places.map(p => normalizeCategory(p.category))))
+      .sort((a, b) => {
+        const order = ["activity", "nature", "water", "food", "culture", "stay"];
+        return order.indexOf(a) - order.indexOf(b);
+      })
+  ];
 
   const filteredPlaces = places.filter(place => {
     const matchesSearch = place.name.toLowerCase().includes(searchTerm.toLowerCase());

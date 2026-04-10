@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getPlacesFromGoogleSheet } from "@/lib/google-sheets";
+import { getPlacesFromGoogleSheet, normalizeCategory } from "@/lib/google-sheets";
 import AriaPlacesList from "@/components/admin/AriaPlacesList";
 import AriaMap from "@/components/AriaMap";
 import { validateImagePaths } from "@/lib/place-images";
@@ -60,6 +60,7 @@ function AdminPlacesContent() {
         if (localData) {
           const parsed = JSON.parse(localData).map((p: Place) => ({
             ...p,
+            category: normalizeCategory(p.category),
             images: validateImagePaths(p.images || [], p.id, p.category)
           }));
           const merged = [...sheetData];
