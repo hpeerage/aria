@@ -6,6 +6,7 @@ import { ArrowLeft, MapPin, Tag, Sparkles, Navigation, Share2, Compass, MoveRigh
 import Link from "next/link";
 import { Place } from "@/types/place";
 import { useLanguage } from "@/lib/i18n/context";
+import AriaMap from "./AriaMap";
 
 interface PlaceDetailClientProps {
   place: Place;
@@ -180,6 +181,18 @@ export default function PlaceDetailClient({ place, nearbyPlaces }: PlaceDetailCl
                 <p className="text-xl text-foreground/80 dark:text-white/80 force-dark-text-white font-bold leading-relaxed italic">
                   {displayPlace.description || "이 장소의 깊은 역사와 웰니스 리듬을 발견할 수 있는 상세한 이야기가 준비되고 있습니다. 정선의 자연이 빚어낸 이곳에서 당신만의 새로운 아리아를 시작해 보세요."}
                 </p>
+
+                {/* [v0.9.9] 위치 지도 조감도 추가 */}
+                <div className="relative pt-4">
+                  <AriaMap 
+                    places={[displayPlace]} 
+                    className="w-full h-[400px] rounded-[3rem] overflow-hidden shadow-2xl border-4 border-white dark:border-forest-dark relative group"
+                  />
+                  <div className="absolute top-8 left-8 z-10 px-4 py-2 bg-white/90 backdrop-blur-md rounded-xl shadow-sm border border-forest/5 flex items-center gap-2">
+                    <div className="w-2 h-2 bg-accent rounded-full animate-pulse" />
+                    <span className="text-[10px] font-black text-forest uppercase tracking-widest leading-none">Location Presence</span>
+                  </div>
+                </div>
               </div>
 
               <div className="relative group bg-accent/[0.05] dark:bg-white/10 insight-box-contrast p-10 rounded-[3rem] border border-accent/20 dark:border-white/20 overflow-hidden shadow-lg shadow-black/10">

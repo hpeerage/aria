@@ -34,9 +34,10 @@ interface AriaMapProps {
   onMarkerClick?: (place: Place) => void;
   userLocation?: { lat: number; lng: number } | null;
   focusedPlace?: Place | null;
+  className?: string;
 }
 
-export default function AriaMap({ places, onMarkerClick, userLocation, focusedPlace }: AriaMapProps) {
+export default function AriaMap({ places, onMarkerClick, userLocation, focusedPlace, className }: AriaMapProps) {
   const [selectedPlace, setSelectedPlace] = useState<Place | null>(null);
   const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "";
 
@@ -55,7 +56,10 @@ export default function AriaMap({ places, onMarkerClick, userLocation, focusedPl
   }
 
   return (
-    <div key={`map-container-${places.length}`} className="w-full h-[600px] rounded-[3rem] overflow-hidden shadow-2xl border-4 border-white dark:border-forest-dark relative group">
+    <div 
+      key={`map-container-${places.length}`} 
+      className={className || "w-full h-[600px] rounded-[3rem] overflow-hidden shadow-2xl border-4 border-white dark:border-forest-dark relative group"}
+    >
       <APIProvider apiKey={apiKey} version="beta" libraries={['marker']}>
         <Map
           defaultCenter={{ lat: 37.3806, lng: 128.6608 }}
