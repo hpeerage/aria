@@ -37,6 +37,12 @@ export default function PlaceDetailClient({ place, nearbyPlaces }: PlaceDetailCl
     return () => clearInterval(interval);
   }, [displayImages.length, isLightboxOpen]);
 
+  const handleDirections = () => {
+    const { lat, lng } = displayPlace.coordinates;
+    const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
+    window.open(url, '_blank');
+  };
+
   return (
     <main className="min-h-screen bg-[#F8FAF9] dark:bg-forest-dark pb-32">
       {/* Lightbox Overlay */}
@@ -164,7 +170,10 @@ export default function PlaceDetailClient({ place, nearbyPlaces }: PlaceDetailCl
                   {dict.common.backToList}
                 </Link>
                 <div className="flex gap-4">
-                  <button className="p-3 bg-foreground/5 text-foreground hover:bg-foreground/10 rounded-2xl transition-all active:scale-95">
+                  <button 
+                    onClick={handleDirections}
+                    className="p-3 bg-foreground/5 text-foreground hover:bg-accent hover:text-white rounded-2xl transition-all active:scale-95 shadow-sm"
+                  >
                     <Navigation className="w-5 h-5" />
                   </button>
                   <button className="p-3 bg-foreground/5 text-foreground hover:bg-foreground/10 rounded-2xl transition-all active:scale-95">
@@ -265,7 +274,10 @@ export default function PlaceDetailClient({ place, nearbyPlaces }: PlaceDetailCl
                 <SidebarItem label={dict.common.coordinates} value={`${displayPlace.coordinates.lat.toFixed(4)}, ${displayPlace.coordinates.lng.toFixed(4)}`} />
               </div>
               <div className="pt-6">
-                <button className="w-full py-5 bg-forest dark:bg-accent text-white rounded-2xl font-black text-sm tracking-widest uppercase hover:bg-accent dark:hover:bg-white dark:hover:text-forest transition-all shadow-lg active:scale-95">
+                <button 
+                  onClick={handleDirections}
+                  className="w-full py-5 bg-forest dark:bg-accent text-white rounded-2xl font-black text-sm tracking-widest uppercase hover:bg-accent dark:hover:bg-white dark:hover:text-forest transition-all shadow-lg active:scale-95"
+                >
                   {dict.common.findRoute} (Google Maps)
                 </button>
               </div>
