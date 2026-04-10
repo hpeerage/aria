@@ -8,9 +8,9 @@ import { validateImagePaths } from "@/lib/place-images";
 import { useSearchParams } from "next/navigation";
 import { Place } from "@/types/place";
 import { useLanguage } from "@/lib/i18n/context";
+import Link from "next/link";
 
 import { Suspense } from "react";
-import { Placeholder } from "@/components/Placeholder"; // Assuming a placeholder component exists or I'll use a local div
 
 function AdminPlacesContent() {
   const { dict } = useLanguage();
