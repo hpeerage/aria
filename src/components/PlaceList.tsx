@@ -42,14 +42,35 @@ const cardVariants: Variants = {
   },
 };
 
-const getCategoryConfig = (cat: string, dict: any) => {
-  const c = cat.toLowerCase();
+const getCategoryConfig = (cat: string, dict: any, customIcon?: string, customColor?: string) => {
+  const iconMap: Record<string, any> = {
+    nature: Trees, water: Droplets, activity: Sparkles, food: UtensilsCrossed, culture: Palmtree, stay: Home,
+    Trees, Droplets, Sparkles, UtensilsCrossed, Palmtree, Home, 
+    Star, Heart, Camera, Landmark, Bed, 
+    Mountain, Palette, MapPin, Compass, Navigation, Coffee,
+    ShoppingBag, Ticket, Flag, Flame, Wind, Sunrise
+  };
+
+  const colorMap: Record<string, { color: string, bg: string }> = {
+    nature: { color: "text-emerald-500", bg: "bg-emerald-500/10" },
+    water: { color: "text-sky-500", bg: "bg-sky-500/10" },
+    activity: { color: "text-rose-500", bg: "bg-rose-500/10" },
+    food: { color: "text-orange-500", bg: "bg-orange-500/10" },
+    culture: { color: "text-amber-500", bg: "bg-amber-500/10" },
+    stay: { color: "text-indigo-500", bg: "bg-indigo-500/10" },
+    emerald: { color: "text-emerald-500", bg: "bg-emerald-500/10" },
+    sky: { color: "text-sky-500", bg: "bg-sky-500/10" },
+    rose: { color: "text-rose-500", bg: "bg-rose-500/10" },
+    orange: { color: "text-orange-500", bg: "bg-orange-500/10" },
+    amber: { color: "text-amber-500", bg: "bg-amber-500/10" },
+    indigo: { color: "text-indigo-500", bg: "bg-indigo-500/10" },
+    slate: { color: "text-slate-500", bg: "bg-slate-500/10" },
+    forest: { color: "text-forest", bg: "bg-forest/10" },
+    accent: { color: "text-accent", bg: "bg-accent/10" },
+  };
+
   if (cat === dict.common.all) return { icon: LayoutGrid, label: dict.common.all, bg: "bg-forest/10 dark:bg-white/20", color: "text-forest dark:text-white" };
   if (cat === dict.common.nearMe) return { icon: Navigation, label: dict.common.nearMe, bg: "bg-accent/10", color: "text-accent" };
-  
-  if (c === "nature") 
-    return { icon: Trees, label: (dict.categories as any).nature || cat, bg: "bg-emerald-500/10", color: "text-emerald-500" };
-  
   if (c === "water") 
     return { icon: Droplets, label: (dict.categories as any).water || cat, bg: "bg-sky-500/10", color: "text-sky-500" };
   
@@ -562,52 +583,56 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
         className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10"
       >
         <AnimatePresence mode="popLayout">
-          {filteredPlaces.map((place) => (
-            <Link key={place.id} href={`/places/${place.id}`} className="block group">
-              <motion.div
-                layout
-                variants={cardVariants}
-                initial="hidden"
-                animate="visible"
-                exit={{ opacity: 0, scale: 0.8 }}
-                className="group relative bg-white dark:bg-forest p-1 rounded-[2.5rem] border border-forest/5 shadow-xl hover:shadow-[0_45px_100px_-20px_rgba(26,67,47,0.12)] hover:-translate-y-3 cursor-pointer transition-all duration-700 overflow-hidden h-full"
-              >
-                <div className="relative h-48 w-full overflow-hidden rounded-[2rem] mb-4">
-                  <div 
-                    className="absolute inset-0 bg-cover bg-center group-hover:scale-110 transition-transform duration-1000"
-                    style={{ backgroundImage: `url('${(place.images && place.images.length > 0) ? place.images[0] : 'https://images.unsplash.com/photo-1542224566-6e85f2e6772f?q=80&w=1950'}')` }}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-forest/40 to-transparent" />
-                  <div className="absolute top-4 left-4 flex gap-2">
-                    <span className="text-[10px] uppercase tracking-[0.2em] font-black text-white bg-forest/40 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10">
-                      No. {place.id}
-                    </span>
-                  </div>
-                  <button 
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      togglePlace(place);
-                    }}
-                    className={`absolute top-4 right-4 p-2.5 rounded-full backdrop-blur-md border transition-all duration-300 shadow-xl z-50 ${
-                      isInWishlist(place.id) 
-                        ? 'bg-rose-500 text-white border-rose-500/50 scale-110' 
-                        : 'bg-white/10 text-white/80 border-white/20 hover:bg-white/30 hover:scale-110'
-                    }`}
-                  >
-                    <Heart className={`w-4 h-4 ${isInWishlist(place.id) ? 'fill-current' : ''}`} />
-                  </button>
-                </div>
+          {filteredPlaces.map((place) => {
+            const pConfig = getCategoryConfig(place.category, dict, place.icon, place.color);
+            const CustomIcon = pConfig.icon;
 
-                <div className="px-6 pb-8 flex-grow flex flex-col justify-between space-y-6 relative z-10">
-                  <div className="space-y-4">
-                    <div className="flex justify-between items-start">
-                      <div className="inline-flex items-center text-[10px] font-black uppercase tracking-[0.1em] text-accent-light bg-accent/5 px-3 py-1 rounded-lg border border-accent/10">
-                        <CustomTag className="w-3 h-3 mr-2" />
-                        {(dict.categories as any)[place.category.toLowerCase()] || place.category}
-                      </div>
-                      {userLocation && (
-                        <div className="flex items-center text-[10px] font-black uppercase tracking-[0.1em] text-accent font-mono ml-auto">
+            return (
+              <Link key={place.id} href={`/places/${place.id}`} className="block group">
+                <motion.div
+                  layout
+                  variants={cardVariants}
+                  initial="hidden"
+                  animate="visible"
+                  exit={{ opacity: 0, scale: 0.8 }}
+                  className="group relative bg-white dark:bg-forest p-1 rounded-[2.5rem] border border-forest/5 shadow-xl hover:shadow-[0_45px_100px_-20px_rgba(26,67,47,0.12)] hover:-translate-y-3 cursor-pointer transition-all duration-700 overflow-hidden h-full"
+                >
+                  <div className="relative h-48 w-full overflow-hidden rounded-[2rem] mb-4">
+                    <div 
+                      className="absolute inset-0 bg-cover bg-center group-hover:scale-110 transition-transform duration-1000"
+                      style={{ backgroundImage: `url('${(place.images && place.images.length > 0) ? place.images[0] : 'https://images.unsplash.com/photo-1542224566-6e85f2e6772f?q=80&w=1950'}')` }}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-forest/40 to-transparent" />
+                    <div className="absolute top-4 left-4 flex gap-2">
+                      <span className="text-[10px] uppercase tracking-[0.2em] font-black text-white bg-forest/40 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10">
+                        No. {place.id}
+                      </span>
+                    </div>
+                    <button 
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        togglePlace(place);
+                      }}
+                      className={`absolute top-4 right-4 p-2.5 rounded-full backdrop-blur-md border transition-all duration-300 shadow-xl z-50 ${
+                        isInWishlist(place.id) 
+                          ? 'bg-rose-500 text-white border-rose-500/50 scale-110' 
+                          : 'bg-white/10 text-white/80 border-white/20 hover:bg-white/30 hover:scale-110'
+                      }`}
+                    >
+                      <Heart className={`w-4 h-4 ${isInWishlist(place.id) ? 'fill-current' : ''}`} />
+                    </button>
+                  </div>
+
+                  <div className="px-6 pb-8 flex-grow flex flex-col justify-between space-y-6 relative z-10">
+                    <div className="space-y-4">
+                      <div className="flex justify-between items-start">
+                        <div className={`inline-flex items-center text-[10px] font-black uppercase tracking-[0.1em] px-3 py-1 rounded-lg border ${pConfig.bg.replace('bg-', 'bg-')}/5 ${pConfig.color} ${pConfig.bg.replace('bg-', 'border-')}/10`}>
+                          <CustomIcon className="w-3 h-3 mr-2" />
+                          {pConfig.label}
+                        </div>
+                        {userLocation && (
+                          <div className={`flex items-center text-[10px] font-black uppercase tracking-[0.1em] font-mono ml-auto ${pConfig.color}`}>
                           {calculateDistance(
                             userLocation.lat,
                             userLocation.lng,
@@ -641,7 +666,7 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
                 </div>
                 
                 {/* Hover Luxury Decor */}
-                <div className="absolute top-0 right-0 w-48 h-48 bg-accent/5 rounded-full -mr-24 -mt-24 group-hover:bg-accent/10 transition-all duration-1000 blur-3xl opacity-0 group-hover:opacity-100" />
+                <div className={`absolute top-0 right-0 w-48 h-48 rounded-full -mr-24 -mt-24 group-hover:opacity-10 transition-all duration-1000 blur-3xl opacity-0 ${pConfig.bg.replace('bg-', 'bg-')}/5 group-hover:bg-accent/10`} />
               </motion.div>
             </Link>
           ))}

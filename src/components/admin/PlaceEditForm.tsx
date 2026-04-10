@@ -36,6 +36,18 @@ const AVAILABLE_ICONS = [
   { id: "Sunrise", icon: Sunrise },
 ];
 
+const AVAILABLE_COLORS = [
+  { id: "emerald", hex: "#10b981", bg: "bg-emerald-500", label: "Nature" },
+  { id: "sky", hex: "#0ea5e9", bg: "bg-sky-500", label: "Water" },
+  { id: "rose", hex: "#f43f5e", bg: "bg-rose-500", label: "Activity" },
+  { id: "orange", hex: "#f97316", bg: "bg-orange-500", label: "Food" },
+  { id: "amber", hex: "#f59e0b", bg: "bg-amber-500", label: "Culture" },
+  { id: "indigo", hex: "#6366f1", bg: "bg-indigo-500", label: "Stay" },
+  { id: "slate", hex: "#64748b", bg: "bg-slate-500", label: "Default" },
+  { id: "forest", hex: "#2E4D3E", bg: "bg-forest", label: "Signature" },
+  { id: "accent", hex: "#FF7F50", bg: "bg-accent", label: "Highlight" },
+];
+
 export default function PlaceEditForm({ isNew = false }: { isNew?: boolean }) {
   const { dict } = useLanguage();
   const params = useParams();
@@ -322,6 +334,60 @@ export default function PlaceEditForm({ isNew = false }: { isNew?: boolean }) {
                  className="w-full px-6 py-5 bg-white/5 border border-white/10 rounded-2xl text-white placeholder:text-white/40 focus:ring-2 focus:ring-accent outline-none transition-all font-bold resize-none"
                  placeholder={dict.admin.placeholderDesc}
                />
+             </div>
+
+             {/* [v0.12.6] 커스텀 테마 색상 선택기 추가 */}
+             <div className="md:col-span-2 space-y-6 pt-10 border-t border-white/5">
+                <div className="flex items-center justify-between">
+                  <label className="text-[10px] font-black uppercase tracking-widest text-accent px-1">Theme Color Selection</label>
+                  <span className="text-[10px] font-bold text-white/20 uppercase tracking-widest">Select brand color palette</span>
+                </div>
+                <div className="flex flex-wrap gap-4">
+                  {AVAILABLE_COLORS.map((color) => {
+                    const isSelected = formData.color === color.id;
+                    return (
+                      <button
+                        key={color.id}
+                        type="button"
+                        onClick={() => handleInputChange('color', color.id)}
+                        className={`relative group flex flex-col items-center gap-2`}
+                        title={color.label}
+                      >
+                        <div 
+                          className={`w-12 h-12 rounded-full transition-all flex items-center justify-center border-2 ${
+                            isSelected 
+                              ? 'border-white scale-125 shadow-[0_0_25px_rgba(255,255,255,0.3)]' 
+                              : 'border-white/5 hover:border-white/20'
+                          } ${color.bg}`}
+                        >
+                          {isSelected && <CheckCircle2 className="w-5 h-5 text-white" />}
+                        </div>
+                        <span className={`text-[8px] font-black uppercase tracking-widest ${isSelected ? 'text-white' : 'text-white/20'}`}>
+                          {color.id}
+                        </span>
+                      </button>
+                    );
+                  })}
+                  <button
+                    type="button"
+                    onClick={() => handleInputChange('color', undefined)}
+                    className={`relative group flex flex-col items-center gap-2`}
+                  >
+                    <div 
+                      className={`w-12 h-12 rounded-full transition-all flex items-center justify-center border-2 border-dashed ${
+                        !formData.color 
+                          ? 'border-white/40 bg-white/10 scale-125' 
+                          : 'border-white/10 hover:border-white/20'
+                      }`}
+                    >
+                      {!formData.color && <CheckCircle2 className="w-5 h-5 text-white/40" />}
+                      {formData.color && <X className="w-5 h-5 text-white/20" />}
+                    </div>
+                    <span className={`text-[8px] font-black uppercase tracking-widest ${!formData.color ? 'text-white' : 'text-white/20'}`}>
+                      Auto
+                    </span>
+                  </button>
+                </div>
              </div>
 
              {/* [v0.11.0] 커스텀 마커 아이콘 선택기 추가 */}

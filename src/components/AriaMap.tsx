@@ -7,7 +7,7 @@ import { MapPin, Info, ArrowRight, Mountain, Palette, Utensils, Sparkles, Landma
 import NavigationSelector from "./NavigationSelector";
 import { NavTarget } from "@/lib/navigation";
 
-const getMarkerConfig = (category: string, customIcon?: string) => {
+const getMarkerConfig = (category: string, customIcon?: string, customColor?: string) => {
   const iconMap: Record<string, any> = {
     Trees, Droplets, Sparkles, Utensils, Palmtree, Home, 
     Star, Heart, Camera, Landmark, Bed, 
@@ -15,33 +15,49 @@ const getMarkerConfig = (category: string, customIcon?: string) => {
     ShoppingBag, Ticket, Flag, Flame, Wind, Sunrise
   };
 
-  if (customIcon && iconMap[customIcon]) {
-    // 커스텀 아이콘은 강조를 위해 특별한 색상(Accent 또는 Forest)을 사용하거나 
-    // 기존 카테고리 색상을 유지할 수 있습니다. 여기서는 Forest를 기본으로 사용합니다.
-    return { icon: iconMap[customIcon], color: "#2E4D3E", bg: "bg-forest" };
+  const colorMap: Record<string, { hex: string, bg: string }> = {
+    emerald: { hex: "#10b981", bg: "bg-emerald-500" },
+    sky: { hex: "#0ea5e9", bg: "bg-sky-500" },
+    rose: { hex: "#f43f5e", bg: "bg-rose-500" },
+    orange: { hex: "#f97316", bg: "bg-orange-500" },
+    amber: { hex: "#f59e0b", bg: "bg-amber-500" },
+    indigo: { hex: "#6366f1", bg: "bg-indigo-500" },
+    slate: { hex: "#64748b", bg: "bg-slate-500" },
+    forest: { hex: "#2E4D3E", bg: "bg-forest" },
+    accent: { hex: "#FF7F50", bg: "bg-accent" },
+  };
+
+  let icon = iconMap[customIcon || ""] || null;
+  let color = "#64748b";
+  let bg = "bg-slate-500";
+
+  // 색상 결정 (커스텀 -> 카테고리 기본)
+  if (customColor && colorMap[customColor]) {
+    color = colorMap[customColor].hex;
+    bg = colorMap[customColor].bg;
+  } else {
+    const c = category.toLowerCase();
+    if (c === "nature") { color = "#10b981"; bg = "bg-emerald-500"; }
+    else if (c === "water") { color = "#0ea5e9"; bg = "bg-sky-500"; }
+    else if (c === "activity") { color = "#f43f5e"; bg = "bg-rose-500"; }
+    else if (c === "food") { color = "#f97316"; bg = "bg-orange-500"; }
+    else if (c === "culture") { color = "#f59e0b"; bg = "bg-amber-500"; }
+    else if (c === "stay") { color = "#6366f1"; bg = "bg-indigo-500"; }
   }
 
-  const c = category.toLowerCase();
-  
-  if (c === "nature") 
-    return { icon: Trees, color: "#10b981", bg: "bg-emerald-500" }; // Emerald-500
+  // 아이콘 결정 (아이콘이 없으면 카테고리 기본 아이콘 매핑)
+  if (!icon) {
+    const c = category.toLowerCase();
+    if (c === "nature") icon = Trees;
+    else if (c === "water") icon = Droplets;
+    else if (c === "activity") icon = Sparkles;
+    else if (c === "food") icon = Utensils;
+    else if (c === "culture") icon = Palmtree;
+    else if (c === "stay") icon = Home;
+    else icon = Droplets;
+  }
 
-  if (c === "water") 
-    return { icon: Droplets, color: "#0ea5e9", bg: "bg-sky-500" }; // Sky-500
-  
-  if (c === "activity") 
-    return { icon: Sparkles, color: "#f43f5e", bg: "bg-rose-500" }; // Rose-500
-  
-  if (c === "food") 
-    return { icon: Utensils, color: "#f97316", bg: "bg-orange-500" }; // Orange-500
-
-  if (c === "culture") 
-    return { icon: Palmtree, color: "#f59e0b", bg: "bg-amber-500" }; // Amber-500
-
-  if (c === "stay") 
-    return { icon: Home, color: "#6366f1", bg: "bg-indigo-500" }; // Indigo-500
-
-  return { icon: Droplets, color: "#64748b", bg: "bg-slate-500" }; // Gray fallback
+  return { icon, color, bg };
 };
 
 interface AriaMapProps {
@@ -198,7 +214,7 @@ function MapController({ places, focusedPlace }: { places: Place[], focusedPlace
 }
 
 function CustomMarker({ place, onClick }: { place: Place; onClick: () => void }) {
-  const { icon, color, bg } = getMarkerConfig(place.category, place.icon);
+  const { icon, color, bg } = getMarkerConfig(place.category, place.icon, place.color);
   const IconComp = icon;
 
   return (
