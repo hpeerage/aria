@@ -14,6 +14,7 @@ export default function AdminPlacesPage() {
   const [places, setPlaces] = useState<Place[]>([]);
   const [serverPlaces, setServerPlaces] = useState<Place[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [focusedPlace, setFocusedPlace] = useState<Place | null>(null);
 
   useEffect(() => {
     async function loadPlaces() {
@@ -101,13 +102,14 @@ export default function AdminPlacesPage() {
           <div className="w-1.5 h-6 bg-accent rounded-full" />
           <h4 className="text-xl font-bold text-white uppercase tracking-widest">Map Visualization</h4>
         </div>
-        <AriaMap places={places} />
+        <AriaMap places={places} focusedPlace={focusedPlace} />
       </div>
 
       <AriaPlacesList 
         places={places} 
         setPlaces={setPlaces} 
         serverPlaces={serverPlaces}
+        onFocus={setFocusedPlace}
       />
     </div>
   );
