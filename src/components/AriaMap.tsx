@@ -4,6 +4,8 @@ import { APIProvider, Map, AdvancedMarker, InfoWindow, useMap } from "@vis.gl/re
 import { Place } from "@/types/place";
 import { useState, useEffect } from "react";
 import { MapPin, Info, ArrowRight, Mountain, Palette, Utensils, Sparkles, Landmark, Bed, Trees, Palmtree, Home, MoreHorizontal, Droplets, Navigation } from "lucide-react";
+import NavigationSelector from "./NavigationSelector";
+import { NavTarget } from "@/lib/navigation";
 
 const getMarkerConfig = (category: string) => {
   const c = category.toLowerCase();
@@ -39,6 +41,8 @@ interface AriaMapProps {
 
 export default function AriaMap({ places, onMarkerClick, userLocation, focusedPlace, className }: AriaMapProps) {
   const [selectedPlace, setSelectedPlace] = useState<Place | null>(null);
+  const [navTarget, setNavTarget] = useState<NavTarget | null>(null);
+  const [isNavOpen, setIsNavOpen] = useState(false);
   const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "";
 
   if (!apiKey) {
@@ -116,8 +120,15 @@ export default function AriaMap({ places, onMarkerClick, userLocation, focusedPl
                   <button 
                     onClick={(e) => {
                       e.stopPropagation();
-                      const { lat, lng } = selectedPlace.coordinates;
-                      window.open(`https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`, '_blank');
+                      const { name, coordinates } = selectedPlace;
+                      const target: NavTarget = { name, lat: coordinates.lat, lng: coordinates.lng };
+                      
+                      if (typeof window !== "undefined" && window.innerWidth < 768) {
+                        setNavTarget(target);
+                        setIsNavOpen(true);
+                      } else {
+                        window.open(`https://www.google.com/maps/dir/?api=1&destination=${target.lat},${target.lng}`, '_blank');
+                      }
                     }}
                     className="px-3 bg-accent text-white rounded-lg hover:bg-forest transition-all shadow-md active:scale-95 flex items-center justify-center"
                     title="Directions"
@@ -136,6 +147,12 @@ export default function AriaMap({ places, onMarkerClick, userLocation, focusedPl
         <div className="w-3 h-3 bg-accent rounded-full animate-ping" />
         <span className="text-xs font-bold text-forest uppercase tracking-widest leading-none">Live Exploration</span>
       </div>
+
+      <NavigationSelector 
+        isOpen={isNavOpen} 
+        onClose={() => setIsNavOpen(false)} 
+        target={navTarget}
+      />
     </div>
   );
 }

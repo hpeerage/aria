@@ -7,6 +7,8 @@ import Link from "next/link";
 import { Place } from "@/types/place";
 import { useLanguage } from "@/lib/i18n/context";
 import AriaMap from "./AriaMap";
+import NavigationSelector from "./NavigationSelector";
+import { NavTarget } from "@/lib/navigation";
 
 interface PlaceDetailClientProps {
   place: Place;
@@ -18,6 +20,8 @@ export default function PlaceDetailClient({ place, nearbyPlaces }: PlaceDetailCl
   const [displayPlace, setDisplayPlace] = useState<Place>(place);
   const [currentImgIndex, setCurrentImgIndex] = useState(0);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+  const [navTarget, setNavTarget] = useState<NavTarget | null>(null);
+  const [isNavOpen, setIsNavOpen] = useState(false);
 
   useEffect(() => {
     const localData = localStorage.getItem(`aria_place_${place.id}`);
@@ -38,9 +42,17 @@ export default function PlaceDetailClient({ place, nearbyPlaces }: PlaceDetailCl
   }, [displayImages.length, isLightboxOpen]);
 
   const handleDirections = () => {
-    const { lat, lng } = displayPlace.coordinates;
-    const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
-    window.open(url, '_blank');
+    const { name, coordinates } = displayPlace;
+    const target: NavTarget = { name, lat: coordinates.lat, lng: coordinates.lng };
+    
+    // Check if mobile
+    if (typeof window !== "undefined" && window.innerWidth < 768) {
+      setNavTarget(target);
+      setIsNavOpen(true);
+    } else {
+      const url = `https://www.google.com/maps/dir/?api=1&destination=${target.lat},${target.lng}`;
+      window.open(url, '_blank');
+    }
   };
 
   return (
@@ -285,6 +297,12 @@ export default function PlaceDetailClient({ place, nearbyPlaces }: PlaceDetailCl
           </aside>
         </div>
       </div>
+
+      <NavigationSelector 
+        isOpen={isNavOpen} 
+        onClose={() => setIsNavOpen(false)} 
+        target={navTarget} 
+      />
     </main>
   );
 }

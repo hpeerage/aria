@@ -4,6 +4,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Place } from "@/types/place";
 import { X, MapPin, Tag, Sparkles, Navigation, Share2, Compass, ArrowRight } from "lucide-react";
 import { useLanguage } from "@/lib/i18n/context";
+import NavigationSelector from "./NavigationSelector";
+import { useState } from "react";
 
 interface AriaDetailModalProps {
   place: Place | null;
@@ -13,6 +15,8 @@ interface AriaDetailModalProps {
 
 export default function AriaDetailModal({ place, onClose, allPlaces }: AriaDetailModalProps) {
   const { dict } = useLanguage();
+  const [isNavOpen, setIsNavOpen] = useState(false);
+
   if (!place) return null;
 
   // 단순 거리 계산 (피타고라스) 기반 주변 추천 (임시 로직)
@@ -103,9 +107,13 @@ export default function AriaDetailModal({ place, onClose, allPlaces }: AriaDetai
                 <div className="flex gap-4">
                 <button 
                   onClick={() => {
-                    const { lat, lng } = place.coordinates;
-                    const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
-                    window.open(url, '_blank');
+                    if (typeof window !== "undefined" && window.innerWidth < 768) {
+                      setIsNavOpen(true);
+                    } else {
+                      const { lat, lng } = place.coordinates;
+                      const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
+                      window.open(url, '_blank');
+                    }
                   }}
                   className="p-3 bg-foreground/5 text-foreground hover:bg-accent hover:text-white rounded-2xl transition-all active:scale-95 shadow-sm"
                 >
@@ -187,6 +195,12 @@ export default function AriaDetailModal({ place, onClose, allPlaces }: AriaDetai
           </div>
         </motion.div>
       </div>
+
+      <NavigationSelector 
+        isOpen={isNavOpen} 
+        onClose={() => setIsNavOpen(false)} 
+        target={place ? { name: place.name, lat: place.coordinates.lat, lng: place.coordinates.lng } : null} 
+      />
     </AnimatePresence>
   );
 }
