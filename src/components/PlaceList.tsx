@@ -109,6 +109,13 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [isLocating, setIsLocating] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
+
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    const container = e.currentTarget;
+    const progress = (container.scrollLeft / (container.scrollWidth - container.clientWidth)) * 100;
+    setScrollProgress(progress);
+  };
 
   // Sync search term from URL param ?q=
   useEffect(() => {
@@ -505,6 +512,7 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
           {/* 💻 Desktop Icon Grid View (hidden md:flex) */}
           <div 
             ref={scrollRef}
+            onScroll={handleScroll}
             className="hidden md:flex gap-6 md:gap-8 overflow-x-auto pt-24 pb-32 md:pt-32 md:pb-56 scrollbar-hide snap-x snap-proximity px-12"
           >
             {categories.map((cat) => {
@@ -572,15 +580,21 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
             <div className="flex-shrink-0 w-12 h-1" aria-hidden="true" />
           </div>
           
-          {/* Subtle decoration to indicate scroll ability on desktop */}
-          <div className="absolute bottom-16 left-1/2 -translate-x-1/2 hidden md:flex gap-1 opacity-0 group-hover/scroll:opacity-100 transition-opacity duration-1000">
-             <div className="w-12 h-1 bg-forest/5 rounded-full overflow-hidden">
-                <motion.div 
-                  className="w-1/3 h-full bg-accent/40"
-                  animate={{ x: ["-100%", "300%"] }}
-                  transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
-                />
-             </div>
+          {/* 🧩 Intuitive Scroll Progress Bar (Desktop/Tablet Only) */}
+          <div className="absolute bottom-16 left-1/2 -translate-x-1/2 hidden md:flex w-48 h-[2px] bg-white/5 dark:bg-white/10 rounded-full overflow-hidden">
+             <motion.div 
+               className="h-full bg-accent shadow-[0_0_10px_rgba(255,127,80,0.5)]"
+               animate={{ 
+                 width: "30%", // The width of the "thumb"
+                 x: `${(scrollProgress * 0.7)}%` // Move the thumb based on scroll (using 70% to keep thumb inside) -> actually better logic:
+               }}
+               style={{ 
+                 width: "30%", 
+                 left: `${scrollProgress * 0.7}%`,
+                 position: "absolute"
+               }}
+               transition={{ type: "spring", stiffness: 300, damping: 30 }}
+             />
           </div>
         </div>
       </motion.div>
