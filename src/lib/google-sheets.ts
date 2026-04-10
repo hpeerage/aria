@@ -92,6 +92,7 @@ export async function getPlacesFromGoogleSheet(sheetId: string, sheetName?: stri
           coordinates: { lat, lng },
           description: `${c[4]?.v || ''} ${c[6]?.v || ''}`.trim(),
           images: validateImagePaths(getImagesByCategory(category, id), id, category),
+          icon: c[10]?.v ? String(c[10].v) : undefined, // [v0.11.0] 아이콘 데이터 매핑
         };
       });
 

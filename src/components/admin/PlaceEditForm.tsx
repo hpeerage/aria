@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, Save, MapPin, Tag, Sparkles, Image as ImageIcon, CheckCircle2, Upload, X } from "lucide-react";
+import { ArrowLeft, Save, MapPin, Tag, Sparkles, Image as ImageIcon, CheckCircle2, Upload, X, Trees, Droplets, Utensils, Palmtree, Home, Star, Heart, Camera, Info, Landmark, Bed, Mountain, Palette, Compass, Navigation, Coffee, ShoppingBag, Ticket, Flag, Flame, Wind, Sunrise, Landmark as LandmarkIcon } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
@@ -9,6 +9,32 @@ import { Place } from "@/types/place";
 import { getPlacesFromGoogleSheet } from "@/lib/google-sheets";
 import { useLanguage } from "@/lib/i18n/context";
 import { compressImage } from "@/lib/image-compressor";
+
+const AVAILABLE_ICONS = [
+  { id: "Trees", icon: Trees },
+  { id: "Droplets", icon: Droplets },
+  { id: "Sparkles", icon: Sparkles },
+  { id: "Utensils", icon: Utensils },
+  { id: "Palmtree", icon: Palmtree },
+  { id: "Home", icon: Home },
+  { id: "Star", icon: Star },
+  { id: "Heart", icon: Heart },
+  { id: "Camera", icon: Camera },
+  { id: "Landmark", icon: Landmark },
+  { id: "Bed", icon: Bed },
+  { id: "Mountain", icon: Mountain },
+  { id: "Palette", icon: Palette },
+  { id: "MapPin", icon: MapPin },
+  { id: "Compass", icon: Compass },
+  { id: "Navigation", icon: Navigation },
+  { id: "Coffee", icon: Coffee },
+  { id: "ShoppingBag", icon: ShoppingBag },
+  { id: "Ticket", icon: Ticket },
+  { id: "Flag", icon: Flag },
+  { id: "Flame", icon: Flame },
+  { id: "Wind", icon: Wind },
+  { id: "Sunrise", icon: Sunrise },
+];
 
 export default function PlaceEditForm({ isNew = false }: { isNew?: boolean }) {
   const { dict } = useLanguage();
@@ -296,6 +322,47 @@ export default function PlaceEditForm({ isNew = false }: { isNew?: boolean }) {
                  className="w-full px-6 py-5 bg-white/5 border border-white/10 rounded-2xl text-white placeholder:text-white/40 focus:ring-2 focus:ring-accent outline-none transition-all font-bold resize-none"
                  placeholder={dict.admin.placeholderDesc}
                />
+             </div>
+
+             {/* [v0.11.0] 커스텀 마커 아이콘 선택기 추가 */}
+             <div className="md:col-span-2 space-y-6 pt-10 border-t border-white/5">
+                <div className="flex items-center justify-between">
+                  <label className="text-[10px] font-black uppercase tracking-widest text-accent px-1">Marker Icon Selection</label>
+                  <span className="text-[10px] font-bold text-white/20 uppercase tracking-widest">Select custom symbol</span>
+                </div>
+                <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-12 gap-3">
+                  {AVAILABLE_ICONS.map((item) => {
+                    const IconComp = item.icon;
+                    const isSelected = formData.icon === item.id;
+                    return (
+                      <button
+                        key={item.id}
+                        type="button"
+                        onClick={() => handleInputChange('icon', item.id)}
+                        className={`aspect-square rounded-xl flex items-center justify-center transition-all ${
+                          isSelected 
+                            ? 'bg-accent text-white shadow-lg shadow-accent/20 scale-110' 
+                            : 'bg-white/5 text-white/40 hover:bg-white/10 hover:text-white border border-white/5'
+                        }`}
+                        title={item.id}
+                      >
+                        <IconComp size={20} strokeWidth={isSelected ? 3 : 2} />
+                      </button>
+                    );
+                  })}
+                  <button
+                    type="button"
+                    onClick={() => handleInputChange('icon', undefined)}
+                    className={`aspect-square rounded-xl flex items-center justify-center transition-all ${
+                      !formData.icon 
+                        ? 'bg-white/20 text-white border-2 border-white/30' 
+                        : 'bg-white/5 text-white/20 hover:text-white border border-white/5'
+                    }`}
+                    title="Default (Category)"
+                  >
+                    <X size={16} />
+                  </button>
+                </div>
              </div>
 
              <div className="md:col-span-2 space-y-6 pt-10 border-t border-white/5">

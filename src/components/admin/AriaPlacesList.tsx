@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, Filter, Edit2, Trash2, Eye, MapPin, Tag, Sparkles, AlertCircle, CheckCircle2 } from "lucide-react";
+import { Search, Filter, Edit2, Trash2, Eye, MapPin, Tag, Sparkles, AlertCircle, CheckCircle2, Trees, Droplets, Utensils, Palmtree, Home, Star, Heart, Camera, Landmark, Bed, Mountain, Palette, Compass, Navigation, Coffee, ShoppingBag, Ticket, Flag, Flame, Wind, Sunrise } from "lucide-react";
 import Link from "next/link";
 import { Place } from "@/types/place";
 
@@ -14,6 +14,13 @@ interface AriaPlacesListProps {
   serverPlaces: Place[];
   onFocus?: (place: Place) => void;
 }
+
+const ICON_MAP: Record<string, any> = {
+  Trees, Droplets, Sparkles, Utensils, Palmtree, Home, 
+  Star, Heart, Camera, Landmark, Bed, 
+  Mountain, Palette, MapPin, Compass, Navigation, Coffee,
+  ShoppingBag, Ticket, Flag, Flame, Wind, Sunrise
+};
 
 export default function AriaPlacesList({ places, setPlaces, serverPlaces, onFocus }: AriaPlacesListProps) {
   const { dict } = useLanguage();
@@ -124,7 +131,14 @@ export default function AriaPlacesList({ places, setPlaces, serverPlaces, onFocu
                           className="p-3 bg-white/5 rounded-2xl border border-white/10 hover:border-accent hover:bg-accent/10 group/focus transition-all relative overflow-hidden"
                           title="Focus on Map"
                         >
-                          <Search className="w-4 h-4 text-accent group-hover/focus:scale-125 transition-transform" />
+                          {place.icon && ICON_MAP[place.icon] ? (
+                            (() => {
+                              const IconComp = ICON_MAP[place.icon];
+                              return <IconComp className="w-4 h-4 text-accent group-hover/focus:scale-125 transition-transform" />;
+                            })()
+                          ) : (
+                            <Search className="w-4 h-4 text-accent group-hover/focus:scale-125 transition-transform" />
+                          )}
                           <div className="absolute inset-0 bg-accent/5 opacity-0 group-hover/focus:opacity-100 transition-opacity" />
                         </button>
                         <div>

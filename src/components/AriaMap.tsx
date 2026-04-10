@@ -3,11 +3,24 @@
 import { APIProvider, Map, AdvancedMarker, InfoWindow, useMap } from "@vis.gl/react-google-maps";
 import { Place } from "@/types/place";
 import { useState, useEffect } from "react";
-import { MapPin, Info, ArrowRight, Mountain, Palette, Utensils, Sparkles, Landmark, Bed, Trees, Palmtree, Home, MoreHorizontal, Droplets, Navigation } from "lucide-react";
+import { MapPin, Info, ArrowRight, Mountain, Palette, Utensils, Sparkles, Landmark, Bed, Trees, Palmtree, Home, MoreHorizontal, Droplets, Navigation, Star, Heart, Camera, Compass, Coffee, ShoppingBag, Ticket, Flag, Flame, Wind, Sunrise } from "lucide-react";
 import NavigationSelector from "./NavigationSelector";
 import { NavTarget } from "@/lib/navigation";
 
-const getMarkerConfig = (category: string) => {
+const getMarkerConfig = (category: string, customIcon?: string) => {
+  const iconMap: Record<string, any> = {
+    Trees, Droplets, Sparkles, Utensils, Palmtree, Home, 
+    Star, Heart, Camera, Landmark, Bed, 
+    Mountain, Palette, MapPin, Compass, Navigation, Coffee,
+    ShoppingBag, Ticket, Flag, Flame, Wind, Sunrise
+  };
+
+  if (customIcon && iconMap[customIcon]) {
+    // 커스텀 아이콘은 강조를 위해 특별한 색상(Accent 또는 Forest)을 사용하거나 
+    // 기존 카테고리 색상을 유지할 수 있습니다. 여기서는 Forest를 기본으로 사용합니다.
+    return { icon: iconMap[customIcon], color: "#2E4D3E", bg: "bg-forest" };
+  }
+
   const c = category.toLowerCase();
   
   if (c === "nature") 
@@ -185,8 +198,8 @@ function MapController({ places, focusedPlace }: { places: Place[], focusedPlace
 }
 
 function CustomMarker({ place, onClick }: { place: Place; onClick: () => void }) {
-  const config = getMarkerConfig(place.category);
-  const Icon = config.icon;
+  const { icon, color, bg } = getMarkerConfig(place.category, place.icon);
+  const IconComp = icon;
 
   return (
     <AdvancedMarker
