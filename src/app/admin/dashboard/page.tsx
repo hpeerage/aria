@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import { getPlacesFromGoogleSheet } from "@/lib/google-sheets";
 import { useLanguage } from "@/lib/i18n/context";
 import { Place } from "@/types/place";
+import Link from "next/link";
 
 const container = {
   hidden: { opacity: 0 },
