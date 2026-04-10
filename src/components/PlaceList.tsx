@@ -671,8 +671,9 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
                 {/* Hover Luxury Decor */}
                 <div className={`absolute top-0 right-0 w-48 h-48 rounded-full -mr-24 -mt-24 group-hover:opacity-10 transition-all duration-1000 blur-3xl opacity-0 ${pConfig.bg.replace('bg-', 'bg-')}/5 group-hover:bg-accent/10`} />
               </motion.div>
-            </Link>
-          ))}
+              </Link>
+            );
+          })}
         </AnimatePresence>
       </motion.div>
 
