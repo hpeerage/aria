@@ -71,19 +71,19 @@ const getCategoryConfig = (cat: string, dict: any, customIcon?: string, customCo
 
   if (cat === dict.common.all) return { icon: LayoutGrid, label: dict.common.all, bg: "bg-forest/10 dark:bg-white/20", color: "text-forest dark:text-white" };
   if (cat === dict.common.nearMe) return { icon: Navigation, label: dict.common.nearMe, bg: "bg-accent/10", color: "text-accent" };
-  if (c === "water") 
+  if (cat === "water") 
     return { icon: Droplets, label: (dict.categories as any).water || cat, bg: "bg-sky-500/10", color: "text-sky-500" };
   
-  if (c === "activity") 
+  if (cat === "activity") 
     return { icon: Sparkles, label: (dict.categories as any).activity || cat, bg: "bg-rose-500/10", color: "text-rose-500" };
   
-  if (c === "food") 
+  if (cat === "food") 
     return { icon: UtensilsCrossed, label: (dict.categories as any).food || cat, bg: "bg-orange-500/10", color: "text-orange-500" };
   
-  if (c === "culture") 
+  if (cat === "culture") 
     return { icon: Palmtree, label: (dict.categories as any).culture || cat, bg: "bg-amber-500/10", color: "text-amber-500" };
   
-  if (c === "stay") 
+  if (cat === "stay") 
     return { icon: Home, label: (dict.categories as any).stay || cat, bg: "bg-indigo-500/10", color: "text-indigo-500" };
   
   return { icon: Droplets, label: (dict.categories as any).etc || cat, bg: "bg-slate-500/10", color: "text-slate-500" }; 

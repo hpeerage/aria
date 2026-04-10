@@ -57,10 +57,10 @@ export default function AriaPlaceDetail({ place, nearbyPlaces }: AriaPlaceDetail
 
   return (
     <main className="min-h-screen bg-[#F8FAF9] dark:bg-forest-dark pb-32">
-      {/* [v0.14.4] Forced Re-render Floating Back Button with Deployment Tracker */}
+      {/* [v0.14.5] Ultimate Build Fix & Floating Back Button Deployment */}
       <Link 
         href="/" 
-        data-version="0.14.4"
+        data-version="0.14.5"
         className="fixed top-8 left-6 z-[95] group flex items-center gap-2 px-5 py-3 bg-forest-dark/95 dark:bg-accent/90 backdrop-blur-3xl rounded-2xl border border-white/20 text-white shadow-[0_20px_60px_rgba(0,0,0,0.5)] transition-all hover:scale-110 active:scale-95 md:top-12 md:left-12"
       >
         <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
