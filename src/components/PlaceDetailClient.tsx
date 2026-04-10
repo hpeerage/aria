@@ -57,17 +57,15 @@ export default function PlaceDetailClient({ place, nearbyPlaces }: PlaceDetailCl
 
   return (
     <main className="min-h-screen bg-[#F8FAF9] dark:bg-forest-dark pb-32">
-      {/* [v0.14.0] Premium Floating Back Button */}
+      {/* [v0.14.1] High-Visibility Floating Back Button */}
       <Link 
         href="/" 
-        className="fixed top-6 left-6 z-[80] group flex items-center gap-3 px-4 md:px-6 py-3 bg-black/20 hover:bg-black/40 backdrop-blur-xl rounded-2xl border border-white/10 text-white shadow-2xl transition-all active:scale-95 md:top-10 md:left-10"
+        className="fixed top-8 left-6 z-[90] group flex items-center gap-2 px-5 py-3 bg-forest/90 dark:bg-accent/90 backdrop-blur-3xl rounded-2xl border border-white/20 text-white shadow-[0_20px_50px_rgba(0,0,0,0.3)] transition-all hover:scale-105 active:scale-95 md:top-12 md:left-12"
       >
-        <div className="flex items-center gap-3">
-          <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
-          <span className="text-[10px] font-black uppercase tracking-[0.2em] hidden sm:block">
-            {dict.common.backToList}
-          </span>
-        </div>
+        <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
+        <span className="text-[11px] font-black uppercase tracking-[0.2em]">
+          {dict.common.backToList}
+        </span>
       </Link>
 
       {/* Lightbox Overlay */}
@@ -185,17 +183,7 @@ export default function PlaceDetailClient({ place, nearbyPlaces }: PlaceDetailCl
               className="bg-white dark:bg-forest-light p-10 md:p-16 rounded-[4rem] shadow-2xl border border-forest/5 dark:border-white/5 space-y-10 shadow-black/20"
             >
               <div className="flex justify-between items-center">
-                <div className="hidden md:block">
-                  <Link 
-                    href="/" 
-                    className="group flex items-center gap-3 text-foreground/40 hover:text-accent font-black text-xs tracking-widest uppercase transition-all"
-                  >
-                    <div className="p-3 bg-foreground/5 rounded-2xl group-hover:bg-accent/10 transition-all">
-                      <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
-                    </div>
-                    {dict.common.backToList}
-                  </Link>
-                </div>
+                <div className="flex-1" /> {/* Spacer for alignment */}
                 <div className="flex gap-4">
                   <button 
                     onClick={handleDirections}
