@@ -1,4 +1,6 @@
 "use client";
+// [v0.14.19] Force deployment cache burst - Interactive Scrollbar & UI Refinement
+
 
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence, Variants } from "framer-motion";
