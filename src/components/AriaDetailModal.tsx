@@ -101,9 +101,16 @@ export default function AriaDetailModal({ place, onClose, allPlaces }: AriaDetai
               {/* Header Actions */}
               <div className="flex justify-between items-center mb-8">
                 <div className="flex gap-4">
-                  <button className="p-3 bg-foreground/5 text-foreground hover:bg-accent hover:text-white rounded-2xl transition-all active:scale-95 shadow-sm">
-                    <Navigation className="w-5 h-5" />
-                  </button>
+                <button 
+                  onClick={() => {
+                    const { lat, lng } = place.coordinates;
+                    const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
+                    window.open(url, '_blank');
+                  }}
+                  className="p-3 bg-foreground/5 text-foreground hover:bg-accent hover:text-white rounded-2xl transition-all active:scale-95 shadow-sm"
+                >
+                  <Navigation className="w-5 h-5" />
+                </button>
                   <button className="p-3 bg-foreground/5 text-foreground hover:bg-foreground/10 rounded-2xl transition-all active:scale-95">
                     <Share2 className="w-5 h-5" />
                   </button>

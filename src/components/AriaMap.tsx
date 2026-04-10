@@ -3,7 +3,7 @@
 import { APIProvider, Map, AdvancedMarker, InfoWindow, useMap } from "@vis.gl/react-google-maps";
 import { Place } from "@/types/place";
 import { useState, useEffect } from "react";
-import { MapPin, Info, ArrowRight, Mountain, Palette, Utensils, Sparkles, Landmark, Bed, Trees, Palmtree, Home, MoreHorizontal, Droplets } from "lucide-react";
+import { MapPin, Info, ArrowRight, Mountain, Palette, Utensils, Sparkles, Landmark, Bed, Trees, Palmtree, Home, MoreHorizontal, Droplets, Navigation } from "lucide-react";
 
 const getMarkerConfig = (category: string) => {
   const c = category.toLowerCase();
@@ -105,13 +105,26 @@ export default function AriaMap({ places, onMarkerClick, userLocation, focusedPl
                 <p className="text-xs text-forest/70 font-medium leading-relaxed line-clamp-2">
                   {selectedPlace.description || "이 장소에 대한 신비로운 이야기가 곧 추가될 예정입니다."}
                 </p>
-                <button 
-                  onClick={() => onMarkerClick?.(selectedPlace)}
-                  className="w-full py-2 bg-forest text-white text-[10px] font-black uppercase tracking-widest rounded-lg hover:bg-accent transition-all flex items-center justify-center gap-2 group/btn"
-                >
-                  상세 정보 탐색
-                  <ArrowRight className="w-3 h-3 group-hover/btn:translate-x-1 transition-transform" />
-                </button>
+                <div className="flex gap-2">
+                  <button 
+                    onClick={() => onMarkerClick?.(selectedPlace)}
+                    className="flex-1 py-2 bg-forest text-white text-[10px] font-black uppercase tracking-widest rounded-lg hover:bg-accent transition-all flex items-center justify-center gap-2 group/btn"
+                  >
+                    상세 정보
+                    <ArrowRight className="w-3 h-3 group-hover/btn:translate-x-1 transition-transform" />
+                  </button>
+                  <button 
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      const { lat, lng } = selectedPlace.coordinates;
+                      window.open(`https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`, '_blank');
+                    }}
+                    className="px-3 bg-accent text-white rounded-lg hover:bg-forest transition-all shadow-md active:scale-95 flex items-center justify-center"
+                    title="Directions"
+                  >
+                    <Navigation className="w-4 h-4" />
+                  </button>
+                </div>
               </div>
             </InfoWindow>
           )}
