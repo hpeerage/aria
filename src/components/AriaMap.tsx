@@ -60,7 +60,7 @@ export default function AriaMap({ places, onMarkerClick, userLocation, focusedPl
       key={`map-container-${places.length}`} 
       className={className || "w-full h-[600px] rounded-[3rem] overflow-hidden shadow-2xl border-4 border-white dark:border-forest-dark relative group"}
     >
-      <APIProvider apiKey={apiKey} version="beta" libraries={['marker']}>
+      <APIProvider apiKey={apiKey} version="weekly" libraries={['marker']}>
         <Map
           defaultCenter={{ lat: 37.3806, lng: 128.6608 }}
           defaultZoom={11}
