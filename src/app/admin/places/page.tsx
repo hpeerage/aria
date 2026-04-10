@@ -5,16 +5,30 @@ import { getPlacesFromGoogleSheet } from "@/lib/google-sheets";
 import AriaPlacesList from "@/components/admin/AriaPlacesList";
 import AriaMap from "@/components/AriaMap";
 import { validateImagePaths } from "@/lib/place-images";
-import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { Place } from "@/types/place";
 import { useLanguage } from "@/lib/i18n/context";
 
 export default function AdminPlacesPage() {
   const { dict } = useLanguage();
+  const searchParams = useSearchParams();
   const [places, setPlaces] = useState<Place[]>([]);
   const [serverPlaces, setServerPlaces] = useState<Place[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [focusedPlace, setFocusedPlace] = useState<Place | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string>("");
+
+  // Initialize selectedCategory with dict.common.all or URL param
+  useEffect(() => {
+    if (dict) {
+      const catParam = searchParams.get("category");
+      if (catParam) {
+        setSelectedCategory(catParam);
+      } else {
+        setSelectedCategory(dict.common.all);
+      }
+    }
+  }, [dict, searchParams]);
 
   useEffect(() => {
     async function loadPlaces() {
@@ -98,11 +112,21 @@ export default function AdminPlacesPage() {
       </div>
 
       <div className="space-y-6">
-        <div className="flex items-center gap-3 px-6">
-          <div className="w-1.5 h-6 bg-accent rounded-full" />
-          <h4 className="text-xl font-bold text-white uppercase tracking-widest">Map Visualization</h4>
+        <div className="flex items-center justify-between px-6">
+          <div className="flex items-center gap-3">
+            <div className="w-1.5 h-6 bg-accent rounded-full" />
+            <h4 className="text-xl font-bold text-white uppercase tracking-widest">Map Visualization</h4>
+          </div>
+          {selectedCategory !== dict.common.all && (
+            <div className="px-4 py-1.5 bg-accent/10 border border-accent/30 rounded-full text-[10px] font-black text-accent uppercase tracking-widest animate-in zoom-in duration-500">
+              Filtering: {selectedCategory}
+            </div>
+          )}
         </div>
-        <AriaMap places={places} focusedPlace={focusedPlace} />
+        <AriaMap 
+          places={selectedCategory === dict.common.all || !selectedCategory ? places : places.filter(p => p.category === selectedCategory)} 
+          focusedPlace={focusedPlace} 
+        />
       </div>
 
       <AriaPlacesList 
@@ -110,6 +134,8 @@ export default function AdminPlacesPage() {
         setPlaces={setPlaces} 
         serverPlaces={serverPlaces}
         onFocus={setFocusedPlace}
+        selectedCategory={selectedCategory}
+        setSelectedCategory={setSelectedCategory}
       />
     </div>
   );

@@ -13,6 +13,8 @@ interface AriaPlacesListProps {
   setPlaces: (places: Place[]) => void;
   serverPlaces: Place[];
   onFocus?: (place: Place) => void;
+  selectedCategory: string;
+  setSelectedCategory: (cat: string) => void;
 }
 
 const ICON_MAP: Record<string, any> = {
@@ -22,10 +24,9 @@ const ICON_MAP: Record<string, any> = {
   ShoppingBag, Ticket, Flag, Flame, Wind, Sunrise
 };
 
-export default function AriaPlacesList({ places, setPlaces, serverPlaces, onFocus }: AriaPlacesListProps) {
+export default function AriaPlacesList({ places, setPlaces, serverPlaces, onFocus, selectedCategory, setSelectedCategory }: AriaPlacesListProps) {
   const { dict } = useLanguage();
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState(dict.common.all);
 
   const getSyncStatus = (place: Place) => {
     const serverPlace = serverPlaces.find(p => p.id === place.id);

@@ -227,7 +227,11 @@ export default function DashboardPage() {
               const percentage = stats.total > 0 ? (count / stats.total) * 100 : 0;
 
               return (
-                <div key={key} className="p-6 bg-white/5 border border-white/5 rounded-[2rem] space-y-4 group hover:border-accent/40 transition-all">
+                <Link 
+                  href={`/admin/places?category=${key}`}
+                  key={key} 
+                  className="p-6 bg-white/5 border border-white/5 rounded-[2rem] space-y-4 group hover:border-accent/40 transition-all hover:-translate-y-1 block"
+                >
                   <div className="flex items-start justify-between">
                     <div className={`p-3 bg-white/5 rounded-xl ${catConfig.color}`}>
                       <Icon className="w-5 h-5" />
@@ -245,7 +249,7 @@ export default function DashboardPage() {
                       />
                     </div>
                   </div>
-                </div>
+                </Link>
               );
             })}
           </div>
