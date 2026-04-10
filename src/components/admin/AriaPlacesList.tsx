@@ -8,6 +8,7 @@ import { Place } from "@/types/place";
 
 import { useLanguage } from "@/lib/i18n/context";
 import { normalizeCategory } from "@/lib/google-sheets";
+import { dictionaries } from "@/lib/i18n/dictionaries";
 
 interface AriaPlacesListProps {
   places: Place[];
@@ -104,7 +105,9 @@ export default function AriaPlacesList({ places, setPlaces, serverPlaces, onFocu
                   : "bg-white/5 text-white/60 hover:bg-white/10 hover:text-white"
               }`}
             >
-              {cat === dict.common.all ? cat : (dict.categories as any)[cat] || cat}
+              {cat === dict.common.all 
+                ? (dictionaries.en.common.all) 
+                : ((dictionaries.en.categories as any)[cat] || cat)}
             </button>
           ))}
         </div>
