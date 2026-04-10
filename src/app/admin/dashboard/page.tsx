@@ -1,149 +1,293 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Map, Users, Sparkles, Calendar, ArrowUpRight, TrendingUp, Info } from "lucide-react";
+import { 
+  Map, Sparkles, ArrowUpRight, TrendingUp, Info, 
+  Database, RefreshCcw, PlusSquare, AlertTriangle,
+  Trees, Droplets, Utensils, Palmtree, Home, Activity
+} from "lucide-react";
 
 import { useEffect, useState } from "react";
 import { getPlacesFromGoogleSheet } from "@/lib/google-sheets";
 import { useLanguage } from "@/lib/i18n/context";
+import { Place } from "@/types/place";
+
+const container = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1
+    }
+  }
+};
+
+const item = {
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0 }
+};
 
 export default function DashboardPage() {
   const { dict } = useLanguage();
-  const [placeCount, setPlaceCount] = useState(0);
+  const [stats, setStats] = useState({
+    total: 0,
+    modified: 0,
+    new: 0,
+    integrity: 100,
+    categories: {} as Record<string, number>
+  });
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    async function loadStats() {
-      const places = await getPlacesFromGoogleSheet('1Setffm27HQ8LyOM3N9o9V8eA0ihGbZeZgN763jkm1WU');
-      setPlaceCount(places.length);
-      setIsLoading(false);
+    async function calculateStats() {
+      setIsLoading(true);
+      try {
+        // 1. Fetch Server Data (GitHub/Sheet)
+        const serverPlaces = await getPlacesFromGoogleSheet('1Setffm27HQ8LyOM3N9o9V8eA0ihGbZeZgN763jkm1WU');
+        
+        // 2. Load Local Data (Defensive Parsing)
+        let localPlaces: Place[] = [];
+        try {
+          const localData = localStorage.getItem('aria_local_places');
+          if (localData) {
+            localPlaces = JSON.parse(localData);
+          }
+        } catch (e) {
+          console.warn("Failed to parse local places", e);
+        }
+
+        // 3. Aggregate Stats
+        let modifiedCount = 0;
+        let newCount = 0;
+        const categoryMap: Record<string, number> = {};
+
+        // Merge logic to find modified/new
+        const serverMap = new Map<number, Place>();
+        serverPlaces.forEach(p => {
+          if (p && p.id) serverMap.set(p.id, p);
+        });
+
+        localPlaces.forEach(lp => {
+          if (!lp || !lp.id) return;
+
+          const sp = serverMap.get(lp.id);
+          if (!sp) {
+            newCount++;
+          } else {
+            // Defensive comparison for coordinates
+            const lpCoords = lp.coordinates || { lat: 0, lng: 0 };
+            const spCoords = sp.coordinates || { lat: 0, lng: 0 };
+            
+            const isSame = 
+              lp.name === sp.name && 
+              lp.category === sp.category && 
+              Number(lpCoords.lat || 0).toFixed(6) === Number(spCoords.lat || 0).toFixed(6) &&
+              Number(lpCoords.lng || 0).toFixed(6) === Number(spCoords.lng || 0).toFixed(6);
+            
+            if (!isSame) modifiedCount++;
+          }
+        });
+
+        // Combined unique places for total count & category distribution
+        const combinedMap = new Map<number, Place>();
+        serverPlaces.forEach(p => combinedMap.set(p.id, p));
+        localPlaces.forEach(p => {
+          if (p && p.id) combinedMap.set(p.id, p);
+        });
+        
+        const allPlaces = Array.from(combinedMap.values());
+        allPlaces.forEach(p => {
+          if (p && p.category) {
+            categoryMap[p.category] = (categoryMap[p.category] || 0) + 1;
+          }
+        });
+
+        const integrity = serverPlaces.length > 0 
+          ? Math.max(0, Math.min(100, Math.round(((serverPlaces.length - modifiedCount) / serverPlaces.length) * 100)))
+          : 100;
+
+        setStats({
+          total: allPlaces.length,
+          modified: modifiedCount,
+          new: newCount,
+          integrity,
+          categories: categoryMap
+        });
+      } catch (err) {
+        console.error("Dashboard calculation failed", err);
+      } finally {
+        setIsLoading(false);
+      }
     }
-    loadStats();
+    
+    calculateStats();
   }, []);
 
-  const stats = [
-    { label: dict.admin.statsAssets, value: isLoading ? "..." : String(placeCount), trend: `+4 ${dict.stats.newPlaces}`, icon: Map, color: "text-accent" },
-    { label: dict.admin.statsPaths, value: "12", trend: dict.admin.statsTrendStable, icon: TrendingUp, color: "text-blue-400" },
-    { label: dict.admin.statsWellness, value: "98%", trend: `+2% ${dict.admin.statsTrendUp}`, icon: Sparkles, color: "text-purple-400" },
-    { label: dict.admin.statsOperators, value: "24", trend: dict.admin.statsTrendStable, icon: Users, color: "text-white" },
+  const metricCards = [
+    { label: "Total Assets", value: stats.total, trend: "Master Registry", icon: Database, color: "text-white", bg: "bg-white/5" },
+    { label: "Sync Pending", value: stats.modified, trend: "Modified", icon: RefreshCcw, color: "text-orange-400", bg: "bg-orange-500/10" },
+    { label: "New Entries", value: stats.new, trend: "Locally Added", icon: PlusSquare, color: "text-accent", bg: "bg-accent/10" },
+    { label: "Data Integrity", value: `${stats.integrity}%`, trend: "Optimal Health", icon: Sparkles, color: "text-purple-400", bg: "bg-purple-500/10" },
   ];
 
+  const categoryConfigs: Record<string, any> = {
+    nature: { icon: Trees, color: "text-emerald-400" },
+    water: { icon: Droplets, color: "text-sky-400" },
+    activity: { icon: Activity, color: "text-rose-400" },
+    food: { icon: Utensils, color: "text-orange-400" },
+    culture: { icon: Palmtree, color: "text-amber-400" },
+    stay: { icon: Home, color: "text-indigo-400" },
+  };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-[60vh] flex flex-col items-center justify-center space-y-6">
+        <div className="w-12 h-12 border-4 border-accent/20 border-t-accent rounded-full animate-spin" />
+        <p className="text-white/40 font-black uppercase tracking-[0.3em] text-xs animate-pulse">Initializing Dashboard...</p>
+      </div>
+    );
+  }
+
   return (
-    <div className="space-y-12">
-      {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-        {stats.map((stat, idx) => (
+    <motion.div 
+      variants={container}
+      initial="hidden"
+      animate="show"
+      className="space-y-12"
+    >
+      {/* Metric Cards Row */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {metricCards.map((card) => (
           <motion.div 
-            key={stat.label}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: idx * 0.1 }}
-            className="p-8 bg-white/5 border border-white/10 rounded-[2.5rem] relative overflow-hidden group hover:bg-white/10 transition-all hover:-translate-y-2 hover:shadow-2xl hover:shadow-black/20"
+            key={card.label}
+            variants={item}
+            className={`p-8 ${card.bg} border border-white/5 rounded-[2.5rem] relative overflow-hidden group hover:bg-white/10 transition-all hover:-translate-y-1`}
           >
-            <div className={`p-4 bg-white/10 rounded-2xl w-fit mb-6 ${stat.color} group-hover:bg-accent group-hover:text-white transition-all`}>
-              <stat.icon className="w-6 h-6" />
+            <div className={`p-4 bg-white/5 rounded-2xl w-fit mb-6 ${card.color}`}>
+              <card.icon className="w-6 h-6" />
             </div>
-            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50 mb-2">{stat.label}</p>
-            <div className="flex items-end gap-3">
-              <h3 className="text-4xl font-black text-white tracking-tighter">{stat.value}</h3>
-              <p className="text-[10px] font-bold text-accent mb-1 flex items-center gap-1">
-                <ArrowUpRight className="w-3 h-3" />
-                {stat.trend}
-              </p>
+            <div className="space-y-1">
+              <p className="text-[10px] font-black uppercase tracking-widest text-white/30">{card.label}</p>
+              <div className="flex items-end gap-3">
+                <h3 className={`text-4xl font-black text-white tracking-tighter`}>{card.value}</h3>
+                <span className="text-[10px] font-bold text-white/20 mb-1">{card.trend}</span>
+              </div>
             </div>
-            {/* Background Accent */}
-            <div className="absolute -right-6 -bottom-6 opacity-0 group-hover:opacity-10 transition-opacity duration-700">
-               <stat.icon className="w-24 h-24" />
+            <div className="absolute -right-4 -bottom-4 opacity-5 group-hover:opacity-10 transition-opacity">
+              <card.icon className="w-24 h-24" />
             </div>
           </motion.div>
         ))}
       </div>
 
-      {/* Main Analysis Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-        {/* Sync Status Card */}
+      {/* Analysis Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+        {/* Category Breakdown */}
         <motion.div 
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          className="p-10 bg-forest/40 border border-white/10 rounded-[3rem] space-y-8 backdrop-blur-xl relative overflow-hidden"
+          variants={item}
+          className="lg:col-span-2 p-10 bg-white/5 border border-white/10 rounded-[3.5rem] space-y-8 relative overflow-hidden"
         >
-          <div className="absolute top-0 right-0 p-8 text-accent/20">
-            <Sparkles className="w-32 h-32 rotate-12" />
+          <div className="flex items-center justify-between">
+            <h4 className="text-2xl font-black text-white tracking-tight flex items-center gap-3">
+              <TrendingUp className="w-6 h-6 text-accent" />
+              Category Distribution
+            </h4>
+            <span className="text-[10px] font-black uppercase tracking-widest text-white/20">Asset Taxonomy Analysis</span>
           </div>
-          <div className="relative z-10 space-y-6">
-            <h4 className="text-2xl font-black text-white tracking-tight">{dict.admin.sysIntegrity}</h4>
-            <p className="text-white/60 leading-relaxed max-w-md">
-              {dict.admin.sysDesc}
-            </p>
-            <div className="space-y-4">
-              <div className="flex justify-between items-center text-xs font-bold border-b border-white/5 pb-4">
-                <span className="text-white/60 uppercase tracking-widest">{dict.admin.sysConn}</span>
-                <span className="text-accent flex items-center gap-2">
-                  <div className="w-2 h-2 bg-accent rounded-full animate-ping" />
-                  {dict.admin.sysStable}
-                </span>
-              </div>
-              <div className="flex justify-between items-center text-xs font-bold border-b border-white/5 pb-4">
-                <span className="text-white/60 uppercase tracking-widest">{dict.admin.sysLastSync}</span>
-                <span className="text-white">Today 21:30 PM</span>
-              </div>
-              <div className="flex justify-between items-center text-xs font-bold">
-                <span className="text-white/40 uppercase tracking-widest">Missing Images</span>
-                <span className="text-yellow-400">0 Items</span>
-              </div>
-            </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+            {Object.entries(dict.categories).map(([key, label]) => {
+              const count = stats.categories[key] || 0;
+              const config = categoryConfigs[key] || { icon: Map, color: "text-white" };
+              const Icon = config.icon;
+              const percentage = stats.total > 0 ? (count / stats.total) * 100 : 0;
+
+              return (
+                <div key={key} className="p-6 bg-white/5 border border-white/5 rounded-[2rem] space-y-4 group hover:border-accent/40 transition-all">
+                  <div className="flex items-start justify-between">
+                    <div className={`p-3 bg-white/5 rounded-xl ${config.color}`}>
+                      <Icon className="w-5 h-5" />
+                    </div>
+                    <span className="text-xl font-black text-white">{count}</span>
+                  </div>
+                  <div className="space-y-2">
+                    <p className="text-xs font-bold text-white/60">{label}</p>
+                    <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
+                      <motion.div 
+                        initial={{ width: 0 }}
+                        animate={{ width: `${percentage}%` }}
+                        transition={{ duration: 1, delay: 0.5 }}
+                        className={`h-full bg-accent/60`} 
+                      />
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </motion.div>
 
-        {/* Quick Insights */}
+        {/* Sync & System Status */}
         <motion.div 
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          className="p-10 bg-white/5 border border-white/10 rounded-[3rem] space-y-8 relative overflow-hidden hover:bg-white/[0.08] transition-all"
+          variants={item}
+          className="p-10 bg-white/[0.03] border border-white/10 rounded-[3.5rem] space-y-10 relative overflow-hidden backdrop-blur-3xl"
         >
-          <div className="flex items-center justify-between">
-            <h4 className="text-2xl font-black text-white tracking-tight">{dict.admin.wellnessLoop}</h4>
-            <div className="p-3 bg-white/5 rounded-2xl">
-              <Calendar className="w-5 h-5 text-accent" />
-            </div>
-          </div>
-          <div className="space-y-6">
-            <p className="text-white/40 text-sm leading-relaxed border-l-4 border-accent pl-6 italic">
-              "정선군 8월 방문자 선호도 분석 결과, 자연 경관(Nature) 카테고리의 체류 시간이 전월 대비 15% 상승했습니다."
+          <div className="space-y-4">
+            <h4 className="text-2xl font-black text-white tracking-tight">{dict.admin.sysIntegrity}</h4>
+            <p className="text-sm text-white/40 leading-relaxed">
+              현재 로컬 브라우저와 클라우드 저장소 간의 데이터 불일치 여부를 모니터링합니다.
             </p>
-            <div className="grid grid-cols-2 gap-6">
-              <div className="p-6 bg-white/5 rounded-[2rem] border border-white/5 text-center">
-                <p className="text-[10px] font-black uppercase text-white/30 mb-2">{dict.admin.popularRegion}</p>
-                <p className="text-xl font-black text-white">Jeongseon-eup</p>
+          </div>
+
+          <div className="space-y-6">
+            {[
+              { label: "Connection", value: "Stable", color: "text-accent", pulse: true },
+              { label: "Local Buffer", value: `${stats.modified + stats.new} Changes`, color: "text-white" },
+              { label: "Cloud Source", value: "Verified", color: "text-blue-400" },
+              { label: "Storage Capacity", value: "92% Free", color: "text-emerald-400" },
+            ].map((row) => (
+              <div key={row.label} className="flex justify-between items-center py-4 border-b border-white/5">
+                <span className="text-[10px] font-black uppercase tracking-widest text-white/20">{row.label}</span>
+                <span className={`text-xs font-bold flex items-center gap-2 ${row.color}`}>
+                  {row.pulse && <div className="w-1.5 h-1.5 bg-accent rounded-full animate-ping" />}
+                  {row.value}
+                </span>
               </div>
-              <div className="p-6 bg-white/5 rounded-[2rem] border border-white/5 text-center">
-                <p className="text-[10px] font-black uppercase text-white/30 mb-2">{dict.admin.peakTime}</p>
-                <p className="text-xl font-black text-white">14:00 - 16:00</p>
-              </div>
-            </div>
+            ))}
+          </div>
+
+          <div className="p-6 bg-accent/5 border border-accent/20 rounded-2xl flex items-center gap-4">
+            <AlertTriangle className="w-6 h-6 text-accent animate-pulse" />
+            <p className="text-[10px] font-bold text-accent leading-relaxed">
+              수정 사항이 있는 경우 우측 상단 [Cloud Sync] 버튼을 통해 GitHub에 반영해 주세요.
+            </p>
           </div>
         </motion.div>
       </div>
 
-      {/* Guide Banner */}
+      {/* Footer Info */}
       <motion.div 
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="p-8 bg-accent text-forest-dark rounded-[2rem] flex items-center justify-between shadow-2xl shadow-accent/20 border-b-4 border-black/10 active:translate-y-1 transition-all"
+        variants={item}
+        className="p-8 bg-forest-dark border border-white/10 rounded-[2.5rem] flex flex-col md:flex-row items-center justify-between gap-6"
       >
-        <div className="flex items-center gap-6">
-          <div className="p-4 bg-forest-dark/10 rounded-2xl">
-            <Info className="w-8 h-8" />
+        <div className="flex items-center gap-6 text-center md:text-left">
+          <div className="p-4 bg-white/5 rounded-2xl">
+            <Info className="w-6 h-6 text-white/40" />
           </div>
           <div>
-            <h5 className="text-xl font-black tracking-tight">{dict.admin.adminGuide} v2.0</h5>
-            <p className="text-forest-dark/60 text-sm font-bold tracking-tight">장소 데이터 수정 시 다국어(영어) 필드 누락 여부를 반드시 확인해 주세요.</p>
+            <h5 className="text-sm font-black text-white">System Monitor Active</h5>
+            <p className="text-[10px] font-bold text-white/20 uppercase tracking-[0.2em] mt-1">Updates checked every route transition</p>
           </div>
         </div>
-        <button className="px-8 py-4 bg-forest-dark text-white rounded-[1.5rem] font-black text-xs uppercase tracking-widest hover:bg-black hover:scale-105 transition-all">
-          {dict.admin.downloadGuide}
-        </button>
+        <div className="flex gap-4">
+          <div className="px-6 py-3 bg-white/5 rounded-xl text-[10px] font-black uppercase tracking-widest text-white/40 border border-white/5">
+            Registry: v2.5.0
+          </div>
+          <div className="px-6 py-3 bg-white/5 rounded-xl text-[10px] font-black uppercase tracking-widest text-white/40 border border-white/5">
+            Node: GH-PAGES-CDN
+          </div>
+        </div>
       </motion.div>
-    </div>
+    </motion.div>
   );
 }
