@@ -497,7 +497,7 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
           {/* 💻 Desktop Icon Grid View (hidden md:flex) */}
           <div 
             ref={scrollRef}
-            className="hidden md:flex gap-4 md:gap-6 overflow-x-auto py-8 md:py-12 scrollbar-hide snap-x snap-proximity px-8 pb-20 md:pb-32"
+            className="hidden md:flex gap-6 md:gap-8 overflow-x-auto py-10 md:py-16 scrollbar-hide snap-x snap-proximity px-12 pb-24 md:pb-40"
           >
             {categories.map((cat) => {
               const catConfig = getCategoryConfig(cat, dict);
@@ -508,11 +508,11 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
                 <motion.button
                   key={cat}
                   whileHover={{ 
-                    scale: 1.08, 
-                    y: -10,
-                    transition: { type: "spring", stiffness: 400, damping: 20 }
+                    scale: 1.1, 
+                    y: -15,
+                    transition: { type: "spring", stiffness: 400, damping: 17 }
                   }}
-                  whileTap={{ scale: 0.95 }}
+                  whileTap={{ scale: 0.94 }}
                   onClick={() => {
                     if (cat === dict.common.nearMe) {
                       if (!userLocation) handleLocateMe();
@@ -521,28 +521,28 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
                       setSelectedCategory(cat);
                     }
                   }}
-                  className={`relative group flex-shrink-0 flex flex-col items-center justify-center p-6 md:p-8 min-w-[110px] md:min-w-[130px] h-36 md:h-40 rounded-[2.5rem] transition-all duration-700 border snap-center ${
+                  className={`relative group flex-shrink-0 flex flex-col items-center justify-center p-8 md:p-10 min-w-[140px] md:min-w-[160px] h-40 md:h-44 rounded-[3rem] transition-all duration-700 border snap-center ${
                     isActive 
-                      ? `bg-white dark:bg-forest-light shadow-[0_40px_80px_-15px_rgba(26,67,47,0.4)] border-accent/40 z-20 backdrop-blur-2xl` 
-                      : "bg-white/30 dark:bg-white/5 border-white/10 dark:border-white/5 hover:bg-white/50 dark:hover:bg-white/10 hover:border-forest/20 shadow-xl"
+                      ? `bg-white dark:bg-white/10 shadow-[0_45px_100px_-15px_rgba(0,0,0,0.5)] border-white/20 z-20 backdrop-blur-3xl` 
+                      : "bg-white/[0.03] dark:bg-white/[0.02] border-white/5 dark:border-white/[0.03] hover:bg-white/[0.08] hover:border-white/10 shadow-2xl backdrop-blur-md"
                   }`}
                 >
-                  {/* Accent Background Glow - High blur for premium depth */}
+                  {/* Premium Neon Glow for Active Category */}
                   {isActive && (
                     <motion.div 
                       layoutId="active-glow"
-                      className={`absolute inset-0 rounded-[2.5rem] blur-3xl opacity-40 transition-all duration-700 ${catConfig.bg}`}
+                      className={`absolute inset-0 rounded-[3rem] blur-[60px] opacity-40 transition-all duration-1000 ${catConfig.bg}`}
                     />
                   )}
                   
-                  <div className={`p-3 rounded-[1.2rem] mb-3 transition-all duration-500 group-hover:rotate-6 relative z-10 ${
-                    isActive ? `${catConfig.bg} ${catConfig.color} shadow-lg shadow-black/5` : "bg-forest/5 dark:bg-white/10 text-forest/40 dark:text-white/40"
+                  <div className={`p-4 rounded-[1.5rem] mb-4 transition-all duration-500 group-hover:rotate-12 relative z-10 ${
+                    isActive ? `${catConfig.bg} ${catConfig.color} shadow-[0_10px_30px_rgba(0,0,0,0.2)]` : "bg-white/5 text-white/20 group-hover:text-white/60"
                   }`}>
-                    <Icon className={`w-5 h-5 ${cat === dict.common.nearMe && isLocating ? "animate-spin" : ""}`} />
+                    <Icon className={`w-7 h-7 ${cat === dict.common.nearMe && isLocating ? "animate-spin" : ""}`} />
                   </div>
                   
-                  <span className={`text-[11px] font-black uppercase tracking-[0.2em] text-center relative z-10 whitespace-nowrap ${
-                    isActive ? "text-forest dark:text-white" : "text-forest/30 dark:text-white/30"
+                  <span className={`text-[13px] font-black uppercase tracking-[0.25em] text-center relative z-10 whitespace-nowrap transition-colors duration-500 ${
+                    isActive ? "text-forest dark:text-white" : "text-white/10 group-hover:text-white/40"
                   }`}>
                     {catConfig.label}
                   </span>
@@ -550,7 +550,8 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
                   {isActive && (
                     <motion.div 
                       layoutId="active-indicator"
-                      className="absolute -bottom-2 w-3 h-3 bg-accent rounded-full shadow-[0_0_20px_rgba(255,127,80,0.8)]"
+                      className="absolute -bottom-4 w-4 h-4 bg-accent rounded-full"
+                      style={{ boxShadow: "0 0 30px rgba(255,127,80,1)" }}
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
                       transition={{ type: "spring", stiffness: 500, damping: 15 }}
