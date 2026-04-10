@@ -57,13 +57,14 @@ export default function PlaceDetailClient({ place, nearbyPlaces }: PlaceDetailCl
 
   return (
     <main className="min-h-screen bg-[#F8FAF9] dark:bg-forest-dark pb-32">
-      {/* [v0.14.1] High-Visibility Floating Back Button */}
+      {/* [v0.14.3] Enhanced Floating Back Button with Deployment Tracker */}
       <Link 
         href="/" 
-        className="fixed top-8 left-6 z-[90] group flex items-center gap-2 px-5 py-3 bg-forest/90 dark:bg-accent/90 backdrop-blur-3xl rounded-2xl border border-white/20 text-white shadow-[0_20px_50px_rgba(0,0,0,0.3)] transition-all hover:scale-105 active:scale-95 md:top-12 md:left-12"
+        data-version="0.14.3"
+        className="fixed top-8 left-6 z-[95] group flex items-center gap-2 px-5 py-3 bg-forest-dark/95 dark:bg-accent/90 backdrop-blur-3xl rounded-2xl border border-white/20 text-white shadow-[0_20px_60px_rgba(0,0,0,0.5)] transition-all hover:scale-110 active:scale-95 md:top-12 md:left-12"
       >
         <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
-        <span className="text-[11px] font-black uppercase tracking-[0.2em]">
+        <span className="text-[11px] font-black uppercase tracking-[0.2em] drop-shadow-sm">
           {dict.common.backToList}
         </span>
       </Link>
