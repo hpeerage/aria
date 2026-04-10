@@ -76,6 +76,9 @@ const getCategoryConfig = (cat: string, dict: any, customIcon?: string, customCo
 
   if (cat === dict.common.all) return { icon: LayoutGrid, label: dict.common.all, bg: "bg-forest/10 dark:bg-white/20", color: "text-forest dark:text-white" };
   if (cat === dict.common.nearMe) return { icon: Navigation, label: dict.common.nearMe, bg: "bg-accent/10", color: "text-accent" };
+  if (cat === "nature") 
+    return { icon: Trees, label: (dict.categories as any).nature || cat, bg: "bg-emerald-500/10", color: "text-emerald-500" };
+
   if (cat === "water") 
     return { icon: Droplets, label: (dict.categories as any).water || cat, bg: "bg-sky-500/10", color: "text-sky-500" };
   
@@ -502,7 +505,7 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
           {/* 💻 Desktop Icon Grid View (hidden md:flex) */}
           <div 
             ref={scrollRef}
-            className="hidden md:flex gap-6 md:gap-8 overflow-x-auto pt-24 pb-28 md:pt-32 md:pb-48 scrollbar-hide snap-x snap-proximity px-12"
+            className="hidden md:flex gap-6 md:gap-8 overflow-x-auto pt-24 pb-32 md:pt-32 md:pb-56 scrollbar-hide snap-x snap-proximity px-12"
           >
             {categories.map((cat) => {
               const catConfig = getCategoryConfig(cat, dict);
@@ -528,8 +531,8 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
                   }}
                   className={`relative group flex-shrink-0 flex flex-col items-center justify-center p-8 md:p-10 min-w-[140px] md:min-w-[160px] h-40 md:h-44 rounded-[3rem] transition-all duration-700 border snap-center ${
                     isActive 
-                      ? `bg-white dark:bg-white/10 shadow-[0_45px_100px_-15px_rgba(0,0,0,0.5)] border-white/20 z-20 backdrop-blur-3xl` 
-                      : "bg-white/[0.03] dark:bg-white/[0.02] border-white/5 dark:border-white/[0.03] hover:bg-white/[0.08] hover:border-white/10 shadow-2xl backdrop-blur-md"
+                      ? `bg-white dark:bg-white/10 shadow-[0_45px_100px_-15px_rgba(26,67,47,0.15)] dark:shadow-[0_45px_100px_-15px_rgba(0,0,0,0.5)] border-forest/10 dark:border-white/20 z-20 backdrop-blur-3xl` 
+                      : "bg-forest/[0.03] dark:bg-white/[0.02] border-forest/5 dark:border-white/[0.03] hover:bg-forest/[0.08] dark:hover:bg-white/[0.08] hover:border-forest/10 dark:hover:border-white/10 shadow-xl backdrop-blur-md"
                   }`}
                 >
                   {/* Premium Neon Glow for Active Category */}
@@ -541,13 +544,13 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
                   )}
                   
                   <div className={`p-4 rounded-[1.5rem] mb-4 transition-all duration-500 group-hover:rotate-12 relative z-10 ${
-                    isActive ? `${catConfig.bg} ${catConfig.color} shadow-[0_10px_30px_rgba(0,0,0,0.2)]` : "bg-white/5 text-white/20 group-hover:text-white/60"
+                    isActive ? `${catConfig.bg} ${catConfig.color} shadow-[0_10px_30px_rgba(0,0,0,0.2)]` : "bg-forest/[0.05] dark:bg-white/5 text-forest/20 dark:text-white/20 group-hover:text-forest/60 dark:group-hover:text-white/60"
                   }`}>
                     <Icon className={`w-7 h-7 ${cat === dict.common.nearMe && isLocating ? "animate-spin" : ""}`} />
                   </div>
                   
                   <span className={`text-[13px] font-black uppercase tracking-[0.25em] text-center relative z-10 whitespace-nowrap transition-colors duration-500 ${
-                    isActive ? "text-forest dark:text-white" : "text-white/10 group-hover:text-white/40"
+                    isActive ? "text-forest dark:text-white" : "text-forest/30 dark:text-white/10 group-hover:text-forest/60 dark:group-hover:text-white/40"
                   }`}>
                     {catConfig.label}
                   </span>
