@@ -225,18 +225,18 @@ function CustomMarker({ place, onClick }: { place: Place; onClick: () => void })
     >
        <div className="relative group cursor-pointer">
           {/* Enhanced Glow Effect (Radial Gradient for smoothness) */}
-          <div className="absolute -inset-2 rounded-full opacity-30 group-hover:opacity-60 transition-opacity duration-500" 
+          <div className="absolute -inset-1 rounded-full opacity-30 group-hover:opacity-60 transition-opacity duration-500" 
                style={{ background: `radial-gradient(circle, ${color} 0%, transparent 70%)` }} />
           
           <div 
-            className={`relative flex items-center justify-center w-7 h-7 rounded-full border-2 border-white shadow-[0_5px_15px_-3px_rgba(0,0,0,0.3)] transform group-hover:scale-125 group-hover:-translate-y-2 transition-all duration-500 text-white`}
+            className={`relative flex items-center justify-center w-[18px] h-[18px] rounded-full border border-white shadow-[0_3px_10px_-2px_rgba(0,0,0,0.3)] transform group-hover:scale-150 group-hover:-translate-y-1.5 transition-all duration-500 text-white`}
             style={{ backgroundColor: color }}
           >
-             <IconComp className="w-3.5 h-3.5 drop-shadow-sm" />
+             <IconComp className="w-2.5 h-2.5 drop-shadow-sm" />
              
              {/* Vibrant Pin Tail */}
-             <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 rotate-45 bg-white shadow-sm" />
-             <div className="absolute -bottom-0.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rotate-45" style={{ backgroundColor: color }} />
+             <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rotate-45 bg-white shadow-sm" />
+             <div className="absolute -bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 rotate-45" style={{ backgroundColor: color }} />
           </div>
        </div>
     </AdvancedMarker>
