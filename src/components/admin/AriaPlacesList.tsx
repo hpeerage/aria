@@ -93,7 +93,7 @@ export default function AriaPlacesList({ places, setPlaces, serverPlaces, onFocu
           />
         </div>
         
-        <div className="flex items-center gap-2 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 scrollbar-hide">
+        <div className="flex items-center gap-4 overflow-x-auto w-full md:w-auto py-6 scrollbar-hide">
           <Filter className="w-5 h-5 text-white/20 mr-2 flex-shrink-0" />
           {categories.map((cat) => (
             <button

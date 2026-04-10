@@ -502,7 +502,7 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
           {/* 💻 Desktop Icon Grid View (hidden md:flex) */}
           <div 
             ref={scrollRef}
-            className="hidden md:flex gap-6 md:gap-8 overflow-x-auto py-10 md:py-16 scrollbar-hide snap-x snap-proximity px-12 pb-24 md:pb-40"
+            className="hidden md:flex gap-6 md:gap-8 overflow-x-auto pt-24 pb-28 md:pt-32 md:pb-48 scrollbar-hide snap-x snap-proximity px-12"
           >
             {categories.map((cat) => {
               const catConfig = getCategoryConfig(cat, dict);
