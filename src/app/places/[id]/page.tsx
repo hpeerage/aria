@@ -1,7 +1,7 @@
 import { getPlacesFromGoogleSheet } from "@/lib/google-sheets";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
-import PlaceDetailClient from "@/components/PlaceDetailClient";
+import AriaPlaceDetail from "@/components/PlaceDetailClient";
 
 const SHEET_ID = '1Setffm27HQ8LyOM3N9o9V8eA0ihGbZeZgN763jkm1WU';
 
@@ -89,7 +89,7 @@ export default async function PlaceDetailPage({ params }: { params: { id: string
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <PlaceDetailClient place={place} nearbyPlaces={nearbyPlaces} />
+      <AriaPlaceDetail place={place} nearbyPlaces={nearbyPlaces} />
     </>
   );
 }
