@@ -163,7 +163,7 @@ export default function DashboardPage() {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center space-y-6">
         <div className="w-12 h-12 border-4 border-accent/20 border-t-accent rounded-full animate-spin" />
-        <p className="text-white/40 font-black uppercase tracking-[0.3em] text-xs animate-pulse">Initializing Dashboard...</p>
+        <p className="text-white/40 font-black uppercase tracking-[0.3em] text-xs animate-pulse">v0.12.5 Initializing Dashboard...</p>
       </div>
     );
   }
@@ -222,14 +222,14 @@ export default function DashboardPage() {
           <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
             {Object.entries(categoriesDict).map(([key, label]) => {
               const count = stats.categories[key] || 0;
-              const config = categoryConfigs[key] || { icon: Map, color: "text-white" };
-              const Icon = config.icon;
+              const catConfig = categoryConfigs[key] || { icon: Map, color: "text-white" };
+              const Icon = catConfig.icon;
               const percentage = stats.total > 0 ? (count / stats.total) * 100 : 0;
 
               return (
                 <div key={key} className="p-6 bg-white/5 border border-white/5 rounded-[2rem] space-y-4 group hover:border-accent/40 transition-all">
                   <div className="flex items-start justify-between">
-                    <div className={`p-3 bg-white/5 rounded-xl ${config.color}`}>
+                    <div className={`p-3 bg-white/5 rounded-xl ${catConfig.color}`}>
                       <Icon className="w-5 h-5" />
                     </div>
                     <span className="text-xl font-black text-white">{count}</span>

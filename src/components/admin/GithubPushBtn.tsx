@@ -15,8 +15,8 @@ export default function GithubPushBtn() {
     setMounted(true);
     const configStr = localStorage.getItem("aria_github_config");
     if (configStr) {
-      const config = JSON.parse(configStr);
-      setHasCloudToken(!!config.token);
+      const gConfig = JSON.parse(configStr);
+      setHasCloudToken(!!gConfig.token);
     }
   }, []);
 

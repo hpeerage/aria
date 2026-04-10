@@ -438,9 +438,9 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
                     className="absolute top-[110%] left-4 right-4 bg-white/95 dark:bg-forest-dark/95 border border-forest/10 dark:border-white/10 rounded-[2.5rem] shadow-2xl backdrop-blur-3xl overflow-hidden p-3 space-y-2"
                   >
                     {categories.map((cat) => {
-                      const config = getCategoryConfig(cat, dict);
+                      const catConfig = getCategoryConfig(cat, dict);
                       const isActive = selectedCategory === cat;
-                      const Icon = config.icon;
+                      const Icon = catConfig.icon;
 
                       return (
                         <button
@@ -460,10 +460,10 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
                               : "hover:bg-forest/5 dark:hover:bg-white/5 text-forest/70 dark:text-white/70"
                           }`}
                         >
-                          <div className={`p-2 rounded-lg ${isActive ? "bg-white/20 text-white" : `${config.bg} ${config.color}`}`}>
+                          <div className={`p-2 rounded-lg ${isActive ? "bg-white/20 text-white" : `${catConfig.bg} ${catConfig.color}`}`}>
                             <Icon className="w-4 h-4" />
                           </div>
-                          <span className="text-sm font-black tracking-tight">{config.label}</span>
+                          <span className="text-sm font-black tracking-tight">{catConfig.label}</span>
                         </button>
                       );
                     })}
@@ -479,9 +479,9 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
             className="hidden md:flex gap-4 md:gap-6 overflow-x-auto py-8 md:py-12 scrollbar-hide snap-x snap-proximity px-8 pb-20 md:pb-32"
           >
             {categories.map((cat) => {
-              const config = getCategoryConfig(cat, dict);
+              const catConfig = getCategoryConfig(cat, dict);
               const isActive = selectedCategory === cat;
-              const Icon = config.icon;
+              const Icon = catConfig.icon;
 
               return (
                 <motion.button
@@ -510,12 +510,12 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
                   {isActive && (
                     <motion.div 
                       layoutId="active-glow"
-                      className={`absolute inset-0 rounded-[2.5rem] blur-3xl opacity-40 transition-all duration-700 ${config.bg}`}
+                      className={`absolute inset-0 rounded-[2.5rem] blur-3xl opacity-40 transition-all duration-700 ${catConfig.bg}`}
                     />
                   )}
                   
                   <div className={`p-3 rounded-[1.2rem] mb-3 transition-all duration-500 group-hover:rotate-6 relative z-10 ${
-                    isActive ? `${config.bg} ${config.color} shadow-lg shadow-black/5` : "bg-forest/5 dark:bg-white/10 text-forest/40 dark:text-white/40"
+                    isActive ? `${catConfig.bg} ${catConfig.color} shadow-lg shadow-black/5` : "bg-forest/5 dark:bg-white/10 text-forest/40 dark:text-white/40"
                   }`}>
                     <Icon className={`w-5 h-5 ${cat === dict.common.nearMe && isLocating ? "animate-spin" : ""}`} />
                   </div>
@@ -523,7 +523,7 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
                   <span className={`text-[11px] font-black uppercase tracking-[0.2em] text-center relative z-10 whitespace-nowrap ${
                     isActive ? "text-forest dark:text-white" : "text-forest/30 dark:text-white/30"
                   }`}>
-                    {config.label}
+                    {catConfig.label}
                   </span>
 
                   {isActive && (
