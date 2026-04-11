@@ -542,7 +542,15 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
                   className={`relative group flex-shrink-0 flex flex-col items-center justify-center p-6 md:p-8 min-w-[120px] md:min-w-[140px] h-32 md:h-36 rounded-[2.5rem] transition-all duration-700 border snap-center ${
                     isActive 
                       ? `bg-white dark:bg-white/10 shadow-[0_30px_60px_-15px_rgba(26,67,47,0.15)] dark:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.5)] border-forest/10 dark:border-white/20 z-20 backdrop-blur-3xl` 
-                      : "bg-forest/[0.03] dark:bg-white/[0.02] border-forest/5 dark:border-white/[0.03] hover:bg-forest/[0.08] dark:hover:bg-white/[0.08] hover:border-forest/10 dark:hover:border-white/10 shadow-xl backdrop-blur-md"
+                      : `bg-forest/[0.03] dark:bg-white/[0.02] border-forest/5 dark:border-white/[0.03] shadow-xl backdrop-blur-md transition-colors duration-300
+                         ${cat === "nature" ? "hover:bg-emerald-500/10 hover:border-emerald-500/20" : ""}
+                         ${cat === "water" ? "hover:bg-sky-500/10 hover:border-sky-500/20" : ""}
+                         ${cat === "activity" ? "hover:bg-rose-500/10 hover:border-rose-500/20" : ""}
+                         ${cat === "food" ? "hover:bg-orange-500/10 hover:border-orange-500/20" : ""}
+                         ${cat === "culture" ? "hover:bg-amber-500/10 hover:border-amber-500/20" : ""}
+                         ${cat === "stay" ? "hover:bg-indigo-500/10 hover:border-indigo-500/20" : ""}
+                         ${cat === dict.common.nearMe || cat === dict.common.all ? "hover:bg-forest/10 dark:hover:bg-white/10 hover:border-forest/20 dark:hover:border-white/20" : ""}
+                        `
                   }`}
                 >
                   {/* Premium Neon Glow for Active Category */}
