@@ -21,25 +21,10 @@ export default function ShareButton({ place, className = "" }: ShareButtonProps)
   const shareTitle = (dict.common.shareTitle as string).replace("{name}", place.name);
   const shareText = place.description || (dict.common.shareDescription as string).replace("{name}", place.name);
 
-  const handleShare = async () => {
-    // 모바일에서 네이티브 공유창 우선 호출
-    if (typeof navigator !== "undefined" && navigator.share) {
-      try {
-        await navigator.share({
-          title: shareTitle,
-          text: shareText,
-          url: shareUrl,
-        });
-        return;
-      } catch (err) {
-        // 사용자가 취소한 경우는 무시, 그 외 에러는 팝업 폴백
-        if ((err as Error).name !== "AbortError") {
-          console.error("Error sharing:", err);
-        }
-      }
-    }
+  const handleShare = () => {
     setIsOpen(true);
   };
+
 
   const copyToClipboard = async () => {
     try {
