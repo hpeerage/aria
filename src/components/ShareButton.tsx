@@ -17,8 +17,8 @@ export default function ShareButton({ place, className = "" }: ShareButtonProps)
   const [isCopied, setIsCopied] = useState(false);
 
   const shareUrl = typeof window !== "undefined" ? `${window.location.origin}/aria/places/${place.id}` : "";
-  const shareTitle = `${place.name} - 정선 아리아 웰니스 큐레이션`;
-  const shareText = place.description || `${place.name}에서 경험하는 정선의 치유 에너지.`;
+  const shareTitle = (dict.common.shareTitle as string).replace("{name}", place.name);
+  const shareText = place.description || (dict.common.shareDescription as string).replace("{name}", place.name);
 
   const handleShare = async () => {
     // 모바일에서 네이티브 공유창 우선 호출
@@ -83,7 +83,7 @@ export default function ShareButton({ place, className = "" }: ShareButtonProps)
       });
     } else {
       // 카카오 미설치 또는 초기화 실패 시 링크 복사로 유도
-      alert("카카오톡 공유가 준비되지 않았습니다. 링크를 복사하여 공유해 주세요.");
+      alert(dict.common.kakaoNotReady);
       copyToClipboard();
     }
   };

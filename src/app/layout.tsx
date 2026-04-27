@@ -56,6 +56,7 @@ import { LanguageProvider } from "@/lib/i18n/context";
 import { WishlistProvider } from "@/lib/wishlist/context";
 import FloatingCart from "@/components/FloatingCart";
 import WishlistPanel from "@/components/WishlistPanel";
+import KakaoScript from "@/components/KakaoScript";
 
 export default function RootLayout({
   children,
@@ -72,18 +73,11 @@ export default function RootLayout({
             {children}
             <FloatingCart />
             <WishlistPanel />
-            <Script
-              src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.0/kakao.min.js"
-              strategy="afterInteractive"
-              onLoad={() => {
-                if (typeof window !== "undefined" && (window as any).Kakao && !(window as any).Kakao.isInitialized()) {
-                  (window as any).Kakao.init(process.env.NEXT_PUBLIC_KAKAO_JS_KEY || "");
-                }
-              }}
-            />
+            <KakaoScript />
           </WishlistProvider>
         </LanguageProvider>
       </body>
     </html>
   );
 }
+

@@ -18,7 +18,11 @@ export const dictionaries = {
       nearbyTreasures: "주변의 또 다른 보물들",
       story: "장소의 이야기",
       copyRight: "© 2026 정선 웰니스 관광 프로젝트. All Rights Reserved.",
-      share: "공유하기"
+      share: "공유하기",
+      shareTitle: "{name} - 정선 아리아 웰니스 큐레이션",
+      shareDescription: "{name}에서 경험하는 정선의 치유 에너지.",
+      kakaoNotReady: "카카오톡 공유가 준비되지 않았습니다. 링크를 복사하여 공유해 주세요.",
+      copied: "링크가 복사되었습니다."
     },
     categories: {
       nature: "자연/숲",
@@ -136,7 +140,11 @@ export const dictionaries = {
       nearbyPlaces: "Nearby Places",
       story: "The Story",
       copyRight: "© 2026 Jeongseon Wellness Tourism Project. All Rights Reserved.",
-      share: "Share"
+      share: "Share",
+      shareTitle: "{name} - Jeongseon Aria Wellness Curation",
+      shareDescription: "Experience the healing energy of Jeongseon at {name}.",
+      kakaoNotReady: "KakaoTalk share is not ready. Please copy the link instead.",
+      copied: "Link copied to clipboard."
     },
     categories: {
       nature: "Nature/Forest",

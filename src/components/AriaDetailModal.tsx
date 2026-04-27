@@ -141,26 +141,35 @@ export default function AriaDetailModal({ place, onClose, allPlaces }: AriaDetai
               </section>
 
               {/* Wellness Tip */}
-              <section className="bg-accent/[0.05] dark:bg-white/10 p-8 rounded-[2rem] border border-accent/20 dark:border-white/20 relative overflow-hidden group hover:bg-accent/[0.08] transition-colors shadow-lg shadow-black/10">
-                <div className="absolute -right-8 -bottom-8 text-accent/10 group-hover:text-accent/20 transition-all duration-500">
-                  <Sparkles className="w-32 h-32 rotate-12" />
+              <section className="relative group bg-gradient-to-br from-accent/[0.08] to-transparent dark:from-white/10 dark:to-transparent p-12 rounded-[3.5rem] border border-accent/20 dark:border-white/20 overflow-hidden shadow-2xl hover:shadow-accent/5 transition-all duration-1000">
+                <div className="absolute -right-8 -bottom-8 text-accent/5 group-hover:text-accent/10 group-hover:rotate-12 transition-all duration-1000">
+                  <Sparkles className="w-64 h-64" />
                 </div>
-                <div className="relative z-10 space-y-4">
-                  <div className="flex items-center gap-2 text-accent font-black uppercase text-xs tracking-widest">
-                    <Sparkles className="w-4 h-4" />
-                    Wellness Insight
+                <div className="relative z-10 space-y-8">
+                  <div className="flex items-center gap-4">
+                    <div className="p-3 bg-accent/10 rounded-2xl">
+                      <Sparkles className="w-6 h-6 text-accent animate-pulse" />
+                    </div>
+                    <span className="text-xs font-black uppercase tracking-[0.4em] text-accent">Curated Wellness Insight</span>
                   </div>
-                  <h4 className="text-xl font-black text-foreground dark:text-white">{dict.common.wellnessTip}</h4>
-                  <div className="space-y-3">
+                  <h3 className="text-3xl font-black text-foreground dark:text-white">{dict.common.wellnessTip}</h3>
+                  <div className="space-y-5">
                     {place.wellnessTips && place.wellnessTips.length > 0 ? (
                       place.wellnessTips.map((tip, idx) => (
-                        <div key={idx} className="flex gap-3 text-sm font-bold text-foreground/70 dark:text-white/90 leading-relaxed list-item list-inside marker:text-accent">
+                        <motion.div 
+                          key={idx} 
+                          initial={{ opacity: 0, x: -20 }}
+                          whileInView={{ opacity: 1, x: 0 }}
+                          transition={{ delay: idx * 0.1 }}
+                          className="flex gap-5 text-base font-bold text-foreground/70 dark:text-white/80 leading-relaxed"
+                        >
+                          <div className="mt-2.5 w-2 h-2 bg-accent rounded-full shrink-0 shadow-[0_0_10px_rgba(255,255,255,0.5)]" />
                           {tip}
-                        </div>
+                        </motion.div>
                       ))
                     ) : (
-                      <p className="text-sm font-bold text-foreground/70 dark:text-white/90 leading-relaxed">
-                        숨겨진 82개의 보물 중 하나인 이곳은 바쁜 일상을 잠시 잊고, 정선의 맑은 정기와 함께 영혼의 질서를 되찾기에 가장 최적화된 공간입니다. 30분 정도의 느린 걸음으로 공간의 정적을 느껴보세요.
+                      <p className="text-base font-bold text-foreground/70 dark:text-white/80 leading-relaxed italic">
+                        정선의 맑은 공기와 고요한 숲이 어우러진 이곳은 당신의 영혼이 진정한 휴식을 취할 수 있는 최적의 장소입니다. 잠시 눈을 감고 당신 내면의 아리아에 집중해 보세요.
                       </p>
                     )}
                   </div>
