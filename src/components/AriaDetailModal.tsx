@@ -5,6 +5,7 @@ import { Place } from "@/types/place";
 import { X, MapPin, Tag, Sparkles, Navigation, Share2, Compass, ArrowRight } from "lucide-react";
 import { useLanguage } from "@/lib/i18n/context";
 import NavigationSelector from "./NavigationSelector";
+import ShareButton from "./ShareButton";
 import { useState } from "react";
 
 interface AriaDetailModalProps {
@@ -119,9 +120,7 @@ export default function AriaDetailModal({ place, onClose, allPlaces }: AriaDetai
                 >
                   <Navigation className="w-5 h-5" />
                 </button>
-                  <button className="p-3 bg-foreground/5 text-foreground hover:bg-foreground/10 rounded-2xl transition-all active:scale-95">
-                    <Share2 className="w-5 h-5" />
-                  </button>
+                  <ShareButton place={place} />
                 </div>
                 <button 
                    onClick={onClose}

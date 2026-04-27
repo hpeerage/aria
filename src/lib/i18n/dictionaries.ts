@@ -17,7 +17,8 @@ export const dictionaries = {
       wellnessTip: "정선 아리아가 전하는 웰니스 팁",
       nearbyTreasures: "주변의 또 다른 보물들",
       story: "장소의 이야기",
-      copyRight: "© 2026 정선 웰니스 관광 프로젝트. All Rights Reserved."
+      copyRight: "© 2026 정선 웰니스 관광 프로젝트. All Rights Reserved.",
+      share: "공유하기"
     },
     categories: {
       nature: "자연/숲",
@@ -134,7 +135,8 @@ export const dictionaries = {
       nearbyTreasures: "Nearby Treasures",
       nearbyPlaces: "Nearby Places",
       story: "The Story",
-      copyRight: "© 2026 Jeongseon Wellness Tourism Project. All Rights Reserved."
+      copyRight: "© 2026 Jeongseon Wellness Tourism Project. All Rights Reserved.",
+      share: "Share"
     },
     categories: {
       nature: "Nature/Forest",

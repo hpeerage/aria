@@ -8,6 +8,7 @@ import { Place } from "@/types/place";
 import { useLanguage } from "@/lib/i18n/context";
 import AriaMap from "./AriaMap";
 import NavigationSelector from "./NavigationSelector";
+import ShareButton from "./ShareButton";
 import { NavTarget } from "@/lib/navigation";
 
 interface AriaPlaceDetailProps {
@@ -191,9 +192,7 @@ export default function AriaPlaceDetail({ place, nearbyPlaces }: AriaPlaceDetail
                   >
                     <Navigation className="w-5 h-5" />
                   </button>
-                  <button className="p-3 bg-foreground/5 text-foreground hover:bg-foreground/10 rounded-2xl transition-all active:scale-95">
-                    <Share2 className="w-5 h-5" />
-                  </button>
+                  <ShareButton place={displayPlace} />
                 </div>
               </div>
 

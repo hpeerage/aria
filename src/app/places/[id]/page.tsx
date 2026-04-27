@@ -23,6 +23,8 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
   
   if (!place) return { title: "Place Not Found - Jeongseon Aria" };
 
+  const ogImage = place.images && place.images.length > 0 ? place.images[0] : "https://hpeerage.github.io/aria/og-image.jpg";
+  
   return {
     title: `${place.name} - 정선 아리아 웰니스 큐레이션`,
     description: place.description || `${place.name}에서 경험하는 정선의 치유 에너지.`,
@@ -32,7 +34,7 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
     openGraph: {
       title: place.name,
       description: place.description,
-      images: ["/aria/og-image.jpg"],
+      images: [ogImage],
       url: `https://hpeerage.github.io/aria/places/${params.id}`,
       type: "article",
     },
@@ -40,7 +42,7 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
       card: "summary_large_image",
       title: place.name,
       description: place.description,
-      images: ["/aria/og-image.jpg"],
+      images: [ogImage],
     },
   };
 }
@@ -69,7 +71,7 @@ export default async function PlaceDetailPage({ params }: { params: { id: string
     "@type": "Place",
     "name": place.name,
     "description": place.description,
-    "image": "https://hpeerage.github.io/aria/og-image.jpg",
+    "image": place.images && place.images.length > 0 ? place.images[0] : "https://hpeerage.github.io/aria/og-image.jpg",
     "geo": {
       "@type": "GeoCoordinates",
       "latitude": place.coordinates.lat,
