@@ -1,7 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    output: 'export',
+    output: 'export', 
     basePath: '/aria',
+
+
     trailingSlash: true,
     images: {
           unoptimized: true,

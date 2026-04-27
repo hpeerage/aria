@@ -1,6 +1,6 @@
 "use client";
 
-import { APIProvider, Map, AdvancedMarker, InfoWindow, useMap } from "@vis.gl/react-google-maps";
+import { APIProvider, Map, Marker, InfoWindow, useMap } from "@vis.gl/react-google-maps";
 import { Place } from "@/types/place";
 import { useState, useEffect } from "react";
 import { MapPin, Info, ArrowRight, Mountain, Palette, Utensils, Sparkles, Landmark, Bed, Trees, Palmtree, Home, MoreHorizontal, Droplets, Navigation, Star, Heart, Camera, Compass, Coffee, ShoppingBag, Ticket, Flag, Flame, Wind, Sunrise } from "lucide-react";
@@ -90,37 +90,34 @@ export default function AriaMap({ places, onMarkerClick, userLocation, focusedPl
 
   return (
     <div 
-      key={`map-container-${places.length}`} 
+      key="map-container-fixed" 
       className={className || "w-full h-[600px] rounded-[3rem] overflow-hidden shadow-2xl border-4 border-white dark:border-forest-dark relative group"}
     >
-      <APIProvider apiKey={apiKey} version="weekly" libraries={['marker']}>
+
+      <APIProvider apiKey={apiKey}>
         <Map
           defaultCenter={{ lat: 37.3806, lng: 128.6608 }}
           defaultZoom={11}
           gestureHandling={"greedy"}
           disableDefaultUI={false}
           className="w-full h-full"
-          mapId="cfbaaba5db65c27fc5138e79" 
           clickableIcons={false}
         >
           <MapController places={places} focusedPlace={focusedPlace} />
           {places.map((place) => (
-            <CustomMarker 
+            <Marker 
               key={`${place.id}-${places.length}`} 
-              place={place} 
-              onClick={() => {
-                setSelectedPlace(place);
-              }}
+              position={{ lat: place.coordinates.lat, lng: place.coordinates.lng }}
+              onClick={() => setSelectedPlace(place)}
+              title={place.name}
             />
           ))}
 
           {userLocation && (
-            <AdvancedMarker
+            <Marker
               position={userLocation}
               title="현재 위치"
-            >
-              <div className="w-4 h-4 bg-blue-500 rounded-full border-2 border-white shadow-lg animate-pulse" />
-            </AdvancedMarker>
+            />
           )}
 
           {selectedPlace && (
