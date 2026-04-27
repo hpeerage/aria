@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Share2, Link2, X, Check } from "lucide-react";
+import { Share2, Link2, X, Check, Instagram } from "lucide-react";
 import { Place } from "@/types/place";
 import { useLanguage } from "@/lib/i18n/context";
 
@@ -36,8 +36,9 @@ export default function ShareButton({ place, className = "" }: ShareButtonProps)
     }
   };
 
-  const shareToFacebook = () => {
-    window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`, "_blank");
+  const shareToInstagram = () => {
+    copyToClipboard();
+    alert("링크가 복사되었습니다. 인스타그램 스토리나 게시물에 붙여넣어 공유해 보세요!");
   };
 
   const shareToTwitter = () => {
@@ -124,10 +125,10 @@ export default function ShareButton({ place, className = "" }: ShareButtonProps)
                   icon={<img src="https://developers.kakao.com/assets/img/about/logos/kakaotalksharing/kakaotalk_sharing_btn_medium.png" className="w-6 h-6" alt="Kakao" />} 
                 />
                 <ShareIcon 
-                  onClick={shareToFacebook} 
-                  label="Facebook" 
-                  color="bg-[#1877F2]" 
-                  icon={<svg className="w-6 h-6 text-white fill-current" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>} 
+                  onClick={shareToInstagram} 
+                  label="Instagram" 
+                  color="bg-gradient-to-tr from-[#f9ce34] via-[#ee2a7b] to-[#6228d7]" 
+                  icon={<Instagram className="w-6 h-6 text-white" />} 
                 />
                 <ShareIcon 
                   onClick={shareToTwitter} 
