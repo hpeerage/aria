@@ -16,7 +16,8 @@ export default function ShareButton({ place, className = "" }: ShareButtonProps)
   const [isOpen, setIsOpen] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
 
-  const shareUrl = typeof window !== "undefined" ? `${window.location.origin}/aria/places/${place.id}` : "";
+  const shareUrl = typeof window !== "undefined" ? `${window.location.origin}/aria/places/${place.id}/` : "";
+
   const shareTitle = (dict.common.shareTitle as string).replace("{name}", place.name);
   const shareText = place.description || (dict.common.shareDescription as string).replace("{name}", place.name);
 
@@ -60,17 +61,23 @@ export default function ShareButton({ place, className = "" }: ShareButtonProps)
 
   const shareToKakao = () => {
     if ((window as any).Kakao && (window as any).Kakao.isInitialized()) {
+      const rawImageUrl = place.images?.[0] || 'https://hpeerage.github.io/aria/og-image.jpg';
+      const absoluteImageUrl = rawImageUrl.startsWith('http') 
+        ? rawImageUrl 
+        : `${window.location.origin}${rawImageUrl}`;
+
       (window as any).Kakao.Share.sendDefault({
         objectType: 'feed',
         content: {
           title: shareTitle,
           description: shareText,
-          imageUrl: place.images?.[0] || 'https://hpeerage.github.io/aria/og-image.jpg',
+          imageUrl: absoluteImageUrl,
           link: {
             mobileWebUrl: shareUrl,
             webUrl: shareUrl,
           },
         },
+
         buttons: [
           {
             title: '자세히 보기',
