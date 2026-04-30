@@ -47,9 +47,11 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [locale, setLocale] = useState<Locale>("ko");
   const [overrides, setOverrides] = useState<Overrides>({});
+  const [isMounted, setIsMounted] = useState(false);
 
   // localStorage에서 오버라이드 로드
   useEffect(() => {
+    setIsMounted(true);
     try {
       const stored = localStorage.getItem(OVERRIDE_KEY);
       if (stored) {
@@ -61,10 +63,13 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   // 기본 딕셔너리에 오버라이드 딥 머지
   const buildDict = useCallback((loc: Locale, ovr: Overrides): Dictionary => {
     const base = dictionaries[loc];
+    // 하이드레이션 불일치 방지: 마운트 전에는 오버라이드를 적용하지 않음
+    if (!isMounted) return base;
+    
     const override = ovr[loc as keyof Overrides];
     if (!override) return base;
     return deepMerge(base as unknown as Record<string, unknown>, override as Record<string, unknown>) as unknown as Dictionary;
-  }, []);
+  }, [isMounted]);
 
   const dict = buildDict(locale, overrides);
   const allDicts = {
