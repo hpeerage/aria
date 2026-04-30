@@ -3,6 +3,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, Save, MapPin, Tag, Sparkles, Image as ImageIcon, CheckCircle2, Upload, X, Trees, Droplets, Utensils, Palmtree, Home, Star, Heart, Camera, Info, Landmark, Bed, Mountain, Palette, Compass, Navigation, Coffee, ShoppingBag, Ticket, Flag, Flame, Wind, Sunrise, Landmark as LandmarkIcon } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { Place } from "@/types/place";
@@ -123,7 +124,7 @@ export default function PlaceEditForm({ isNew = false }: { isNew?: boolean }) {
     loadPlace();
   }, [id, isNew]);
 
-  const handleInputChange = (field: string, value: any) => {
+  const handleInputChange = (field: string, value: string | number | undefined) => {
     if (!formData) return;
     if (field.includes('.')) {
       const [parent, child] = field.split('.');
@@ -132,7 +133,7 @@ export default function PlaceEditForm({ isNew = false }: { isNew?: boolean }) {
         [parent]: { ...((formData as any)[parent]), [child]: value }
       });
     } else {
-      setFormData({ ...formData, [field]: value });
+      setFormData({ ...formData, [field]: value } as Place);
     }
   };
 
@@ -195,7 +196,7 @@ export default function PlaceEditForm({ isNew = false }: { isNew?: boolean }) {
           
           const localListStr = localStorage.getItem('aria_local_places');
           const localList = localListStr ? JSON.parse(localListStr) : [];
-          const existingIdx = localList.findIndex((p: any) => p.id === finalData.id);
+          const existingIdx = localList.findIndex((p: Place) => p.id === finalData.id);
           
           if (existingIdx >= 0) {
             localList[existingIdx] = listData;
@@ -210,10 +211,10 @@ export default function PlaceEditForm({ isNew = false }: { isNew?: boolean }) {
             setIsSuccess(false);
             router.push("/admin/places");
           }, 1500);
-        } catch (error: any) {
+        } catch (error) {
           console.error("Save failed:", error);
           setIsSaving(false);
-          if (error.name === 'QuotaExceededError') {
+          if (error instanceof Error && error.name === 'QuotaExceededError') {
             alert("저장 공간이 부족합니다! ⚠️\n\n현재 브라우저의 저장 용량(5MB)이 가득 찼습니다.\n\n[해결 방법]\n1. 상단 [Cloud Sync] 버튼을 눌러 지금까지의 수정을 GitHub에 저장하세요.\n2. [Settings] 메뉴로 이동하여 'Clear Local Cache'를 클릭해 공간을 비워주세요.");
           } else {
             alert("저장 중 예상치 못한 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.");
@@ -500,7 +501,7 @@ export default function PlaceEditForm({ isNew = false }: { isNew?: boolean }) {
                         layoutId={`img-${idx}`}
                         className="relative aspect-video bg-white/5 rounded-3xl border border-white/10 group overflow-hidden shadow-2xl hover:border-accent/40 transition-all cursor-pointer"
                       >
-                         <img src={img} alt="Preview" className="w-full h-full object-cover grayscale opacity-40 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700" />
+                         <Image src={img} alt="Preview" fill className="object-cover grayscale opacity-40 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700" />
                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500" />
                          
                          {idx === 0 && (

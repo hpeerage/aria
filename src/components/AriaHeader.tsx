@@ -2,10 +2,10 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, Menu, X, Sparkles, Clock, TrendingUp, ArrowRight } from "lucide-react";
+import { Search, Menu, X, Clock, TrendingUp, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useLanguage } from "@/lib/i18n/context";
 
 export default function AriaHeader() {

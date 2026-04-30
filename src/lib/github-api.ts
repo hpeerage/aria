@@ -58,23 +58,25 @@ export async function commitFileToGitHub(
 
     const result = await putRes.json();
     return { success: true, sha: result.content.sha };
-  } catch (error: any) {
+  } catch (error) {
     console.error("❌ GitHub Sync Error:", error);
     throw error;
   }
 }
 
+import { Place } from "@/types/place";
+
 /**
  * LocalStorage에 저장된 모든 장소 데이터를 수집하여 하나의 JSON으로 만듭니다.
  */
-export function collectAllLocalData(): any[] {
+export function collectAllLocalData(): Place[] {
   if (typeof window === "undefined") return [];
   
   const localListStr = localStorage.getItem('aria_local_places');
   const localList = localListStr ? JSON.parse(localListStr) : [];
   
   // 리스트의 메타데이터를 기반으로 각 상세 데이터를 병합
-  const fullData = localList.map((item: any) => {
+  const fullData = localList.map((item: Place) => {
     const detail = localStorage.getItem(`aria_place_${item.id}`);
     return detail ? JSON.parse(detail) : item;
   });

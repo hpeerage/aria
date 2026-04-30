@@ -113,7 +113,7 @@ export async function getPlacesFromGoogleSheet(sheetId: string, sheetName?: stri
         if (syncRes.ok) {
           syncedPlaces = await syncRes.json();
         }
-      } catch (fetchErr) {
+      } catch {
         // 빌드 타임 환경 등에서 fetch 실패 시 로깅 생략 (폴백 작동)
       }
 

@@ -54,7 +54,7 @@ const AriaItineraryTicket = forwardRef<HTMLDivElement, AriaItineraryTicketProps>
 
               <div className="w-40 h-40 relative rounded-2xl overflow-hidden flex-shrink-0 bg-forest/5">
                 {place.images?.[0] ? (
-                  <img src={place.images[0]} alt={place.name} className="w-full h-full object-cover" />
+                  <Image src={place.images[0]} alt={place.name} fill className="object-cover" unoptimized />
                 ) : (
                   <div className="w-full h-full flex flex-col items-center justify-center text-[10px] font-black text-forest/20 uppercase bg-forest/5">
                     No Image
@@ -95,7 +95,7 @@ const AriaItineraryTicket = forwardRef<HTMLDivElement, AriaItineraryTicketProps>
           
           <div className="w-32 h-32 opacity-10 grayscale invert brightness-0">
             {/* Using img for html2canvas compatibility with local assets if needed */}
-            <img src="/aria/favicon.svg" alt="" className="w-full h-full object-contain" />
+            <Image src="/aria/favicon.svg" alt="" width={128} height={128} className="w-full h-full object-contain" unoptimized />
           </div>
 
           <div className="text-right max-w-[200px]">

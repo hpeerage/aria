@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Settings, Save, Shield, Database, Bell, Layout, Palette, Sliders, Trash2, HardDrive } from "lucide-react";
+import { Settings, Save, Shield, Bell, Palette, Sliders, Trash2, HardDrive } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useLanguage } from "@/lib/i18n/context";
 
@@ -25,7 +25,7 @@ export default function AdminSettingsPage() {
     // 저장 공간 계산 (5MB 기준)
     const calculateStorage = () => {
       let total = 0;
-      for (let x in localStorage) {
+      for (const x in localStorage) {
         if (localStorage.hasOwnProperty(x)) {
           total += (localStorage[x].length + x.length) * 2; 
         }

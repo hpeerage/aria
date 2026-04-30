@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Map as MapIcon, ArrowUp, ArrowDown, FileDown, ExternalLink, Printer, Sparkles, Loader2 } from "lucide-react";
+import { X, Map as MapIcon, ArrowUp, ArrowDown, ExternalLink, Sparkles, Loader2 } from "lucide-react";
 import { useWishlist } from "@/lib/wishlist/context";
 import Image from "next/image";
 import { useState, useRef } from "react";
@@ -143,7 +143,7 @@ export default function WishlistPanel() {
                       >
                          <div className="relative w-20 h-20 rounded-xl overflow-hidden flex-shrink-0 bg-forest/5 print:w-24 print:h-24">
                             {place.images?.[0] ? (
-                              <img src={place.images[0]} alt={place.name} className="w-full h-full object-cover" />
+                              <Image src={place.images[0]} alt={place.name} fill className="object-cover" />
                             ) : (
                               <div className="w-full h-full flex flex-col items-center justify-center text-[10px] font-black text-forest/20 uppercase">
                                 No Image

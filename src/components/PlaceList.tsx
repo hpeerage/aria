@@ -49,8 +49,10 @@ const cardVariants: Variants = {
   },
 };
 
-const getCategoryConfig = (cat: string, dict: any, customIcon?: string, customColor?: string) => {
-  const iconMap: Record<string, any> = {
+import { Dictionary } from "@/lib/i18n/dictionaries";
+
+const getCategoryConfig = (cat: string, dict: Dictionary, customIcon?: string, customColor?: string) => {
+  const iconMap: Record<string, React.ElementType> = {
     nature: Trees, water: Droplets, activity: Sparkles, food: UtensilsCrossed, culture: Palmtree, stay: Home,
     Trees, Droplets, Sparkles, UtensilsCrossed, Palmtree, Home, 
     Star, Heart, Camera, Landmark, Bed, 
@@ -79,24 +81,24 @@ const getCategoryConfig = (cat: string, dict: any, customIcon?: string, customCo
   if (cat === dict.common.all) return { icon: LayoutGrid, label: dict.common.all, bg: "bg-forest/10 dark:bg-white/20", color: "text-forest dark:text-white" };
   if (cat === dict.common.nearMe) return { icon: Navigation, label: dict.common.nearMe, bg: "bg-accent/10", color: "text-accent" };
   if (cat === "nature") 
-    return { icon: Trees, label: (dict.categories as any).nature || cat, bg: "bg-emerald-500/10", color: "text-emerald-500" };
+    return { icon: Trees, label: dict.categories.nature || cat, bg: "bg-emerald-500/10", color: "text-emerald-500" };
 
   if (cat === "water") 
-    return { icon: Droplets, label: (dict.categories as any).water || cat, bg: "bg-sky-500/10", color: "text-sky-500" };
+    return { icon: Droplets, label: dict.categories.water || cat, bg: "bg-sky-500/10", color: "text-sky-500" };
   
   if (cat === "activity") 
-    return { icon: Sparkles, label: (dict.categories as any).activity || cat, bg: "bg-rose-500/10", color: "text-rose-500" };
+    return { icon: Sparkles, label: dict.categories.activity || cat, bg: "bg-rose-500/10", color: "text-rose-500" };
   
   if (cat === "food") 
-    return { icon: UtensilsCrossed, label: (dict.categories as any).food || cat, bg: "bg-orange-500/10", color: "text-orange-500" };
+    return { icon: UtensilsCrossed, label: dict.categories.food || cat, bg: "bg-orange-500/10", color: "text-orange-500" };
   
   if (cat === "culture") 
-    return { icon: Palmtree, label: (dict.categories as any).culture || cat, bg: "bg-amber-500/10", color: "text-amber-500" };
+    return { icon: Palmtree, label: dict.categories.culture || cat, bg: "bg-amber-500/10", color: "text-amber-500" };
   
   if (cat === "stay") 
-    return { icon: Home, label: (dict.categories as any).stay || cat, bg: "bg-indigo-500/10", color: "text-indigo-500" };
+    return { icon: Home, label: dict.categories.stay || cat, bg: "bg-indigo-500/10", color: "text-indigo-500" };
   
-  return { icon: Droplets, label: (dict.categories as any).etc || cat, bg: "bg-slate-500/10", color: "text-slate-500" }; 
+  return { icon: Droplets, label: (dict.categories as Record<string, string>).etc || cat, bg: "bg-slate-500/10", color: "text-slate-500" }; 
 };
 export default function PlaceList({ initialPlaces }: PlaceListProps) {
   const { dict } = useLanguage();
@@ -303,7 +305,7 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
   const filteredPlaces = places
     .filter((place) => {
       const lowerSearch = searchTerm.toLowerCase();
-      const localizedCategory = (dict.categories as any)[place.category] || "";
+      const localizedCategory = (dict.categories as Record<string, string>)[place.category] || "";
       
       const matchesSearch = 
         place.name.toLowerCase().includes(lowerSearch) ||
@@ -433,7 +435,7 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
         {/* Category Filters - Responsive: Dropdown for Mobile, Icon Grid for Desktop */}
         <div className="relative -mx-4 -my-8 md:-my-16 px-4 py-8 md:py-16 group/scroll">
           
-          {/* 📱 Mobile Dropdown View (Hidden per user request - "not working properly") */}
+          {/* 📱 Mobile Dropdown View (Deprecated in favor of smooth horizontal scroll) */}
           <div className="hidden px-4 relative z-[100]">
             <button
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
@@ -511,11 +513,12 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
             </AnimatePresence>
           </div>
 
-          {/* 💻 Desktop Icon Grid View (hidden md:flex) */}
+          {/* 💻 Desktop & Mobile Icon Scroll View */}
           <div 
             ref={scrollRef}
             onScroll={handleScroll}
-            className="hidden md:flex gap-6 md:gap-8 overflow-x-auto pt-24 pb-32 md:pt-32 md:pb-56 scrollbar-hide snap-x snap-proximity px-12"
+            className="flex gap-4 md:gap-8 overflow-x-auto pt-20 pb-28 md:pt-32 md:pb-56 scrollbar-hide snap-x snap-mandatory md:snap-proximity px-6 md:px-12 -mx-4 md:mx-0"
+            style={{ WebkitOverflowScrolling: 'touch' }}
           >
             {categories.map((cat) => {
               const catConfig = getCategoryConfig(cat, dict);
@@ -735,17 +738,4 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
   );
 }
 
-function CustomTag({ className }: { className?: string }) {
-  return (
-    <svg 
-      className={className} 
-      xmlns="http://www.w3.org/2000/svg" 
-      width="24" height="24" viewBox="0 0 24 24" 
-      fill="none" stroke="currentColor" strokeWidth="2" 
-      strokeLinecap="round" strokeLinejoin="round"
-    >
-      <path d="M12 2H2v10l9.29 9.29c.94.94 2.48.94 3.42 0l6.58-6.58c.94-.94.94-2.48 0-3.42L12 2Z"/>
-      <path d="M7 7h.01"/>
-    </svg>
-  );
-}
+

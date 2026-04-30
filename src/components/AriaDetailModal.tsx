@@ -2,7 +2,7 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { Place } from "@/types/place";
-import { X, MapPin, Tag, Sparkles, Navigation, Share2, Compass, ArrowRight } from "lucide-react";
+import { X, MapPin, Tag, Sparkles, Navigation, Compass, ArrowRight } from "lucide-react";
 import { useLanguage } from "@/lib/i18n/context";
 import NavigationSelector from "./NavigationSelector";
 import ShareButton from "./ShareButton";
@@ -86,7 +86,7 @@ export default function AriaDetailModal({ place, onClose, allPlaces }: AriaDetai
                 </h2>
                 <div className="flex items-center gap-2 text-white/60 font-bold text-sm">
                   <Tag className="w-4 h-4" />
-                  {dict.common.category}: {(dict.categories as any)[place.category.toLowerCase()] || place.category}
+                  {dict.common.category}: {(dict.categories as Record<string, string>)[place.category.toLowerCase()] || place.category}
                 </div>
               </div>
 

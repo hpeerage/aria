@@ -2,8 +2,9 @@
 import { useState, useEffect } from "react";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, MapPin, Tag, Sparkles, Navigation, Share2, Compass, MoveRight, X, Maximize2 } from "lucide-react";
+import { ArrowLeft, MapPin, Tag, Sparkles, Navigation, Compass, MoveRight, X, Maximize2 } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { Place } from "@/types/place";
 import { useLanguage } from "@/lib/i18n/context";
 import AriaMap from "./AriaMap";
@@ -61,8 +62,8 @@ export default function AriaPlaceDetail({ place, nearbyPlaces }: AriaPlaceDetail
       {/* [v0.14.7] Ultimate Syntax Error Fix & Floating Back Button Deployment */}
       <Link 
         href="/" 
-        data-version="0.14.7"
-        className="fixed top-8 left-6 z-[95] group flex items-center gap-2 px-5 py-3 bg-forest-dark/95 dark:bg-accent/90 backdrop-blur-3xl rounded-2xl border border-white/20 text-white shadow-[0_20px_60px_rgba(0,0,0,0.5)] transition-all hover:scale-110 active:scale-95 md:top-12 md:left-12"
+        data-version="0.14.8"
+        className="fixed top-8 left-6 z-[95] group flex items-center gap-2 px-5 py-3 bg-forest-dark/95 dark:bg-white/10 dark:hover:bg-accent/90 backdrop-blur-3xl rounded-2xl border border-white/20 text-white shadow-[0_20px_60px_rgba(0,0,0,0.5)] transition-all hover:scale-110 active:scale-95 md:top-12 md:left-12"
       >
         <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
         <span className="text-[11px] font-black uppercase tracking-[0.2em] drop-shadow-sm">
@@ -86,9 +87,11 @@ export default function AriaPlaceDetail({ place, nearbyPlaces }: AriaPlaceDetail
               exit={{ scale: 0.9, y: 20 }}
               className="relative max-w-6xl w-full h-full flex items-center justify-center"
             >
-              <img 
+              <Image 
                 src={displayImages[currentImgIndex]} 
                 alt={place.name} 
+                width={1200}
+                height={800}
                 className="max-w-full max-h-full object-contain rounded-3xl shadow-2xl"
               />
               <button 
@@ -152,7 +155,7 @@ export default function AriaPlaceDetail({ place, nearbyPlaces }: AriaPlaceDetail
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, ease: "easeOut" }}
-            className="text-6xl md:text-8xl font-black text-white tracking-tighter"
+            className="text-6xl md:text-8xl font-black text-white tracking-tighter drop-shadow-2xl"
           >
             {displayPlace.name}
           </motion.h1>
@@ -201,7 +204,7 @@ export default function AriaPlaceDetail({ place, nearbyPlaces }: AriaPlaceDetail
                   <div className="w-1.5 h-10 bg-accent rounded-full" />
                   <h2 className="text-3xl font-black text-foreground dark:text-white force-dark-text-white">{dict.common.story}</h2>
                 </div>
-                <p className="text-xl text-foreground/80 dark:text-white/80 force-dark-text-white font-bold leading-relaxed italic">
+                <p className="text-xl text-foreground/80 dark:text-white/90 force-dark-text-white font-bold leading-relaxed italic drop-shadow-sm">
                   {displayPlace.description || "이 장소의 깊은 역사와 웰니스 리듬을 발견할 수 있는 상세한 이야기가 준비되고 있습니다. 정선의 자연이 빚어낸 이곳에서 당신만의 새로운 아리아를 시작해 보세요."}
                 </p>
 

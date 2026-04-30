@@ -49,7 +49,7 @@ export async function compressImage(
 /**
  * 데이터의 전체 크기를 바이트 단위로 계산합니다.
  */
-export function getStorageSize(data: any): number {
+export function getStorageSize(data: unknown): number {
   const str = typeof data === "string" ? data : JSON.stringify(data);
   return new TextEncoder().encode(str).length;
 }

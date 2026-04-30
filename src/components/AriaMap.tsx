@@ -1,14 +1,14 @@
 "use client";
 
-import { APIProvider, Map, Marker, InfoWindow, useMap } from "@vis.gl/react-google-maps";
+import { APIProvider, Map, Marker, InfoWindow, useMap, AdvancedMarker } from "@vis.gl/react-google-maps";
 import { Place } from "@/types/place";
 import { useState, useEffect } from "react";
-import { MapPin, Info, ArrowRight, Mountain, Palette, Utensils, Sparkles, Landmark, Bed, Trees, Palmtree, Home, MoreHorizontal, Droplets, Navigation, Star, Heart, Camera, Compass, Coffee, ShoppingBag, Ticket, Flag, Flame, Wind, Sunrise } from "lucide-react";
+import { MapPin, Info, ArrowRight, Mountain, Palette, Utensils, Sparkles, Landmark, Bed, Trees, Palmtree, Home, Droplets, Navigation, Star, Heart, Camera, Compass, Coffee, ShoppingBag, Ticket, Flag, Flame, Wind, Sunrise } from "lucide-react";
 import NavigationSelector from "./NavigationSelector";
 import { NavTarget } from "@/lib/navigation";
 
 const getMarkerConfig = (category: string, customIcon?: string, customColor?: string) => {
-  const iconMap: Record<string, any> = {
+  const iconMap: Record<string, React.ElementType> = {
     Trees, Droplets, Sparkles, Utensils, Palmtree, Home, 
     Star, Heart, Camera, Landmark, Bed, 
     Mountain, Palette, MapPin, Compass, Navigation, Coffee,
@@ -105,11 +105,10 @@ export default function AriaMap({ places, onMarkerClick, userLocation, focusedPl
         >
           <MapController places={places} focusedPlace={focusedPlace} />
           {places.map((place) => (
-            <Marker 
-              key={`${place.id}-${places.length}`} 
-              position={{ lat: place.coordinates.lat, lng: place.coordinates.lng }}
+            <CustomMarker 
+              key={`${place.id}-${places.length}`}
+              place={place}
               onClick={() => setSelectedPlace(place)}
-              title={place.name}
             />
           ))}
 
@@ -211,7 +210,7 @@ function MapController({ places, focusedPlace }: { places: Place[], focusedPlace
 }
 
 function CustomMarker({ place, onClick }: { place: Place; onClick: () => void }) {
-  const { icon, color, bg } = getMarkerConfig(place.category, place.icon, place.color);
+  const { icon, color } = getMarkerConfig(place.category, place.icon, place.color);
   const IconComp = icon;
 
   return (
