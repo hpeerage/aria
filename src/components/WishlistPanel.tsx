@@ -8,6 +8,7 @@ import { useState, useRef } from "react";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import AriaItineraryTicket from "./AriaItineraryTicket";
+import NoSSR from "./NoSSR";
 
 export default function WishlistPanel() {
   const { wishlist, isWishlistOpen, toggleWishlistPanel, removePlace, reorderPlace } = useWishlist();
@@ -76,9 +77,11 @@ export default function WishlistPanel() {
   return (
     <>
       {/* Hidden Container for PDF Capture (Render off-screen) */}
-      <div className="fixed -left-[10000px] top-0 pointer-events-none" aria-hidden="true">
-         <AriaItineraryTicket wishlist={wishlist} id="export-ticket-target" ref={ticketRef as any} />
-      </div>
+      <NoSSR>
+        <div className="fixed -left-[10000px] top-0 pointer-events-none" aria-hidden="true">
+           <AriaItineraryTicket wishlist={wishlist} id="export-ticket-target" ref={ticketRef as any} />
+        </div>
+      </NoSSR>
 
       <AnimatePresence>
         {isWishlistOpen && (
