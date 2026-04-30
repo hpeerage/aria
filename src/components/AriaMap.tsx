@@ -98,11 +98,12 @@ export default function AriaMap({ places, onMarkerClick, userLocation, focusedPl
         <Map
           defaultCenter={{ lat: 37.3806, lng: 128.6608 }}
           defaultZoom={11}
+          defaultTilt={45}
           gestureHandling={"greedy"}
           disableDefaultUI={false}
           className="w-full h-full"
           clickableIcons={false}
-          mapId="DEMO_MAP_ID"
+          mapId="cfbaaba5db65c276e923b457"
         >
           <MapController places={places} focusedPlace={focusedPlace} />
           {places.map((place) => (
