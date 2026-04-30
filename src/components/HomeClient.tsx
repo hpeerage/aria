@@ -208,10 +208,10 @@ export default function HomeClient({ places: initialPlaces }: HomeClientProps) {
           transition={{ duration: 0.8, type: "spring" }}
           className="grid grid-cols-2 md:grid-cols-4 gap-8 bg-white dark:bg-forest/50 p-10 rounded-[3.5rem] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.15)] border border-forest/5 dark:border-white/10 backdrop-blur-3xl"
         >
-          <StatItem icon={<MapIcon className="w-8 h-8" />} label={dict.stats.assets} value="82" suffix="Assets" />
+          <StatItem icon={<MapIcon className="w-8 h-8" />} label={dict.stats.assets} value={places.length.toString()} suffix="Assets" />
           <StatItem icon={<Users className="w-8 h-8" />} label={dict.stats.paths} value="12" suffix="Paths" />
           <StatItem icon={<Calendar className="w-8 h-8" />} label={dict.stats.wellness} value="98%" suffix="Vitality" />
-          <StatItem icon={<Sparkles className="w-8 h-8" />} label={dict.stats.newPlaces} value="24" suffix="Updated" />
+          <StatItem icon={<Sparkles className="w-8 h-8" />} label={dict.stats.newPlaces} value={places.filter(p => new Date(p.lastUpdated || 0).getTime() > Date.now() - 7 * 24 * 60 * 60 * 1000).length.toString()} suffix="Updated" />
         </motion.div>
       </section>
 
@@ -249,7 +249,7 @@ export default function HomeClient({ places: initialPlaces }: HomeClientProps) {
               </div>
             </div>
             <p className="text-sm text-white/70 font-bold leading-relaxed">
-              정선의 맑은 정취와 아리랑의 선율을 담아낸 82개의 치유 거점을 제안합니다. 진정한 웰니스로 가는 길, 정선 아리아가 함께합니다.
+              정선의 맑은 정취와 아리랑의 선율을 담아낸 {places.length}개의 치유 거점을 제안합니다. 진정한 웰니스로 가는 길, 정선 아리아가 함께합니다.
             </p>
           </div>
 
