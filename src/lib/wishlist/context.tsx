@@ -11,6 +11,7 @@ interface WishlistContextType {
   togglePlace: (place: Place) => void;
   removePlace: (id: number) => void;
   reorderPlace: (id: number, direction: "up" | "down") => void;
+  updateWishlist: (newWishlist: Place[]) => void;
   clearWishlist: () => void;
   isInWishlist: (id: number) => boolean;
 }
@@ -82,6 +83,10 @@ export function WishlistProvider({ children }: { children: React.ReactNode }) {
     });
   };
 
+  const updateWishlist = (newWishlist: Place[]) => {
+    setWishlist(newWishlist);
+  };
+
   const clearWishlist = () => {
     setWishlist([]);
   };
@@ -99,6 +104,7 @@ export function WishlistProvider({ children }: { children: React.ReactNode }) {
         togglePlace,
         removePlace,
         reorderPlace,
+        updateWishlist,
         clearWishlist,
         isInWishlist,
       }}

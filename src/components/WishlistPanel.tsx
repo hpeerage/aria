@@ -1,7 +1,7 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
-import { X, Map as MapIcon, ArrowUp, ArrowDown, ExternalLink, Sparkles, Loader2 } from "lucide-react";
+import { motion, AnimatePresence, Reorder } from "framer-motion";
+import { X, Map as MapIcon, ExternalLink, Sparkles, Loader2, GripVertical } from "lucide-react";
 import { useWishlist } from "@/lib/wishlist/context";
 import Image from "next/image";
 import { useState, useRef } from "react";
@@ -11,7 +11,7 @@ import AriaItineraryTicket from "./AriaItineraryTicket";
 import NoSSR from "./NoSSR";
 
 export default function WishlistPanel() {
-  const { wishlist, isWishlistOpen, toggleWishlistPanel, removePlace, reorderPlace } = useWishlist();
+  const { wishlist, isWishlistOpen, toggleWishlistPanel, removePlace, updateWishlist } = useWishlist();
   const [isExporting, setIsExporting] = useState(false);
   const ticketRef = useRef<HTMLDivElement>(null);
 
@@ -134,61 +134,72 @@ export default function WishlistPanel() {
                     <p className="text-sm font-bold text-forest/40 dark:text-white/40">아직 담은 장소가 없습니다.<br/> 탐색 버튼을 통해 장소를 담아보세요.</p>
                   </div>
                 ) : (
-                  <AnimatePresence>
-                    {wishlist.map((place, idx) => (
-                      <motion.div 
-                        key={place.id}
-                        layout
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, scale: 0.9 }}
-                        className="group flex gap-4 p-3 bg-white dark:bg-white/5 border border-forest/5 dark:border-white/5 rounded-2xl shadow-sm hover:shadow-md transition-all print:border print:border-black/20 print:shadow-none print:break-inside-avoid print:items-center"
-                      >
-                         <div className="relative w-20 h-20 rounded-xl overflow-hidden flex-shrink-0 bg-forest/5 print:w-24 print:h-24">
-                            {place.images?.[0] ? (
-                              <Image src={place.images[0]} alt={place.name} fill className="object-cover" />
-                            ) : (
-                              <div className="w-full h-full flex flex-col items-center justify-center text-[10px] font-black text-forest/20 uppercase">
-                                No Image
-                              </div>
-                            )}
-                            <div className="absolute top-1 left-1 w-5 h-5 bg-black/60 backdrop-blur rounded-full flex items-center justify-center text-[10px] font-black text-white">
-                              {idx + 1}
-                            </div>
-                         </div>
-                         
-                         <div className="flex-1 flex flex-col justify-center">
-                            <span className="text-[9px] font-black uppercase tracking-widest text-accent mb-1 print:text-black">
-                              {place.category}
-                            </span>
-                            <h4 className="text-sm font-black text-forest dark:text-white leading-tight mb-1 print:text-black print:text-base">
-                              {place.name}
-                            </h4>
-                            <p className="text-[10px] text-forest/50 dark:text-white/50 line-clamp-2 print:line-clamp-none print:text-xs">
-                               {place.description}
-                            </p>
-                         </div>
+                  <Reorder.Group 
+                    axis="y" 
+                    values={wishlist} 
+                    onReorder={updateWishlist}
+                    className="space-y-4"
+                  >
+                    <AnimatePresence initial={false}>
+                      {wishlist.map((place, idx) => (
+                        <Reorder.Item 
+                          key={place.id}
+                          value={place}
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, scale: 0.9 }}
+                          whileDrag={{ 
+                            scale: 1.02, 
+                            boxShadow: "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
+                            zIndex: 100
+                          }}
+                          className="group flex gap-3 p-3 bg-white dark:bg-white/5 border border-forest/5 dark:border-white/5 rounded-2xl shadow-sm hover:shadow-md transition-shadow print:border print:border-black/20 print:shadow-none print:break-inside-avoid print:items-center cursor-grab active:cursor-grabbing relative"
+                        >
+                           <div className="flex items-center text-forest/20 dark:text-white/20 group-hover:text-forest/40 dark:group-hover:text-white/40 transition-colors print:hidden">
+                              <GripVertical className="w-4 h-4" />
+                           </div>
 
-                         <div className="flex flex-col justify-between items-end print:hidden">
-                            <button 
-                              onClick={() => removePlace(place.id)}
-                              className="p-1.5 text-forest/20 dark:text-white/20 hover:text-rose-500 hover:bg-rose-500/10 rounded-md transition-colors"
-                            >
-                              <X className="w-4 h-4" />
-                            </button>
-                            
-                            <div className="flex flex-col -space-y-1">
-                               <button onClick={() => reorderPlace(place.id, "up")} disabled={idx === 0} className="p-1 text-forest/30 dark:text-white/30 hover:text-accent disabled:opacity-20 transition-colors">
-                                 <ArrowUp className="w-4 h-4" />
-                               </button>
-                               <button onClick={() => reorderPlace(place.id, "down")} disabled={idx === wishlist.length - 1} className="p-1 text-forest/30 dark:text-white/30 hover:text-accent disabled:opacity-20 transition-colors">
-                                 <ArrowDown className="w-4 h-4" />
-                               </button>
-                            </div>
-                         </div>
-                      </motion.div>
-                    ))}
-                  </AnimatePresence>
+                           <div className="relative w-16 h-16 rounded-xl overflow-hidden flex-shrink-0 bg-forest/5 print:w-24 print:h-24">
+                              {place.images?.[0] ? (
+                                <Image src={place.images[0]} alt={place.name} fill className="object-cover" />
+                              ) : (
+                                <div className="w-full h-full flex flex-col items-center justify-center text-[10px] font-black text-forest/20 uppercase">
+                                  No Image
+                                </div>
+                              )}
+                              <div className="absolute top-1 left-1 w-5 h-5 bg-black/60 backdrop-blur rounded-full flex items-center justify-center text-[10px] font-black text-white">
+                                {idx + 1}
+                              </div>
+                           </div>
+                           
+                           <div className="flex-1 flex flex-col justify-center overflow-hidden">
+                              <span className="text-[9px] font-black uppercase tracking-widest text-accent mb-0.5 print:text-black">
+                                {place.category}
+                              </span>
+                              <h4 className="text-sm font-black text-forest dark:text-white leading-tight mb-0.5 truncate print:text-black print:text-base">
+                                {place.name}
+                              </h4>
+                              <p className="text-[10px] text-forest/50 dark:text-white/50 line-clamp-1 print:line-clamp-none print:text-xs">
+                                 {place.description}
+                              </p>
+                           </div>
+
+                           <div className="flex flex-col justify-center items-end print:hidden">
+                              <button 
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  removePlace(place.id);
+                                }}
+                                className="p-2 text-forest/20 dark:text-white/20 hover:text-rose-500 hover:bg-rose-500/10 rounded-xl transition-all"
+                                title="제거"
+                              >
+                                <X className="w-4 h-4" />
+                              </button>
+                           </div>
+                        </Reorder.Item>
+                      ))}
+                    </AnimatePresence>
+                  </Reorder.Group>
                 )}
               </div>
 
