@@ -56,6 +56,7 @@ import { WishlistProvider } from "@/lib/wishlist/context";
 import FloatingCart from "@/components/FloatingCart";
 import WishlistPanel from "@/components/WishlistPanel";
 import KakaoScript from "@/components/KakaoScript";
+import NaverScript from "@/components/NaverScript";
 
 export default function RootLayout({
   children,
@@ -74,6 +75,7 @@ export default function RootLayout({
             <FloatingCart />
             <WishlistPanel />
             <KakaoScript />
+            <NaverScript />
           </WishlistProvider>
         </LanguageProvider>
       </body>
