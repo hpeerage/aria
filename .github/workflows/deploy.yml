@@ -33,8 +33,9 @@ jobs:
       - name: Build with Next.js
         env:
           NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: ${{ secrets.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY }}
-          NEXT_PUBLIC_KAKAO_JS_KEY: ${{ secrets.NEXT_PUBLIC_KAKAO_JS_KEY }}
           NEXT_PUBLIC_NAVER_MAPS_CLIENT_ID: ${{ secrets.NEXT_PUBLIC_NAVER_MAPS_CLIENT_ID }}
+          NEXT_PUBLIC_KAKAO_JS_KEY: ${{ secrets.NEXT_PUBLIC_KAKAO_JS_KEY }}
+
         run: |
           npm run build
           # basePath(/aria) 때문에 out/aria가 생성되면 루트(out/)로 이동
