@@ -38,10 +38,13 @@ jobs:
 
         run: |
           npm run build
+          # 폴더가 없을 경우를 대비해 생성 (에러 방지)
+          mkdir -p out/aria
           # .nojekyll 파일 생성 (GitHub Pages에서 _next 폴더 인식 필수)
           touch out/aria/.nojekyll
-          # 404 페이지 대응 (index.html을 복사)
-          cp out/aria/index.html out/aria/404.html
+          # 404 페이지 대응 (index.html 복사)
+          if [ -f "out/index.html" ]; then cp out/index.html out/aria/404.html; fi
+          if [ -f "out/aria/index.html" ]; then cp out/aria/index.html out/aria/404.html; fi
         
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
