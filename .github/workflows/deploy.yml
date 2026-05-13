@@ -38,18 +38,15 @@ jobs:
 
         run: |
           npm run build
-          # basePath(/aria) 때문에 out/aria가 생성되면 루트(out/)로 이동
-          if [ -d "out/aria" ]; then
-            cp -r out/aria/* out/
-            rm -rf out/aria
-          fi
-          touch out/.nojekyll
-          cp out/index.html out/404.html
+          # .nojekyll 파일 생성 (GitHub Pages에서 _next 폴더 인식 필수)
+          touch out/aria/.nojekyll
+          # 404 페이지 대응 (index.html을 복사)
+          cp out/aria/index.html out/aria/404.html
         
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./out
+          path: ./out/aria
 
   deploy:
     environment:
