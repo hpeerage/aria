@@ -38,11 +38,31 @@ jobs:
 
         run: |
           npm run build
-          # 만약 out/aria 폴더가 생성되었다면 모든 내용을 out으로 이동
+          # 빌드 후 파일 구조 확인 (로그에서 확인 가능)
+          ls -R out
+          # 만약 out/aria 폴더가 있다면 내용을 루트로 이동 (숨김 파일 포함)
           if [ -d "out/aria" ]; then
-            cp -r out/aria/* out/
+            mv out/aria/* out/ 2>/dev/null || true
+            mv out/aria/.* out/ 2>/dev/null || true
             rm -rf out/aria
           fi
-          # .nojekyll 파일 생성 (필수)
+          # .nojekyll 파일 생성
           touch out/.nojekyll
-          # 404 대응을 위해 index.html 복사
+          # index.html을 404.html로 복사하여 라우팅 문제 방지
+          if [ -f "out/index.html" ]; then cp out/index.html out/404.html; fi
+        
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./out
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
