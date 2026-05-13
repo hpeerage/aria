@@ -155,17 +155,22 @@ export default function AriaMap({ places, onMarkerClick, userLocation, focusedPl
         icon: {
           content: `
             <div class="relative group cursor-pointer" style="transform: translate(-50%, -100%)">
-              <div class="absolute -inset-1 rounded-full opacity-30 blur-sm transition-opacity duration-500" 
+              <div class="absolute -inset-2 rounded-full opacity-20 blur-md transition-opacity duration-500" 
                    style="background: radial-gradient(circle, ${color} 0%, transparent 70%)"></div>
-              <div class="relative flex items-center justify-center w-[20px] h-[20px] rounded-full border-2 border-white shadow-md transition-all duration-300"
+              <div class="relative flex items-center justify-center w-[32px] h-[32px] rounded-full border-2 border-white shadow-xl transition-all duration-300 group-hover:scale-110"
                    style="background-color: ${color}">
-                <div class="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-0 h-0 border-l-[4px] border-l-transparent border-r-[4px] border-r-transparent border-t-[6px]" style="border-t-color: white"></div>
-                <div class="absolute -bottom-1 left-1/2 -translate-x-1/2 w-0 h-0 border-l-[3px] border-l-transparent border-r-[3px] border-r-transparent border-t-[5px]" style="border-t-color: ${color}"></div>
+                <div class="text-white w-4 h-4">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>
+                  </svg>
+                </div>
+                <div class="absolute -bottom-2 left-1/2 -translate-x-1/2 w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[8px]" style="border-t-color: white"></div>
+                <div class="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-0 h-0 border-l-[5px] border-l-transparent border-r-[5px] border-r-transparent border-t-[7px]" style="border-t-color: ${color}"></div>
               </div>
             </div>
           `,
-          size: new naver.maps.Size(24, 24),
-          anchor: new naver.maps.Point(12, 24),
+          size: new naver.maps.Size(32, 32),
+          anchor: new naver.maps.Point(16, 32),
         },
       });
 
