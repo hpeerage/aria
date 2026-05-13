@@ -101,6 +101,13 @@ export default function AriaMap({ places, onMarkerClick, userLocation, focusedPl
         pixelOffset: new naver.maps.Point(0, -10)
       });
 
+      // 지도 배경 클릭 시 정보 창 닫기
+      naver.maps.Event.addListener(map, 'click', () => {
+        if (infoWindowRef.current) {
+          infoWindowRef.current.close();
+        }
+      });
+
       setIsMapLoaded(true);
     };
 
