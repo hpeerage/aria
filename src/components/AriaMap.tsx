@@ -148,16 +148,23 @@ export default function AriaMap({ places, onMarkerClick, userLocation, focusedPl
       const { color } = getMarkerConfig(place.category, place.icon, place.color);
       const position = new naver.maps.LatLng(place.coordinates.lat, place.coordinates.lng);
       
-      // 카테고리별 아이콘 SVG 정의
+      // 카테고리별 아이콘 SVG 정의 (대시보드 및 프로젝트 공통 아이콘)
       const getIconSvg = (category: string) => {
         const c = category.toLowerCase();
-        if (c === 'nature') return '<path d="M10 22v-6.5m0 0a4.5 4.5 0 1 1 0-9 4.5 4.5 0 0 1 0 9Z"/><path d="M14 22v-6.5m0 0a4.5 4.5 0 1 1 0-9 4.5 4.5 0 0 1 0 9Z"/><path d="M18 22v-6.5m0 0a4.5 4.5 0 1 1 0-9 4.5 4.5 0 0 1 0 9Z"/>';
-        if (c === 'water') return '<path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5s-3 3.5-3 5.5a7 7 0 0 0 7 7Z"/>';
-        if (c === 'food') return '<path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Z"/><path d="M18 15v7"/>';
+        // Nature -> Mountain
+        if (c === 'nature') return '<path d="m8 3 4 8 5-5 5 15H2L8 3z"/>';
+        // Water -> Wind/Wave
+        if (c === 'water') return '<path d="M17.7 7.7a2.5 2.5 0 1 1 1.8 4.3H2"/><path d="M9.6 4.6A2 2 0 1 1 11 8H2"/><path d="M12.6 19.4A2 2 0 1 0 14 16H2"/>';
+        // Activity -> Sparkles
         if (c === 'activity') return '<path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>';
-        if (c === 'culture') return '<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>';
-        if (c === 'stay') return '<path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>';
-        return '<circle cx="12" cy="12" r="10"/><path d="M12 8v8"/><path d="M8 12h8"/>';
+        // Culture -> Compass
+        if (c === 'culture') return '<circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>';
+        // Stay -> Bed
+        if (c === 'stay') return '<path d="M2 4v16"/><path d="M2 8h18a2 2 0 0 1 2 2v10"/><path d="M2 17h20"/><path d="M6 8v9"/>';
+        // Food -> Utensils
+        if (c === 'food') return '<path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Z"/><path d="M18 15v7"/>';
+        // Default -> MapPin
+        return '<path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>';
       };
 
       const marker = new naver.maps.Marker({
