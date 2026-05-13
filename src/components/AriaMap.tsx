@@ -231,13 +231,20 @@ export default function AriaMap({ places, onMarkerClick, userLocation, focusedPl
     if (focusedPlace) {
       const pos = new naver.maps.LatLng(focusedPlace.coordinates.lat, focusedPlace.coordinates.lng);
       mapRef.current.setCenter(pos);
-      mapRef.current.setZoom(17);
+      mapRef.current.setZoom(16);
     } else if (places.length > 0) {
       if (places.length === 1) {
-        mapRef.current.setCenter(new naver.maps.LatLng(places[0].coordinates.lat, places[0].coordinates.lng));
+        const pos = new naver.maps.LatLng(places[0].coordinates.lat, places[0].coordinates.lng);
+        mapRef.current.setCenter(pos);
         mapRef.current.setZoom(15);
       } else {
-        mapRef.current.fitBounds(bounds);
+        // 모든 마커가 중앙에 오도록 여백(padding)을 주어 맞춤
+        mapRef.current.fitBounds(bounds, {
+          top: 80,
+          right: 80,
+          bottom: 80,
+          left: 80
+        });
       }
     }
   }, [isMapLoaded, places, focusedPlace, onMarkerClick]);
