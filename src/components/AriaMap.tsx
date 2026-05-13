@@ -148,6 +148,18 @@ export default function AriaMap({ places, onMarkerClick, userLocation, focusedPl
       const { color } = getMarkerConfig(place.category, place.icon, place.color);
       const position = new naver.maps.LatLng(place.coordinates.lat, place.coordinates.lng);
       
+      // 카테고리별 아이콘 SVG 정의
+      const getIconSvg = (category: string) => {
+        const c = category.toLowerCase();
+        if (c === 'nature') return '<path d="M10 22v-6.5m0 0a4.5 4.5 0 1 1 0-9 4.5 4.5 0 0 1 0 9Z"/><path d="M14 22v-6.5m0 0a4.5 4.5 0 1 1 0-9 4.5 4.5 0 0 1 0 9Z"/><path d="M18 22v-6.5m0 0a4.5 4.5 0 1 1 0-9 4.5 4.5 0 0 1 0 9Z"/>';
+        if (c === 'water') return '<path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5s-3 3.5-3 5.5a7 7 0 0 0 7 7Z"/>';
+        if (c === 'food') return '<path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Z"/><path d="M18 15v7"/>';
+        if (c === 'activity') return '<path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>';
+        if (c === 'culture') return '<path d="M16.172 11c0 5-4.172 8-4.172 8s-4.172-3-4.172-8a4.172 4.172 0 1 1 8.344 0Z"/><path d="M12 11a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z"/><path d="M12 22v-3"/>';
+        if (c === 'stay') return '<path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>';
+        return '<path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>';
+      };
+
       const marker = new naver.maps.Marker({
         position,
         map: mapRef.current!,
@@ -159,7 +171,7 @@ export default function AriaMap({ places, onMarkerClick, userLocation, focusedPl
                    style="background-color: ${color}">
                 <div class="text-white w-4 h-4">
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>
+                    ${getIconSvg(place.category)}
                   </svg>
                 </div>
                 <div class="absolute -bottom-2 left-1/2 -translate-x-1/2 w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[8px]" style="border-t-color: white"></div>
