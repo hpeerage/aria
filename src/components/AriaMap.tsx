@@ -89,6 +89,7 @@ export default function AriaMap({ places, onMarkerClick, userLocation, focusedPl
           position: naver.maps.Position.TOP_RIGHT,
         },
         mapTypeControl: true,
+        mapStyleId: 'ce4b0f70-d886-4556-bf11-e06f5ac5a743'
       };
 
       const map = new naver.maps.Map(mapElement.current, mapOptions);

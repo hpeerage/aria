@@ -10,7 +10,7 @@ export default function NaverScript() {
   return (
     <Script
       strategy="afterInteractive"
-      src={`https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=${clientId}&submodules=geocoder`}
+      src={`https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=${clientId}&submodules=geocoder&mapStyleId=ce4b0f70-d886-4556-bf11-e06f5ac5a743`}
     />
   );
 }
