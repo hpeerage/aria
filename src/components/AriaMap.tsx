@@ -89,14 +89,18 @@ export default function AriaMap({ places, onMarkerClick, userLocation, focusedPl
           position: naver.maps.Position.TOP_RIGHT,
         },
         mapTypeControl: true,
-        mapStyleId: 'ca4b9679-d588-4538-b4f1-e98f5ac0a743'
+        gl: true, // 벡터 지도 엔진 활성화 (커스텀 스타일 필수)
+        customStyleId: 'ca4b9679-d588-4538-b4f1-e98f5ac0a743',
+        mapStyleId: 'ca4b9679-d588-4538-b4f1-e98f5ac0a743' // 호환성 유지
       };
 
       const map = new naver.maps.Map(mapElement.current, mapOptions);
       mapRef.current = map;
       
-      // 지도가 생성된 후 스타일을 강제로 다시 주입
+      // 지도가 생성된 후 스타일을 강제로 다시 주입 (벡터 모드 호환성 확인)
       map.setOptions({
+        gl: true,
+        customStyleId: 'ca4b9679-d588-4538-b4f1-e98f5ac0a743',
         mapStyleId: 'ca4b9679-d588-4538-b4f1-e98f5ac0a743'
       });
       infoWindowRef.current = new naver.maps.InfoWindow({
