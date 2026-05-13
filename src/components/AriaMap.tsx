@@ -73,6 +73,7 @@ export default function AriaMap({ places, onMarkerClick, userLocation, focusedPl
   const [navTarget, setNavTarget] = useState<NavTarget | null>(null);
   const [isNavOpen, setIsNavOpen] = useState(false);
   const [isMapLoaded, setIsMapLoaded] = useState(false);
+  const [mapError, setMapError] = useState<string | null>(null);
 
   useEffect(() => {
     const initMap = () => {
@@ -103,16 +104,27 @@ export default function AriaMap({ places, onMarkerClick, userLocation, focusedPl
       setIsMapLoaded(true);
     };
 
+    const timeoutId = setTimeout(() => {
+      if (!window.naver || !window.naver.maps) {
+        setMapError("네이버 지도 API를 불러올 수 없습니다. 클라이언트 키 및 서비스 URL 설정을 확인해 주세요.");
+      }
+    }, 5000);
+
     if (window.naver && window.naver.maps) {
       initMap();
+      clearTimeout(timeoutId);
     } else {
       const checkInterval = setInterval(() => {
         if (window.naver && window.naver.maps) {
           initMap();
           clearInterval(checkInterval);
+          clearTimeout(timeoutId);
         }
       }, 100);
-      return () => clearInterval(checkInterval);
+      return () => {
+        clearInterval(checkInterval);
+        clearTimeout(timeoutId);
+      };
     }
   }, []);
 
@@ -211,11 +223,31 @@ export default function AriaMap({ places, onMarkerClick, userLocation, focusedPl
     <div className={className || "w-full h-[600px] rounded-[3rem] overflow-hidden shadow-2xl border-4 border-white dark:border-forest-dark relative group"}>
       <div ref={mapElement} className="w-full h-full" />
       
-      {!isMapLoaded && (
+      {!isMapLoaded && !mapError && (
         <div className="absolute inset-0 bg-forest/5 flex items-center justify-center backdrop-blur-sm z-20">
           <div className="flex flex-col items-center gap-4">
             <div className="w-12 h-12 border-4 border-accent border-t-transparent rounded-full animate-spin" />
             <p className="text-forest font-bold animate-pulse">지도를 불러오는 중...</p>
+          </div>
+        </div>
+      )}
+
+      {mapError && (
+        <div className="absolute inset-0 bg-white/90 flex items-center justify-center backdrop-blur-md z-30 p-8">
+          <div className="max-w-md text-center">
+            <div className="w-16 h-16 bg-rose-100 text-rose-500 rounded-full flex items-center justify-center mx-auto mb-6">
+              <Info size={32} />
+            </div>
+            <h3 className="text-xl font-bold text-forest mb-4">지도 로딩 실패</h3>
+            <p className="text-forest/70 text-sm mb-6 leading-relaxed">
+              {mapError}
+            </p>
+            <button 
+              onClick={() => window.location.reload()}
+              className="px-8 py-3 bg-forest text-white rounded-xl font-bold hover:bg-accent transition-colors shadow-lg shadow-forest/20"
+            >
+              다시 시도하기
+            </button>
           </div>
         </div>
       )}
