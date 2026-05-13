@@ -167,7 +167,7 @@ export default function AriaMap({ places, onMarkerClick, userLocation, focusedPl
         icon: {
           content: `
             <div class="relative group cursor-pointer" style="transform: translate(-50%, -100%)">
-              <svg width="40" height="48" viewBox="0 0 40 48" fill="none" xmlns="http://www.w3.org/2000/svg" class="transition-transform duration-300 group-hover:scale-110 drop-shadow-lg">
+              <svg width="40" height="48" viewBox="0 0 40 48" fill="none" xmlns="http://www.w3.org/2000/svg" class="transition-transform duration-300 group-hover:scale-110">
                 <!-- 핀 배경 -->
                 <path d="M20 48C20 48 40 32.8 40 20C40 9.0 31.0 0 20 0C9.0 0 0 9.0 0 20C0 32.8 20 48 20 48Z" fill="white"/>
                 <path d="M20 44C20 44 36 30.8 36 20C36 11.2 28.8 4 20 4C11.2 4 4 11.2 4 20C4 30.8 20 44 20 44Z" fill="${color}"/>
