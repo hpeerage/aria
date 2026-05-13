@@ -155,9 +155,9 @@ export default function AriaMap({ places, onMarkerClick, userLocation, focusedPl
         if (c === 'water') return '<path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5s-3 3.5-3 5.5a7 7 0 0 0 7 7Z"/>';
         if (c === 'food') return '<path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Z"/><path d="M18 15v7"/>';
         if (c === 'activity') return '<path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>';
-        if (c === 'culture') return '<path d="M16.172 11c0 5-4.172 8-4.172 8s-4.172-3-4.172-8a4.172 4.172 0 1 1 8.344 0Z"/><path d="M12 11a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z"/><path d="M12 22v-3"/>';
+        if (c === 'culture') return '<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>';
         if (c === 'stay') return '<path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>';
-        return '<path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>';
+        return '<circle cx="12" cy="12" r="10"/><path d="M12 8v8"/><path d="M8 12h8"/>';
       };
 
       const marker = new naver.maps.Marker({
@@ -167,20 +167,21 @@ export default function AriaMap({ places, onMarkerClick, userLocation, focusedPl
         icon: {
           content: `
             <div class="relative group cursor-pointer" style="transform: translate(-50%, -100%)">
-              <div class="relative flex items-center justify-center w-[32px] h-[32px] rounded-full border-2 border-white transition-all duration-300 group-hover:scale-110"
-                   style="background-color: ${color}">
-                <div class="text-white w-4 h-4">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <svg width="40" height="48" viewBox="0 0 40 48" fill="none" xmlns="http://www.w3.org/2000/svg" class="transition-transform duration-300 group-hover:scale-110 drop-shadow-lg">
+                <!-- 핀 배경 -->
+                <path d="M20 48C20 48 40 32.8 40 20C40 9.0 31.0 0 20 0C9.0 0 0 9.0 0 20C0 32.8 20 48 20 48Z" fill="white"/>
+                <path d="M20 44C20 44 36 30.8 36 20C36 11.2 28.8 4 20 4C11.2 4 4 11.2 4 20C4 30.8 20 44 20 44Z" fill="${color}"/>
+                <!-- 아이콘 영역 -->
+                <g transform="translate(10, 10)">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                     ${getIconSvg(place.category)}
                   </svg>
-                </div>
-                <div class="absolute -bottom-2 left-1/2 -translate-x-1/2 w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[8px]" style="border-t-color: white"></div>
-                <div class="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-0 h-0 border-l-[5px] border-l-transparent border-r-[5px] border-r-transparent border-t-[7px]" style="border-t-color: ${color}"></div>
-              </div>
+                </g>
+              </svg>
             </div>
           `,
-          size: new naver.maps.Size(32, 32),
-          anchor: new naver.maps.Point(16, 32),
+          size: new naver.maps.Size(40, 48),
+          anchor: new naver.maps.Point(20, 48),
         },
       });
 
