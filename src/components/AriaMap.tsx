@@ -155,9 +155,7 @@ export default function AriaMap({ places, onMarkerClick, userLocation, focusedPl
         icon: {
           content: `
             <div class="relative group cursor-pointer" style="transform: translate(-50%, -100%)">
-              <div class="absolute -inset-2 rounded-full opacity-20 blur-md transition-opacity duration-500" 
-                   style="background: radial-gradient(circle, ${color} 0%, transparent 70%)"></div>
-              <div class="relative flex items-center justify-center w-[32px] h-[32px] rounded-full border-2 border-white shadow-xl transition-all duration-300 group-hover:scale-110"
+              <div class="relative flex items-center justify-center w-[32px] h-[32px] rounded-full border-2 border-white transition-all duration-300 group-hover:scale-110"
                    style="background-color: ${color}">
                 <div class="text-white w-4 h-4">
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
