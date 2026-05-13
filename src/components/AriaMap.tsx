@@ -94,6 +94,11 @@ export default function AriaMap({ places, onMarkerClick, userLocation, focusedPl
 
       const map = new naver.maps.Map(mapElement.current, mapOptions);
       mapRef.current = map;
+      
+      // 지도가 생성된 후 스타일을 강제로 다시 주입
+      map.setOptions({
+        mapStyleId: 'ca4b9679-d588-4538-b4f1-e98f5ac0a743'
+      });
       infoWindowRef.current = new naver.maps.InfoWindow({
         content: '',
         backgroundColor: "transparent",
