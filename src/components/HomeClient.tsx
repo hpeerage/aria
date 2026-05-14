@@ -36,7 +36,23 @@ export default function HomeClient({ places: initialPlaces }: HomeClientProps) {
         if (idx >= 0) merged[idx] = localPlace;
         else merged.push(localPlace);
       });
-      setPlaces(merged);
+
+      // 이름 기준 중복 제거 (베드 데이터 방지)
+      const uniquePlaces = merged.reduce((acc: Place[], current) => {
+        const x = acc.find(item => item.name === current.name);
+        if (!x) return acc.concat([current]);
+        else return acc;
+      }, []);
+
+      setPlaces(uniquePlaces);
+    } else {
+      // 로컬 데이터가 없더라도 시트 데이터 자체의 중복 제거
+      const uniquePlaces = initialPlaces.reduce((acc: Place[], current) => {
+        const x = acc.find(item => item.name === current.name);
+        if (!x) return acc.concat([current]);
+        else return acc;
+      }, []);
+      setPlaces(uniquePlaces);
     }
   }, [initialPlaces]);
 
