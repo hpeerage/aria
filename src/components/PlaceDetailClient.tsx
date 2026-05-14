@@ -10,6 +10,7 @@ import { useLanguage } from "@/lib/i18n/context";
 import AriaMap from "./AriaMap";
 import NavigationSelector from "./NavigationSelector";
 import ShareButton from "./ShareButton";
+import CommentSection from "./CommentSection";
 import { NavTarget } from "@/lib/navigation";
 
 interface AriaPlaceDetailProps {
@@ -256,6 +257,11 @@ export default function AriaPlaceDetail({ place, nearbyPlaces }: AriaPlaceDetail
                 </div>
               </section>
             </motion.div>
+            
+            {/* [v1.0.0] Instagram Style Comment System */}
+            <section className="bg-white dark:bg-forest-light p-10 md:p-16 rounded-[4rem] shadow-2xl border border-forest/5 dark:border-white/5 shadow-black/10">
+              <CommentSection />
+            </section>
 
             <section className="space-y-8">
               <div className="flex items-center justify-between px-6">
