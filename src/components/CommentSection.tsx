@@ -74,20 +74,20 @@ export default function CommentSection() {
 
   return (
     <div className="max-w-2xl mx-auto mt-16 px-4">
-      <div className="flex items-center justify-between mb-8 pb-4 border-b border-forest/5">
-        <h3 className="text-xl font-black text-forest flex items-center gap-2 tracking-tighter">
+      <div className="flex items-center justify-between mb-8 pb-4 border-b border-forest/5 dark:border-white/10">
+        <h3 className="text-xl font-black text-forest dark:text-white/90 flex items-center gap-2 tracking-tighter">
           <MessageCircle className="w-5 h-5 text-accent" />
           댓글 <span className="text-accent">{comments.length}</span>
         </h3>
-        <button className="text-xs font-bold text-forest/40 hover:text-accent transition-colors">
+        <button className="text-xs font-bold text-forest/40 dark:text-white/40 hover:text-accent transition-colors">
           최신순
         </button>
       </div>
 
       {/* Comment Input */}
       <form onSubmit={handleSubmit} className="mb-10 group">
-        <div className="relative flex items-center gap-3 p-4 bg-white dark:bg-forest/50 rounded-3xl shadow-sm border border-forest/5 group-focus-within:border-accent/30 group-focus-within:shadow-xl group-focus-within:shadow-accent/5 transition-all duration-500">
-          <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0 border-2 border-forest/5">
+        <div className="relative flex items-center gap-3 p-4 bg-white dark:bg-white/5 rounded-3xl shadow-sm border border-forest/5 dark:border-white/10 group-focus-within:border-accent/30 group-focus-within:shadow-xl group-focus-within:shadow-accent/5 transition-all duration-500">
+          <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0 border-2 border-forest/5 dark:border-white/10">
             <Image 
               src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=200&h=200&auto=format&fit=crop" 
               alt="My Avatar" 
@@ -101,10 +101,10 @@ export default function CommentSection() {
             value={newComment}
             onChange={(e) => setNewComment(e.target.value)}
             placeholder="칭찬 섞인 따뜻한 댓글을 남겨주세요..."
-            className="flex-1 bg-transparent text-sm font-medium text-forest dark:text-white outline-none placeholder:text-forest/20"
+            className="flex-1 bg-transparent text-sm font-medium text-forest dark:text-white outline-none placeholder:text-forest/20 dark:placeholder:text-white/20"
           />
           <div className="flex items-center gap-2">
-            <button type="button" className="p-2 text-forest/20 hover:text-accent transition-colors">
+            <button type="button" className="p-2 text-forest/20 dark:text-white/20 hover:text-accent transition-colors">
               <Smile size={20} />
             </button>
             <button 
@@ -129,7 +129,7 @@ export default function CommentSection() {
               exit={{ opacity: 0, scale: 0.95 }}
               className="flex gap-4 group"
             >
-              <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0 border-2 border-forest/5 shadow-sm group-hover:scale-110 transition-transform duration-500">
+              <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0 border-2 border-forest/5 dark:border-white/10 shadow-sm group-hover:scale-110 transition-transform duration-500">
                 <Image 
                   src={comment.user.avatar} 
                   alt={comment.user.name} 
@@ -142,9 +142,9 @@ export default function CommentSection() {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <span className="text-sm font-black text-forest dark:text-white tracking-tight">{comment.user.name}</span>
-                    <span className="text-[10px] font-bold text-forest/20">{comment.timestamp}</span>
+                    <span className="text-[10px] font-bold text-forest/20 dark:text-white/30">{comment.timestamp}</span>
                   </div>
-                  <button className="text-forest/20 hover:text-accent opacity-0 group-hover:opacity-100 transition-all">
+                  <button className="text-forest/20 dark:text-white/20 hover:text-accent opacity-0 group-hover:opacity-100 transition-all">
                     <MoreHorizontal size={16} />
                   </button>
                 </div>
@@ -154,12 +154,12 @@ export default function CommentSection() {
                 <div className="flex items-center gap-4 pt-2">
                   <button 
                     onClick={() => toggleLike(comment.id)}
-                    className={`flex items-center gap-1 text-[11px] font-black transition-colors ${comment.isLiked ? 'text-rose-500' : 'text-forest/30 hover:text-rose-500'}`}
+                    className={`flex items-center gap-1 text-[11px] font-black transition-colors ${comment.isLiked ? 'text-rose-500' : 'text-forest/30 dark:text-white/40 hover:text-rose-500'}`}
                   >
                     <Heart size={14} fill={comment.isLiked ? "currentColor" : "none"} />
                     {comment.likes > 0 && comment.likes}
                   </button>
-                  <button className="text-[11px] font-black text-forest/30 hover:text-accent transition-colors uppercase tracking-widest">
+                  <button className="text-[11px] font-black text-forest/30 dark:text-white/40 hover:text-accent transition-colors uppercase tracking-widest">
                     Reply
                   </button>
                 </div>
