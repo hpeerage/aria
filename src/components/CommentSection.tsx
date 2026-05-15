@@ -17,30 +17,7 @@ interface Comment {
   isLiked: boolean;
 }
 
-const MOCK_COMMENTS: Comment[] = [
-  {
-    id: "1",
-    user: {
-      name: "wellness_traveler",
-      avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200&h=200&auto=format&fit=crop",
-    },
-    text: "정선 동강의 물소리가 여기까지 들리는 것 같아요! 다음 주에 꼭 방문해보고 싶네요. ✨",
-    timestamp: "2시간 전",
-    likes: 12,
-    isLiked: false,
-  },
-  {
-    id: "2",
-    user: {
-      name: "mimi_pm",
-      avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=200&h=200&auto=format&fit=crop",
-    },
-    text: "이곳의 일몰은 정말 예술입니다. 카메라 꼭 챙겨가세요! 📸",
-    timestamp: "5시간 전",
-    likes: 24,
-    isLiked: true,
-  }
-];
+const MOCK_COMMENTS: Comment[] = [];
 
 export default function CommentSection() {
   const [comments, setComments] = useState<Comment[]>(MOCK_COMMENTS);
