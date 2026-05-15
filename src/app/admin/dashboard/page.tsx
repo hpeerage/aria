@@ -285,10 +285,21 @@ export default function DashboardPage() {
             ))}
           </div>
 
-          <div className="p-6 bg-accent/5 border border-accent/20 rounded-2xl flex items-center gap-4">
-            <AlertTriangle className="w-6 h-6 text-accent animate-pulse" />
-            <p className="text-[10px] font-bold text-accent leading-relaxed">
-              수정 사항이 있는 경우 우측 상단 [Cloud Sync] 버튼을 통해 GitHub에 반영해 주세요.
+          <div className="space-y-4 pt-6 border-t border-white/5">
+            <button 
+              onClick={() => {
+                if (confirm("모든 로컬 변경사항을 삭제하고 구글 시트 원본 데이터로 초기화하시겠습니까?\n이 작업은 되돌릴 수 없습니다.")) {
+                  localStorage.removeItem('aria_local_places');
+                  window.location.reload();
+                }
+              }}
+              className="w-full py-4 bg-rose-500/10 hover:bg-rose-500 text-rose-500 hover:text-white border border-rose-500/20 rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-3 group"
+            >
+              <RefreshCcw className="w-4 h-4 group-hover:rotate-180 transition-transform duration-700" />
+              Force Data Reset
+            </button>
+            <p className="text-[9px] text-white/20 text-center font-bold uppercase tracking-tight">
+              Danger Zone: Irreversible Action
             </p>
           </div>
         </motion.div>
