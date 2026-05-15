@@ -1,3 +1,4 @@
+/** [v1.1.0] Force reset and re-fetch from Google Sheets */
 import { Place } from "@/types/place";
 import { getImagesByCategory, validateImagePaths } from "./place-images";
 

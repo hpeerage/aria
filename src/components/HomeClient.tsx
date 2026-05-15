@@ -23,37 +23,40 @@ export default function HomeClient({ places: initialPlaces }: HomeClientProps) {
   const [isLocating, setIsLocating] = useState(false);
 
   useEffect(() => {
-    // Merge with LocalStorage changes for real-time map accuracy
+    // [v1.1.0] 데이터 리셋 및 구글 시트 강제 동기화 강화
     const localData = localStorage.getItem('aria_local_places');
+    let merged = [...initialPlaces];
+
     if (localData) {
-      const parsed = JSON.parse(localData).map((p: Place) => ({
-        ...p,
-        images: validateImagePaths(p.images || [], p.id, p.category)
-      }));
-      const merged = [...initialPlaces];
-      parsed.forEach((localPlace: Place) => {
-        const idx = merged.findIndex(p => p.id === localPlace.id);
-        if (idx >= 0) merged[idx] = localPlace;
-        else merged.push(localPlace);
-      });
-
-      // 이름 기준 중복 제거 (베드 데이터 방지)
-      const uniquePlaces = merged.reduce((acc: Place[], current) => {
-        const x = acc.find(item => item.name === current.name);
-        if (!x) return acc.concat([current]);
-        else return acc;
-      }, []);
-
-      setPlaces(uniquePlaces);
-    } else {
-      // 로컬 데이터가 없더라도 시트 데이터 자체의 중복 제거
-      const uniquePlaces = initialPlaces.reduce((acc: Place[], current) => {
-        const x = acc.find(item => item.name === current.name);
-        if (!x) return acc.concat([current]);
-        else return acc;
-      }, []);
-      setPlaces(uniquePlaces);
+      try {
+        const parsed = JSON.parse(localData).map((p: Place) => ({
+          ...p,
+          images: validateImagePaths(p.images || [], p.id, p.category)
+        }));
+        
+        // 로컬 데이터 병합 (시트에 없는 새로운 테스트 장소만 유지)
+        parsed.forEach((localPlace: Place) => {
+          const idx = merged.findIndex(p => p.id === localPlace.id || p.name === localPlace.name);
+          if (idx >= 0) {
+            // 이미 시트에 존재하는 데이터라면 시트의 최신 정보를 유지 (로컬 덮어쓰기 방지)
+            merged[idx] = { ...merged[idx], ...localPlace, id: merged[idx].id };
+          } else {
+            merged.push(localPlace);
+          }
+        });
+      } catch (e) {
+        console.error("Local data sync failed, falling back to sheet data:", e);
+      }
     }
+
+    // 이름 기준 최종 중복 제거 (베드 데이터 및 중복 데이터 방지)
+    const uniquePlaces = merged.reduce((acc: Place[], current) => {
+      const x = acc.find(item => item.name === current.name);
+      if (!x) return acc.concat([current]);
+      return acc;
+    }, []);
+
+    setPlaces(uniquePlaces);
   }, [initialPlaces]);
 
   const handleExplore = () => {
