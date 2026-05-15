@@ -97,45 +97,6 @@ export async function getPlacesFromGoogleSheet(sheetId: string, sheetName?: stri
         };
       });
 
-    // --- [v0.8.0 / v0.8.3] GitHub 동기화 데이터 병합 및 빌드 시점 정합성 강화 ---
-    try {
-      let syncedPlaces: Place[] = [];
-      const isServer = typeof window === 'undefined';
-      
-      // 서버/브라우저 환경 공통으로 fetch 시도 (캐시 무효화 포함)
-      const isProd = !isServer && 
-                    (window.location.hostname.includes('github.io') || window.location.hostname.includes('vercel.app'));
-      const basePath = isProd ? '/aria' : '';
-      const timestamp = new Date().getTime();
-      
-      // 빌드 시점에는 상대 경로 fetch가 실패할 수 있으므로 조용히 처리
-      try {
-        const syncRes = await fetch(`${basePath}/data/places.json?t=${timestamp}`);
-        if (syncRes.ok) {
-          syncedPlaces = await syncRes.json();
-        }
-      } catch {
-        // 빌드 타임 환경 등에서 fetch 실패 시 로깅 생략 (폴백 작동)
-      }
-
-      if (syncedPlaces && syncedPlaces.length > 0) {
-        const combinedMap = new Map<number, Place>();
-        sourcePlaces.forEach(p => combinedMap.set(p.id, p));
-        syncedPlaces.forEach(p => {
-          if (p && p.id && p.coordinates) {
-            // [v0.8.3] 병합 시에도 좌표 유효성 검사
-            if (!p.coordinates.lat || !p.coordinates.lng || p.coordinates.lat === 0 || p.coordinates.lng === 0) {
-              p.coordinates = JEONGSEON_CENTER;
-            }
-            combinedMap.set(p.id, p);
-          }
-        });
-        return Array.from(combinedMap.values());
-      }
-    } catch (e) {
-      console.warn("Synced data merge failed:", e);
-    }
-
     return sourcePlaces;
   } catch (error) {
     console.error("Error fetching places from Google Sheets:", error);
