@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Mail, MessageSquare, Globe, Sparkles, ShieldCheck, Heart } from "lucide-react";
+import { X, Globe, MessageSquare, Sparkles, ShieldCheck, Heart } from "lucide-react";
 import { useAuth } from "@/lib/auth/context";
 import Image from "next/image";
 import { useState } from "react";
@@ -113,7 +113,7 @@ export default function AriaAuthModal({ isOpen, onClose }: AriaAuthModalProps) {
                 </p>
               </div>
             </div>
-          </div>
+          </motion.div>
         </div>
       )}
     </AnimatePresence>
