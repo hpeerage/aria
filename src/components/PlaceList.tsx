@@ -319,26 +319,15 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
       return matchesSearch && matchesCategory;
     })
     .sort((a, b) => {
+      // 내 주변 탭에서는 거리순 정렬
       if (selectedCategory === dict.common.nearMe && userLocation) {
         const distA = calculateDistance(userLocation.lat, userLocation.lng, a.coordinates.lat, a.coordinates.lng);
         const distB = calculateDistance(userLocation.lat, userLocation.lng, b.coordinates.lat, b.coordinates.lng);
         return distA - distB;
       }
       
-      // [v0.8.6] "전체" 탭에서 카테고리별 그룹화 정렬 (시트 순서와 관계없이 묶어서 표시)
-      if (selectedCategory === dict.common.all) {
-        const categoryOrder = ["nature", "water", "activity", "food", "culture", "stay"];
-        const orderA = categoryOrder.indexOf(a.category);
-        const orderB = categoryOrder.indexOf(b.category);
-        
-        if (orderA !== orderB) {
-          return (orderA === -1 ? 99 : orderA) - (orderB === -1 ? 99 : orderB);
-        }
-        // 같은 카테고리 내에서는 ID 순서(기본 시트 순서) 유지
-        return a.id - b.id;
-      }
-      
-      return 0;
+      // 그 외(전체 보기 포함) 모든 경우에는 No. (ID) 순서로 정렬
+      return a.id - b.id;
     });
 
   return (
