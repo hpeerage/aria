@@ -141,7 +141,7 @@ export default function PlaceList({ initialPlaces }: PlaceListProps) {
       try {
         const isProd = typeof window !== 'undefined' && 
                        (window.location.hostname.includes('github.io') || window.location.hostname.includes('vercel.app'));
-        const basePath = isProd ? '/aria' : '';
+        const basePath = isProd ? ' : '';
         const timestamp = new Date().getTime();
         const syncRes = await fetch(`${basePath}/data/places.json?t=${timestamp}`, { cache: 'no-store' });
         

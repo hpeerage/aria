@@ -6,6 +6,6 @@ export default function robots(): MetadataRoute.Robots {
       userAgent: '*',
       allow: '/',
     },
-    sitemap: 'https://hpeerage.github.io/aria/sitemap.xml',
+    sitemap: 'https://hpeerage.github.io/sitemap.xml',
   };
 }

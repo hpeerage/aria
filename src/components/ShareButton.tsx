@@ -17,7 +17,7 @@ export default function ShareButton({ place, className = "" }: ShareButtonProps)
   const [isOpen, setIsOpen] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
 
-  const shareUrl = typeof window !== "undefined" ? `${window.location.origin}/aria/places/${place.id}/` : "";
+  const shareUrl = typeof window !== "undefined" ? `${window.location.origin}/places/${place.id}/` : "";
 
   const shareTitle = (dict.common.shareTitle as string).replace("{name}", place.name);
   const shareText = place.description || (dict.common.shareDescription as string).replace("{name}", place.name);
@@ -48,7 +48,7 @@ export default function ShareButton({ place, className = "" }: ShareButtonProps)
 
   const shareToKakao = () => {
     if (window.Kakao && window.Kakao.isInitialized()) {
-      const rawImageUrl = place.images?.[0] || 'https://hpeerage.github.io/aria/og-image.jpg';
+      const rawImageUrl = place.images?.[0] || 'https://hpeerage.github.io/og-image.jpg';
       const absoluteImageUrl = rawImageUrl.startsWith('http') 
         ? rawImageUrl 
         : `${window.location.origin}${rawImageUrl}`;

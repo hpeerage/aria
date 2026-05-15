@@ -63,7 +63,7 @@ export function getImagesByCategory(category: string, id: number): string[] {
   // 로컬 이미지 경로 (ID가 실제로 존재하는 경우만 엄격하게 추가)
   const ext = EXISTING_LOCAL_IMAGES[id];
   if (ext) {
-    const localImg = `/aria/images/${String(id).padStart(2, '0')}_01.${ext}`;
+    const localImg = `/images/${String(id).padStart(2, '0')}_01.${ext}`;
     // 로컬 이미지를 가장 앞에 배치하여 우선순위 부여
     return [localImg, ...result];
   }
@@ -83,7 +83,7 @@ export function validateImagePaths(images: string[], id: number, category: strin
     // [v0.8.0] Base64 이미지(직접 업로드)는 검증 없이 즉시 최우선 적용
     if (img.startsWith('data:image/')) return img;
 
-    // 로컬 이미지 경로 패턴 감지 (/aria/images/XX_01.xxx)
+    // 로컬 이미지 경로 패턴 감지 (/images/XX_01.xxx)
     const localMatch = img.match(/\/aria\/images\/(\d+)_01\.(jpg|jpeg|webp)/);
     if (localMatch) {
       const matchId = parseInt(localMatch[1], 10);

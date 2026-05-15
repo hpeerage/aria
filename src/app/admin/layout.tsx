@@ -29,7 +29,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         {/* Logo */}
         <div className="flex items-center gap-4 mb-16 group">
           <div className="relative h-10 w-24 transition-transform duration-500 overflow-hidden">
-            <Image src="/aria/images/logo.svg" alt="Aria Logo" fill className="object-contain filter brightness-0 invert opacity-80" />
+            <Image src="/images/logo.svg" alt="Aria Logo" fill className="object-contain filter brightness-0 invert opacity-80" />
           </div>
           <div>
             <h5 className="text-xl font-black tracking-tight leading-none mb-1 text-white">Aria <span className="text-accent underline decoration-accent/20">Console</span></h5>
