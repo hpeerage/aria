@@ -42,7 +42,7 @@ function AdminPlacesContent() {
         // 2. Fetch from GitHub Server (To compare sync status)
         const isProd = typeof window !== 'undefined' && 
                        (window.location.hostname.includes('github.io') || window.location.hostname.includes('vercel.app'));
-        const basePath = isProd ? ' : '';
+        const basePath = '';
         const timestamp = new Date().getTime();
         
         try {
