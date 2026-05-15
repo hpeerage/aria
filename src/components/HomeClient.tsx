@@ -36,10 +36,12 @@ export default function HomeClient({ places: initialPlaces }: HomeClientProps) {
         
         // 로컬 데이터 병합 (시트에 없는 새로운 테스트 장소만 유지)
         parsed.forEach((localPlace: Place) => {
-          const idx = merged.findIndex(p => p.id === localPlace.id || p.name === localPlace.name);
+          const trimmedLocalName = localPlace.name.trim();
+          const idx = merged.findIndex(p => p.id === localPlace.id || p.name.trim() === trimmedLocalName);
+          
           if (idx >= 0) {
-            // 이미 시트에 존재하는 데이터라면 시트의 최신 정보를 유지 (로컬 덮어쓰기 방지)
-            merged[idx] = { ...merged[idx], ...localPlace, id: merged[idx].id };
+            // 이미 시트에 존재하는 데이터(이름이 같거나 ID가 같은 경우)라면 시트의 최신 정보를 유지
+            // 로컬에만 있는 구버전 데이터(75번 등)가 시트 데이터를 덮어쓰지 못하게 함
           } else {
             merged.push(localPlace);
           }
@@ -49,9 +51,10 @@ export default function HomeClient({ places: initialPlaces }: HomeClientProps) {
       }
     }
 
-    // 이름 기준 최종 중복 제거 (베드 데이터 및 중복 데이터 방지)
+    // 이름 기준 최종 중복 제거 (공백 제거 후 비교하여 베드 데이터 완벽 차단)
     const uniquePlaces = merged.reduce((acc: Place[], current) => {
-      const x = acc.find(item => item.name === current.name);
+      const currentNameTrimmed = current.name.trim();
+      const x = acc.find(item => item.name.trim() === currentNameTrimmed);
       if (!x) return acc.concat([current]);
       return acc;
     }, []);
