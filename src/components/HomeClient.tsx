@@ -57,7 +57,7 @@ export default function HomeClient({ places: initialPlaces }: HomeClientProps) {
       const x = acc.find(item => item.name.trim() === currentNameTrimmed);
       if (!x) return acc.concat([current]);
       return acc;
-    }, []);
+    }, []).sort((a, b) => a.id - b.id);
 
     setPlaces(uniquePlaces);
   }, [initialPlaces]);
