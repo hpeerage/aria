@@ -14,6 +14,7 @@ interface AuthContextType {
   user: User | null;
   isLoading: boolean;
   login: (provider: "kakao" | "google") => Promise<void>;
+  loginWithEmail: (email: string, pass: string) => Promise<void>;
   logout: () => void;
 }
 
@@ -31,6 +32,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
     setIsLoading(false);
   }, []);
+
+  const loginWithEmail = async (email: string, pass: string) => {
+    setIsLoading(true);
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    
+    const mockUser: User = {
+      id: "email-user-456",
+      name: email.split('@')[0],
+      email: email,
+      avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=200&h=200&auto=format&fit=crop",
+      provider: "guest"
+    };
+
+    setUser(mockUser);
+    localStorage.setItem("aria_session", JSON.stringify(mockUser));
+    setIsLoading(false);
+  };
 
   const login = async (provider: "kakao" | "google") => {
     setIsLoading(true);
@@ -58,7 +76,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, isLoading, login, logout }}>
+    <AuthContext.Provider value={{ user, isLoading, login, loginWithEmail, logout }}>
       {children}
     </AuthContext.Provider>
   );

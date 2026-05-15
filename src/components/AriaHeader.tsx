@@ -194,7 +194,7 @@ export default function AriaHeader() {
                     }`}
                   >
                     <UserIcon size={14} />
-                    {dict.common.login || "Login"}
+                    {(dict.common as any)?.login || "Login"}
                   </button>
                 )}
               </div>

@@ -152,7 +152,10 @@ export default function AriaMap({ places, onMarkerClick, userLocation, focusedPl
     markersRef.current.forEach(m => m.setMap(null));
     markersRef.current = [];
 
-    const bounds = new naver.maps.LatLngBounds();
+    const bounds = new naver.maps.LatLngBounds(
+      new naver.maps.LatLng(37.3806, 128.6608),
+      new naver.maps.LatLng(37.3806, 128.6608)
+    );
 
     places.forEach((place) => {
       const { color } = getMarkerConfig(place.category, place.icon, place.color);

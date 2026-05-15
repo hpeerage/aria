@@ -11,4 +11,5 @@ export interface Place {
   wellnessTips?: string[]; // 웰니스 인사이트/팁 리스트
   icon?: string;       // 커스텀 마커 아이콘 이름
   color?: string;      // 커스텀 마커/테마 색상 이름 (emerald, rose 등)
+  lastUpdated?: string; // 마지막 수정 시간
 }
