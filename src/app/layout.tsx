@@ -53,6 +53,7 @@ export const viewport = {
 
 import { LanguageProvider } from "@/lib/i18n/context";
 import { WishlistProvider } from "@/lib/wishlist/context";
+import { AuthProvider } from "@/lib/auth/context";
 import FloatingCart from "@/components/FloatingCart";
 import WishlistPanel from "@/components/WishlistPanel";
 import KakaoScript from "@/components/KakaoScript";
@@ -69,15 +70,17 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         suppressHydrationWarning
       >
-        <LanguageProvider>
-          <WishlistProvider>
-            {children}
-            <FloatingCart />
-            <WishlistPanel />
-            <KakaoScript />
-            <NaverScript />
-          </WishlistProvider>
-        </LanguageProvider>
+        <AuthProvider>
+          <LanguageProvider>
+            <WishlistProvider>
+              {children}
+              <FloatingCart />
+              <WishlistPanel />
+              <KakaoScript />
+              <NaverScript />
+            </WishlistProvider>
+          </LanguageProvider>
+        </AuthProvider>
       </body>
     </html>
   );

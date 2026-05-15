@@ -19,7 +19,10 @@ interface Comment {
 
 const MOCK_COMMENTS: Comment[] = [];
 
+import { useAuth } from "@/lib/auth/context";
+
 export default function CommentSection() {
+  const { user } = useAuth();
   const [comments, setComments] = useState<Comment[]>(MOCK_COMMENTS);
   const [newComment, setNewComment] = useState("");
 
@@ -27,11 +30,16 @@ export default function CommentSection() {
     e.preventDefault();
     if (!newComment.trim()) return;
 
+    if (!user) {
+      alert("댓글을 남기려면 먼저 로그인해주세요!");
+      return;
+    }
+
     const comment: Comment = {
       id: Date.now().toString(),
       user: {
-        name: "aria_guest",
-        avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=200&h=200&auto=format&fit=crop",
+        name: user.name,
+        avatar: user.avatar,
       },
       text: newComment,
       timestamp: "방금 전",

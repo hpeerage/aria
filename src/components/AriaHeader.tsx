@@ -2,18 +2,23 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, Menu, X, Clock, TrendingUp, ArrowRight } from "lucide-react";
+import { Search, Menu, X, Clock, TrendingUp, ArrowRight, LogOut, User as UserIcon } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useLanguage } from "@/lib/i18n/context";
+import { useAuth } from "@/lib/auth/context";
+import AriaAuthModal from "./AriaAuthModal";
 
 export default function AriaHeader() {
   const { locale, setLocale, dict } = useLanguage();
+  const { user, logout } = useAuth();
   const router = useRouter();
+  
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -122,16 +127,6 @@ export default function AriaHeader() {
                   }`}
                 />
               </div>
-              {!isScrolled && (
-                <motion.div 
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  className="flex flex-col border-l border-white/20 pl-3 ml-1"
-                >
-                  <span className="text-xs font-black tracking-widest text-white uppercase leading-tight">Jeongseon</span>
-                  <span className="text-[10px] font-bold text-white/40 uppercase tracking-tighter">Wellness</span>
-                </motion.div>
-              )}
             </Link>
 
             {/* Desktop Nav Items */}
@@ -151,6 +146,7 @@ export default function AriaHeader() {
 
             {/* Action Icons */}
             <div className="flex items-center gap-4">
+              {/* Language Switch */}
               <div className="hidden lg:flex items-center bg-forest/5 dark:bg-white/10 rounded-2xl p-1 border border-forest/10 dark:border-white/10">
                 <button 
                   onClick={() => setLocale("ko")}
@@ -169,6 +165,39 @@ export default function AriaHeader() {
                   EN
                 </button>
               </div>
+
+              {/* Login / Profile */}
+              <div className="flex items-center gap-3">
+                {user ? (
+                  <div className="flex items-center gap-3 bg-white/10 backdrop-blur-md px-2 py-2 rounded-2xl border border-white/10">
+                    <div className="w-8 h-8 rounded-xl overflow-hidden border border-white/20">
+                      <Image src={user.avatar} alt={user.name} width={32} height={32} className="object-cover" />
+                    </div>
+                    <span className={`hidden md:block text-[10px] font-black uppercase tracking-widest ${isScrolled ? 'text-forest' : 'text-white'}`}>
+                      {user.name}
+                    </span>
+                    <button 
+                      onClick={logout}
+                      className="p-2 hover:text-accent transition-colors text-white/50"
+                      title="Logout"
+                    >
+                      <LogOut size={14} />
+                    </button>
+                  </div>
+                ) : (
+                  <button 
+                    onClick={() => setIsLoginModalOpen(true)}
+                    className={`px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] transition-all flex items-center gap-2 ${
+                      isScrolled 
+                        ? "bg-forest/5 text-forest hover:bg-forest hover:text-white" 
+                        : "bg-white/10 text-white hover:bg-white"
+                    }`}
+                  >
+                    <UserIcon size={14} />
+                    {dict.common.login || "Login"}
+                  </button>
+                )}
+              </div>
               
               {/* Search Button */}
               <motion.button
@@ -177,17 +206,12 @@ export default function AriaHeader() {
                 onClick={() => setIsSearchOpen(true)}
                 className={`flex items-center gap-2 px-4 py-3 rounded-2xl transition-all ${
                   isScrolled 
-                    ? "bg-forest text-white shadow-xl shadow-forest/20 hover:bg-accent" 
-                    : "bg-white/10 text-white hover:bg-white/20"
+                    ? "bg-accent text-white shadow-xl shadow-accent/20 hover:bg-forest" 
+                    : "bg-white/20 text-white hover:bg-white/30"
                 }`}
               >
                 <Search className="w-4 h-4" />
                 <span className="hidden sm:block text-[10px] font-black uppercase tracking-widest">검색</span>
-                <span className={`hidden lg:flex items-center gap-1 text-[9px] font-bold px-1.5 py-0.5 rounded-lg ${
-                  isScrolled ? "bg-white/20 text-white/70" : "bg-white/10 text-white/50"
-                }`}>
-                  ⌘K
-                </span>
               </motion.button>
 
               <button 
@@ -260,7 +284,7 @@ export default function AriaHeader() {
         </AnimatePresence>
       </header>
 
-      {/* ⭐ Full-Screen Search Overlay */}
+      {/* Search Overlay */}
       <AnimatePresence>
         {isSearchOpen && (
           <>
@@ -337,15 +361,6 @@ export default function AriaHeader() {
                             {term}
                           </motion.button>
                         ))}
-                        <button
-                          onClick={() => {
-                            setRecentSearches([]);
-                            localStorage.removeItem("aria_recent_searches");
-                          }}
-                          className="px-3 py-2 text-[10px] font-black text-forest/30 dark:text-white/20 hover:text-red-400 transition-colors uppercase tracking-wider"
-                        >
-                          지우기
-                        </button>
                       </div>
                     </div>
                   )}
@@ -372,19 +387,18 @@ export default function AriaHeader() {
                       ))}
                     </div>
                   </div>
-
-                  {/* Keyboard hint */}
-                  <div className="flex items-center justify-center gap-4 text-[10px] font-black text-forest/20 dark:text-white/20 uppercase tracking-widest pt-2 border-t border-forest/5 dark:border-white/5">
-                    <span>Enter — 검색</span>
-                    <span>·</span>
-                    <span>Esc — 닫기</span>
-                  </div>
                 </div>
               </div>
             </motion.div>
           </>
         )}
       </AnimatePresence>
+
+      {/* Login Modal */}
+      <AriaAuthModal 
+        isOpen={isLoginModalOpen} 
+        onClose={() => setIsLoginModalOpen(false)} 
+      />
     </>
   );
 }
