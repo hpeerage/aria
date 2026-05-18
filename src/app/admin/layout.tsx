@@ -1,7 +1,8 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { LayoutDashboard, Map, Settings, Globe, LogOut, Compass, Sparkles, User, HelpCircle, Camera } from "lucide-react";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { LayoutDashboard, Map, Settings, Globe, LogOut, Compass, Sparkles, User, HelpCircle, Camera, Menu, X } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -11,6 +12,12 @@ import GithubPushBtn from "@/components/admin/GithubPushBtn";
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const { dict } = useLanguage();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  // 경로 변경 시 모바일 사이드바 자동으로 닫기
+  useEffect(() => {
+    setIsSidebarOpen(false);
+  }, [pathname]);
 
   // 로그인 페이지는 레이아웃에서 제외하거나 별도로 처리해야 함
   if (pathname === "/admin/login") return <>{children}</>;
@@ -25,8 +32,32 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   return (
     <div className="flex min-h-screen bg-forest-dark text-white font-sans selection:bg-accent/30">
+      {/* Mobile Hamburger Button */}
+      <button
+        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+        className="fixed top-6 left-6 z-[60] md:hidden p-4 bg-white/10 backdrop-blur-md border border-white/10 rounded-2xl text-white hover:bg-white/20 active:scale-95 transition-all"
+        title="Toggle Menu"
+      >
+        {isSidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+      </button>
+
+      {/* Backdrop for Mobile */}
+      <AnimatePresence>
+        {isSidebarOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setIsSidebarOpen(false)}
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[45] md:hidden"
+          />
+        )}
+      </AnimatePresence>
+
       {/* Sidebar */}
-      <aside className="w-80 h-screen fixed top-0 left-0 bg-white/5 border-r border-white/5 backdrop-blur-2xl z-50 flex flex-col p-8 overflow-y-auto">
+      <aside className={`w-80 h-screen fixed top-0 left-0 bg-[#0c1a14]/90 md:bg-white/5 border-r border-white/5 backdrop-blur-2xl z-50 flex flex-col p-8 overflow-y-auto transition-transform duration-300 ${
+        isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+      } md:translate-x-0`}>
         {/* Logo */}
         <div className="flex items-center gap-4 mb-16 group">
           <div className="relative h-10 w-24 transition-transform duration-500 overflow-hidden">
@@ -89,13 +120,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       </aside>
 
       {/* Main Content Area */}
-      <main className="flex-1 ml-80 p-12 overflow-x-hidden pt-16">
-        <header className="flex justify-between items-center mb-16 relative">
+      <main className="flex-1 ml-0 md:ml-80 p-6 md:p-12 overflow-x-hidden pt-28 md:pt-16">
+        <header className="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-6 mb-16 relative">
           <div>
-            <h2 className="text-4xl font-black text-white tracking-tighter mb-2">{dict.admin.explorerTitle}</h2>
-            <p className="text-white/40 font-medium">{dict.admin.explorerDesc}</p>
+            <h2 className="text-3xl md:text-4xl font-black text-white tracking-tighter mb-2">{dict.admin.explorerTitle}</h2>
+            <p className="text-white/40 font-medium text-sm md:text-base">{dict.admin.explorerDesc}</p>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex flex-wrap items-center gap-4">
             <GithubPushBtn />
             <div className="flex gap-2">
               <button className="p-4 bg-white/5 hover:bg-white/10 rounded-2xl border border-white/5 transition-all text-white/40 hover:text-accent">
