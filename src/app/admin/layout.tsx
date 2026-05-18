@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { LayoutDashboard, Map, Settings, Globe, LogOut, Compass, Sparkles, User, HelpCircle } from "lucide-react";
+import { LayoutDashboard, Map, Settings, Globe, LogOut, Compass, Sparkles, User, HelpCircle, Camera } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -18,6 +18,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const menuItems = [
     { title: dict.admin.dashboard, icon: LayoutDashboard, href: "/admin/dashboard" },
     { title: dict.admin.places, icon: Map, href: "/admin/places" },
+    { title: "모바일 스냅", icon: Camera, href: "/admin/snap" },
     { title: `i18n ${dict.admin.settings}`, icon: Globe, href: "/admin/i18n" },
     { title: dict.admin.settings, icon: Settings, href: "/admin/settings" },
   ];
