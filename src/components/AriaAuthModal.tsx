@@ -17,23 +17,42 @@ export default function AriaAuthModal({ isOpen, onClose }: AriaAuthModalProps) {
   const [mode, setMode] = useState<AuthMode>("social");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loginError, setLoginError] = useState("");
 
   const handleSocialLogin = async (provider: "kakao" | "google") => {
-    await login(provider);
-    onClose();
+    setLoginError("");
+    try {
+      await login(provider);
+      onClose();
+    } catch (err: any) {
+      console.error(err);
+      setLoginError("소셜 로그인에 실패했습니다. 다시 시도해주세요.");
+    }
   };
 
   const handleEmailLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || !password) return;
-    await loginWithEmail(email, password);
-    onClose();
+    setLoginError("");
+    try {
+      await loginWithEmail(email, password);
+      onClose();
+    } catch (err: any) {
+      console.error(err);
+      // Supabase 에러 메시지를 사용자 친화적으로 매핑
+      if (err.message === "Invalid login credentials") {
+        setLoginError("이메일 또는 비밀번호가 올바르지 않습니다.");
+      } else {
+        setLoginError(err.message || "로그인에 실패했습니다.");
+      }
+    }
   };
 
   const resetForm = () => {
     setMode("social");
     setEmail("");
     setPassword("");
+    setLoginError("");
   };
 
   return (
@@ -141,6 +160,15 @@ export default function AriaAuthModal({ isOpen, onClose }: AriaAuthModalProps) {
                     onSubmit={handleEmailLogin}
                     className="space-y-4"
                   >
+                    {loginError && (
+                      <motion.div 
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="p-4 bg-red-500/10 border border-red-500/20 rounded-2xl text-xs font-bold text-red-500 text-center leading-relaxed"
+                      >
+                        {loginError}
+                      </motion.div>
+                    )}
                     <div className="space-y-2">
                       <div className="relative group">
                         <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-forest/20 dark:text-white/20 group-focus-within:text-accent transition-colors" />

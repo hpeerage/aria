@@ -1,6 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect } from "react";
+import { supabase } from "@/lib/supabase";
 
 interface User {
   id: string;
@@ -15,7 +16,7 @@ interface AuthContextType {
   isLoading: boolean;
   login: (provider: "kakao" | "google") => Promise<void>;
   loginWithEmail: (email: string, pass: string) => Promise<void>;
-  logout: () => void;
+  logout: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -25,54 +26,84 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // 로컬 스토리지에서 세션 확인
-    const savedUser = localStorage.getItem("aria_session");
-    if (savedUser) {
-      setUser(JSON.parse(savedUser));
-    }
-    setIsLoading(false);
+    // 1. 초기 세션 확인 및 복구
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session && session.user) {
+        const u = session.user;
+        setUser({
+          id: u.id,
+          name: u.user_metadata?.full_name || u.email?.split("@")[0] || "관리자",
+          email: u.email || "",
+          avatar: u.user_metadata?.avatar_url || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=200&h=200&auto=format&fit=crop",
+          provider: (session.user.app_metadata?.provider as any) || "guest"
+        });
+      } else {
+        setUser(null);
+      }
+      setIsLoading(false);
+    });
+
+    // 2. 인증 상태 변경 리스너 등록
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session && session.user) {
+        const u = session.user;
+        setUser({
+          id: u.id,
+          name: u.user_metadata?.full_name || u.email?.split("@")[0] || "관리자",
+          email: u.email || "",
+          avatar: u.user_metadata?.avatar_url || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=200&h=200&auto=format&fit=crop",
+          provider: (session.user.app_metadata?.provider as any) || "guest"
+        });
+      } else {
+        setUser(null);
+      }
+      setIsLoading(false);
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
   }, []);
 
+  // 이메일 로그인 연동
   const loginWithEmail = async (email: string, pass: string) => {
     setIsLoading(true);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    
-    const mockUser: User = {
-      id: "email-user-456",
-      name: email.split('@')[0],
-      email: email,
-      avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=200&h=200&auto=format&fit=crop",
-      provider: "guest"
-    };
-
-    setUser(mockUser);
-    localStorage.setItem("aria_session", JSON.stringify(mockUser));
-    setIsLoading(false);
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password: pass,
+    });
+    if (error) {
+      setIsLoading(false);
+      throw error;
+    }
   };
 
+  // 소셜 로그인 연동 (Redirect 방식)
   const login = async (provider: "kakao" | "google") => {
     setIsLoading(true);
-    // [v1.3.0] Mock Login - 실제 API 연동 전 UI 확인용
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    
-    const mockUser: User = {
-      id: "mock-user-123",
-      name: provider === "kakao" ? "카카오 여행자" : "구글 탐험가",
-      email: "traveler@ariajs.kr",
-      avatar: provider === "kakao" 
-        ? "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=200&h=200&auto=format&fit=crop"
-        : "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=200&h=200&auto=format&fit=crop",
-      provider: provider
-    };
-
-    setUser(mockUser);
-    localStorage.setItem("aria_session", JSON.stringify(mockUser));
-    setIsLoading(false);
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: provider,
+      options: {
+        redirectTo: typeof window !== 'undefined' 
+          ? `${window.location.origin}/admin` 
+          : undefined,
+      }
+    });
+    if (error) {
+      setIsLoading(false);
+      throw error;
+    }
   };
 
-  const logout = () => {
+  // 로그아웃 연동
+  const logout = async () => {
+    setIsLoading(true);
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      console.error("Sign out failed:", error);
+    }
     setUser(null);
-    localStorage.removeItem("aria_session");
+    setIsLoading(false);
   };
 
   return (
