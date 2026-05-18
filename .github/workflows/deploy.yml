@@ -37,6 +37,8 @@ jobs:
           NEXT_PUBLIC_KAKAO_JS_KEY: ${{ secrets.NEXT_PUBLIC_KAKAO_JS_KEY }}
           NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME: "dakxsp4wg"
           NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET: "aria_preset"
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
 
         run: |
           npm run build
