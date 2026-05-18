@@ -139,20 +139,38 @@ export default function PlaceEditForm({ isNew = false }: { isNew?: boolean }) {
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = async () => {
-        const base64 = reader.result as string;
-        try {
-          // 기본 압축 설정(1000px, 0.6) 적용
-          const compressed = await compressImage(base64);
-          setImages(prev => [...prev, compressed]);
-        } catch (err) {
-          console.error("Image compression failed:", err);
-          setImages(prev => [...prev, base64]); // 실패 시 원본이라도 추가
-        }
-      };
-      reader.readAsDataURL(file);
+    if (!file) return;
+
+    const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
+    const uploadPreset = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET;
+
+    if (!cloudName || !uploadPreset) {
+      alert("⚠️ Cloudinary 환경 변수(Cloud Name 또는 Upload Preset)가 설정되지 않았습니다.");
+      return;
+    }
+
+    setIsSaving(true);
+
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", uploadPreset);
+
+    try {
+      const res = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!res.ok) throw new Error("Cloudinary upload failed");
+
+      const data = await res.json();
+      // Cloudinary에서 반환된 최적화된 URL을 저장합니다.
+      setImages(prev => [...prev, data.secure_url]);
+    } catch (err) {
+      console.error("Image upload error:", err);
+      alert("이미지 업로드에 실패했습니다. 네트워크 상태나 프리셋 설정을 확인해 주세요.");
+    } finally {
+      setIsSaving(false);
     }
   };
 
