@@ -1,12 +1,14 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Settings, Save, Shield, Bell, Palette, Sliders, Trash2, HardDrive } from "lucide-react";
+import { Settings, Save, Shield, Bell, Palette, Sliders, Trash2, HardDrive, User } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useLanguage } from "@/lib/i18n/context";
+import { useAuth } from "@/lib/auth/context";
 
 export default function AdminSettingsPage() {
   const { dict } = useLanguage();
+  const { user, updateProfile, updatePassword } = useAuth();
   const [isSaving, setIsSaving] = useState(false);
   const [storageUsage, setStorageUsage] = useState({ used: 0, percent: 0 });
   const [config, setConfig] = useState({
@@ -15,6 +17,44 @@ export default function AdminSettingsPage() {
     repo: "aria",
     branch: "main"
   });
+
+  const [profileName, setProfileName] = useState(user?.name || "");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [isSavingProfile, setIsSavingProfile] = useState(false);
+  const [isSavingPassword, setIsSavingPassword] = useState(false);
+
+  useEffect(() => {
+    if (user?.name) {
+      setProfileName(user.name);
+    }
+  }, [user]);
+
+  const handleUpdateProfile = async () => {
+    setIsSavingProfile(true);
+    try {
+      await updateProfile(profileName);
+      alert("프로필 이름이 성공적으로 변경되었습니다.");
+    } catch (err: any) {
+      alert("프로필 수정 오류: " + err.message);
+    } finally {
+      setIsSavingProfile(false);
+    }
+  };
+
+  const handleUpdatePassword = async () => {
+    setIsSavingPassword(true);
+    try {
+      await updatePassword(newPassword);
+      alert("비밀번호가 성공적으로 변경되었습니다.");
+      setNewPassword("");
+      setConfirmPassword("");
+    } catch (err: any) {
+      alert("비밀번호 수정 오류: " + err.message);
+    } finally {
+      setIsSavingPassword(false);
+    }
+  };
 
   useEffect(() => {
     const saved = localStorage.getItem("aria_github_config");
@@ -87,6 +127,81 @@ export default function AdminSettingsPage() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {/* Profile Management Card */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="p-10 bg-white/5 border border-white/10 rounded-[3rem] space-y-8 hover:bg-white/10 transition-all group lg:col-span-2 shadow-2xl"
+        >
+          <div className="flex items-center gap-4">
+            <div className="p-4 bg-accent/20 text-accent rounded-2xl group-hover:bg-accent group-hover:text-white transition-all">
+              <User className="w-6 h-6" />
+            </div>
+            <div>
+              <h4 className="text-2xl font-black text-white tracking-tight">개인 정보 및 비밀번호 변경</h4>
+              <p className="text-[10px] font-bold text-white/30 uppercase tracking-widest">Profile & Authentication Settings</p>
+            </div>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-6 border-t border-white/5">
+            {/* Profile Edit */}
+            <div className="space-y-6">
+              <h5 className="text-lg font-bold text-white">기본 정보 설정</h5>
+              <div className="space-y-3">
+                <label className="text-[10px] font-black uppercase tracking-widest text-accent px-1">관리자 이름 (닉네임)</label>
+                <input 
+                  type="text"
+                  value={profileName}
+                  onChange={(e) => setProfileName(e.target.value)}
+                  placeholder="이름을 입력하세요"
+                  className="w-full px-6 py-5 bg-white/5 border border-white/10 rounded-2xl text-white outline-none focus:ring-2 focus:ring-accent transition-all font-bold"
+                />
+              </div>
+              <button 
+                onClick={handleUpdateProfile}
+                disabled={isSavingProfile || !profileName || profileName === user?.name}
+                className="px-6 py-4 bg-accent text-white rounded-xl font-bold hover:scale-102 active:scale-98 transition-all disabled:opacity-50 text-sm flex items-center gap-2"
+              >
+                {isSavingProfile ? "저장 중..." : "프로필 이름 변경"}
+              </button>
+            </div>
+
+            {/* Password Edit */}
+            <div className="space-y-6">
+              <h5 className="text-lg font-bold text-white">비밀번호 변경</h5>
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-widest text-accent px-1">새 비밀번호</label>
+                  <input 
+                    type="password"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    placeholder="최소 6자리 이상"
+                    className="w-full px-6 py-4 bg-white/5 border border-white/10 rounded-2xl text-white outline-none focus:ring-2 focus:ring-accent transition-all font-bold text-sm"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-widest text-accent px-1">새 비밀번호 확인</label>
+                  <input 
+                    type="password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    placeholder="비밀번호 확인"
+                    className="w-full px-6 py-4 bg-white/5 border border-white/10 rounded-2xl text-white outline-none focus:ring-2 focus:ring-accent transition-all font-bold text-sm"
+                  />
+                </div>
+              </div>
+              <button 
+                onClick={handleUpdatePassword}
+                disabled={isSavingPassword || !newPassword || newPassword !== confirmPassword || newPassword.length < 6}
+                className="px-6 py-4 bg-white/10 hover:bg-white/20 text-white rounded-xl font-bold hover:scale-102 active:scale-98 transition-all disabled:opacity-30 text-sm"
+              >
+                {isSavingPassword ? "변경 중..." : "비밀번호 변경"}
+              </button>
+            </div>
+          </div>
+        </motion.div>
+
         {/* GitHub Integration Card */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
