@@ -35,6 +35,8 @@ jobs:
           NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: ${{ secrets.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY }}
           NEXT_PUBLIC_NAVER_MAPS_CLIENT_ID: ${{ secrets.NEXT_PUBLIC_NAVER_MAPS_CLIENT_ID }}
           NEXT_PUBLIC_KAKAO_JS_KEY: ${{ secrets.NEXT_PUBLIC_KAKAO_JS_KEY }}
+          NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME: "dakxsp4wg"
+          NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET: "aria_preset"
 
         run: |
           npm run build
