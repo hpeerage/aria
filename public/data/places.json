@@ -1,5 +1,1206 @@
 [
   {
+    "id": 5,
+    "name": "아우라지 선착장",
+    "category": "activity",
+    "coordinates": {
+      "lat": 37.475433,
+      "lng": 128.722869
+    },
+    "description": "강원특별자치도 정선군 여량면 여량리 #전통체험 #아리랑전설",
+    "images": [
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779089430/w3mjxgmy2d1uzaxddffp.webp"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T07:30:35.013Z"
+  },
+  {
+    "id": 6,
+    "name": "동강 래프팅",
+    "category": "activity",
+    "coordinates": {
+      "lat": 37.3612,
+      "lng": 128.6142
+    },
+    "description": "#여름스포츠 #동강절경",
+    "images": [
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779089462/ehgyie9xv3kiezwuqj7c.jpg"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T07:31:05.613Z"
+  },
+  {
+    "id": 7,
+    "name": "하이원 워터월드",
+    "category": "activity",
+    "coordinates": {
+      "lat": 37.1955,
+      "lng": 128.8247
+    },
+    "description": "#물놀이 #실내외풀",
+    "images": [
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779089485/uipcg6p9nlbabvjeeyey.jpg"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T07:31:31.950Z"
+  },
+  {
+    "id": 8,
+    "name": "병방치 스카이워크",
+    "category": "activity",
+    "coordinates": {
+      "lat": 37.3618,
+      "lng": 128.6435
+    },
+    "description": "#아찔함 #한반도지형",
+    "images": [
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779089518/ordkadkliv32sekvqfk0.webp"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T07:32:00.975Z"
+  },
+  {
+    "id": 9,
+    "name": "정선 양떼목장",
+    "category": "activity",
+    "coordinates": {
+      "lat": 37.3912,
+      "lng": 128.6142
+    },
+    "description": "#동물먹이주기 #아이와함께",
+    "images": [
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779089542/nyy3jm4egbrxxo2pt3tk.webp"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T07:32:25.006Z"
+  },
+  {
+    "id": 10,
+    "name": "그림바위미술마을",
+    "category": "activity",
+    "coordinates": {
+      "lat": 37.3342,
+      "lng": 128.7542
+    },
+    "description": "#벽화마을 #예술체험",
+    "images": [
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779089583/gwxcvfw7oqto8jssaryb.jpg"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T07:33:05.777Z"
+  },
+  {
+    "id": 11,
+    "name": "삼탄아트마인",
+    "category": "activity",
+    "coordinates": {
+      "lat": 37.1895,
+      "lng": 128.8267
+    },
+    "description": "#폐광재생 #예술박물관",
+    "images": [
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779089615/vcvfedqv0nzb0uanomoa.webp"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T07:33:37.176Z"
+  },
+  {
+    "id": 12,
+    "name": "정선 목재문화체험장",
+    "category": "activity",
+    "coordinates": {
+      "lat": 37.3812,
+      "lng": 128.6612
+    },
+    "description": "#DIY체험 #나무놀이터",
+    "images": [
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779089638/eu0kjtegfpxipouoglif.jpg"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T07:34:00.925Z"
+  },
+  {
+    "id": 13,
+    "name": "아라리촌",
+    "category": "activity",
+    "coordinates": {
+      "lat": 37.3855,
+      "lng": 128.6694
+    },
+    "description": "#전통가옥 #민속체험",
+    "images": [
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779089657/ygnkbcpcqrw2odfwqruv.webp"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T07:34:20.005Z"
+  },
+  {
+    "id": 14,
+    "name": "정선 약초시장",
+    "category": "activity",
+    "coordinates": {
+      "lat": 37.3824,
+      "lng": 128.6642
+    },
+    "description": "#로컬쇼핑 #전통시장",
+    "images": [
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779089678/vrn6qghbpkmcibppapww.jpg"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T07:34:40.549Z"
+  },
+  {
+    "id": 15,
+    "name": "임계 사과마을",
+    "category": "activity",
+    "coordinates": {
+      "lat": 37.43019,
+      "lng": 128.664692
+    },
+    "description": "#농촌체험 #사과따기",
+    "images": [
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779089701/vswl2lho8nr7jy4khsz5.jpg"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T07:35:03.847Z"
+  },
+  {
+    "id": 16,
+    "name": "덕우리 체험마을",
+    "category": "activity",
+    "coordinates": {
+      "lat": 37.3542,
+      "lng": 128.6842
+    },
+    "description": "#삼시세끼촬영지 #한옥체험",
+    "images": [
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779089847/m6ujpwi9iyejrraphrel.webp"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T07:37:28.840Z"
+  },
+  {
+    "id": 17,
+    "name": "개미들마을",
+    "category": "activity",
+    "coordinates": {
+      "lat": 37.2842,
+      "lng": 128.7412
+    },
+    "description": "#전통체험 #농촌체류",
+    "images": [
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779089872/fgrjexl784xzvhtzjaya.jpg"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T07:37:55.547Z"
+  },
+  {
+    "id": 18,
+    "name": "백전리 물레방아",
+    "category": "activity",
+    "coordinates": {
+      "lat": 37.246835,
+      "lng": 128.898019
+    },
+    "description": "#민속유산 #전통방식",
+    "images": [
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779089898/f7do24pnfwfpy0cjszaj.jpg"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T07:38:19.746Z"
+  },
+  {
+    "id": 19,
+    "name": "고한 18번가",
+    "category": "activity",
+    "coordinates": {
+      "lat": 37.204076,
+      "lng": 128.850497
+    },
+    "description": "#마을재생 #골목여행",
+    "images": [
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779089924/amegu62inp7edhfbcphs.jpg"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T07:38:46.229Z"
+  },
+  {
+    "id": 20,
+    "name": "강원랜드 카지노",
+    "category": "activity",
+    "coordinates": {
+      "lat": 37.2012,
+      "lng": 128.8312
+    },
+    "description": "#레저 #실내액티비티",
+    "images": [
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779089957/nomdo0jiumt2ir5bgjxu.jpg"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T07:39:19.811Z"
+  },
+  {
+    "id": 21,
+    "name": "운암정",
+    "category": "activity",
+    "coordinates": {
+      "lat": 37.2042,
+      "lng": 128.8342
+    },
+    "description": "#식객촬영지 #전통차체험",
+    "images": [
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779089979/wdfopse66ner23nqcdry.jpg"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T07:39:41.535Z"
+  },
+  {
+    "id": 22,
+    "name": "나전역 카페",
+    "category": "activity",
+    "coordinates": {
+      "lat": 37.4524,
+      "lng": 128.6942
+    },
+    "description": "#간이역 #레트로 #크림커피",
+    "images": [
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779089996/p5crnllvnjluwlyooigq.jpg"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T07:39:59.063Z"
+  },
+  {
+    "id": 23,
+    "name": "아우라지 둘레길",
+    "category": "activity",
+    "coordinates": {
+      "lat": 37.4761,
+      "lng": 128.7185
+    },
+    "description": "#산책로 #징검다리",
+    "images": [
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779090018/fbntqfa48xvkfwxnq29e.jpg"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T07:40:21.698Z"
+  },
+  {
+    "id": 24,
+    "name": "하이원 곤돌라",
+    "category": "activity",
+    "coordinates": {
+      "lat": 37.176704,
+      "lng": 128.842171
+    },
+    "description": "#정상등반 #편안한관람",
+    "images": [
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779090050/vhlxxcbqtdtc26p3hado.png"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T07:40:52.738Z"
+  },
+  {
+    "id": 25,
+    "name": "정선 짚라인 (화암)",
+    "category": "activity",
+    "coordinates": {
+      "lat": 37.3345,
+      "lng": 128.7742
+    },
+    "description": "#숲속체험 #액티비티",
+    "images": [
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779090071/ij44w2g517hi1sclmbsw.webp"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T07:41:13.888Z"
+  },
+  {
+    "id": 26,
+    "name": "가리왕산 케이블카",
+    "category": "activity",
+    "coordinates": {
+      "lat": 37.4741444,
+      "lng": 128.6097691
+    },
+    "description": "#운해 #무장애관광 #숙암리",
+    "images": [
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779090095/fu7us3rcqontwbsetq4n.jpg"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T07:41:37.998Z"
+  },
+  {
+    "id": 27,
+    "name": "만항재",
+    "category": "nature",
+    "coordinates": {
+      "lat": 37.1483333,
+      "lng": 128.8988889
+    },
+    "description": "#야생화 #드라이브 #국도최고조",
+    "images": [
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779090121/wwqixge3kpzxugclbrg9.jpg"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T07:42:04.446Z"
+  },
+  {
+    "id": 28,
+    "name": "함백산",
+    "category": "nature",
+    "coordinates": {
+      "lat": 37.1615368,
+      "lng": 128.9176271
+    },
+    "description": "#일출 #상고대 #야생화단지",
+    "images": [
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779090143/pbwdkoevzklc3hhp0lkn.jpg"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T07:42:25.507Z"
+  },
+  {
+    "id": 29,
+    "name": "민둥산",
+    "category": "nature",
+    "coordinates": {
+      "lat": 37.273442,
+      "lng": 128.775059
+    },
+    "description": "#억새꽃 #등산 #은빛물결",
+    "images": [
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779090170/gw2nd43f0fysfhmydprg.jpg"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T07:42:53.104Z"
+  },
+  {
+    "id": 30,
+    "name": "몰운대",
+    "category": "nature",
+    "coordinates": {
+      "lat": 37.316988,
+      "lng": 128.810438
+    },
+    "description": "#화암8경 #절벽 #낙송",
+    "images": [
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779090196/sodhldqqwz8zh6u33v62.jpg"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T07:43:19.474Z"
+  },
+  {
+    "id": 31,
+    "name": "소금강",
+    "category": "nature",
+    "coordinates": {
+      "lat": 37.3246922,
+      "lng": 128.7966163
+    },
+    "description": "#드라이브코스 #기암괴석",
+    "images": [
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779090230/uxw9y8reeiihincrilnf.jpg"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T07:43:55.149Z"
+  },
+  {
+    "id": 32,
+    "name": "도사곡 휴양림",
+    "category": "nature",
+    "coordinates": {
+      "lat": 37.2372,
+      "lng": 128.8189
+    },
+    "description": "#캠핑 #계곡 #트레킹",
+    "images": [
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779090255/lt2qngqlwyyc2uqvxu3o.png"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T07:44:18.279Z"
+  },
+  {
+    "id": 33,
+    "name": "동강 드라이브",
+    "category": "nature",
+    "coordinates": {
+      "lat": 37.3375,
+      "lng": 128.6124
+    },
+    "description": "#강변길 #생태경관",
+    "images": [
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779090280/eankttuyga5bem5njdjl.jpg"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T07:44:43.794Z"
+  },
+  {
+    "id": 34,
+    "name": "광하리 생태공원",
+    "category": "nature",
+    "coordinates": {
+      "lat": 37.3695,
+      "lng": 128.6014
+    },
+    "description": "#동강 #산책 #자연학습",
+    "images": [
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779090306/nvh5djxnxsfy5if49ezl.webp"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T07:45:09.771Z"
+  },
+  {
+    "id": 35,
+    "name": "수양마을",
+    "category": "nature",
+    "coordinates": {
+      "lat": 37.3214,
+      "lng": 128.6258
+    },
+    "description": "#동강변 #치유 #강변산책",
+    "images": [
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779090536/tlv6lqohvhzss0odgoqw.jpg"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T07:48:58.780Z"
+  },
+  {
+    "id": 36,
+    "name": "귤암리 캠핑장",
+    "category": "nature",
+    "coordinates": {
+      "lat": 37.3482,
+      "lng": 128.6041
+    },
+    "description": "#동강 #별보기 #차박",
+    "images": [
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779090563/xzk5lfansravx0oe8mhl.webp"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T07:49:24.430Z"
+  },
+  {
+    "id": 37,
+    "name": "동강 할미꽃마을",
+    "category": "nature",
+    "coordinates": {
+      "lat": 37.3456,
+      "lng": 128.6123
+    },
+    "description": "#봄꽃 #생태보존",
+    "images": [
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779090597/yd2p2kgghliu8xftskex.jpg"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T07:50:00.723Z"
+  },
+  {
+    "id": 38,
+    "name": "문치재 전망대",
+    "category": "nature",
+    "coordinates": {
+      "lat": 37.3871,
+      "lng": 128.7492
+    },
+    "description": "#와인딩 #드라이브 #전망대",
+    "images": [
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779090696/cadv2ds12lxmaw1kvmbn.jpg"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T07:51:38.903Z"
+  },
+  {
+    "id": 39,
+    "name": "정암사 수마노탑",
+    "category": "nature",
+    "coordinates": {
+      "lat": 37.183156,
+      "lng": 128.893282
+    },
+    "description": "강원특별자치도 정선군 고한읍 함백산로 1410 #보물 #적멸보궁 #야생화",
+    "images": [
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779090805/i4ujgp6j7xkuawqq19e2.webp"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T07:53:27.906Z"
+  },
+  {
+    "id": 40,
+    "name": "정선군립공원",
+    "category": "nature",
+    "coordinates": {
+      "lat": 37.3812,
+      "lng": 128.6543
+    },
+    "description": "#산책 #로컬쉼터",
+    "images": [
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779091333/nvptiajpnmrifgdsjhmu.jpg"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T08:02:14.831Z"
+  },
+  {
+    "id": 55,
+    "name": "함백산 만항숲길",
+    "category": "nature",
+    "coordinates": {
+      "lat": 37.1512,
+      "lng": 128.9012
+    },
+    "description": "#숲길걷기 #힐링",
+    "images": [
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779092527/izzvorudzhbj12jx6yjk.jpg"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T08:22:09.578Z"
+  },
+  {
+    "id": 56,
+    "name": "하이원 하늘길",
+    "category": "nature",
+    "coordinates": {
+      "lat": 37.1994,
+      "lng": 128.8142
+    },
+    "description": "#트레킹 #리조트연계",
+    "images": [
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779092557/v2wzuxhur2fhgknjuhiz.jpg"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T08:22:38.886Z"
+  },
+  {
+    "id": 57,
+    "name": "민둥산 돌리네",
+    "category": "nature",
+    "coordinates": {
+      "lat": 37.2712,
+      "lng": 128.7745
+    },
+    "description": "#지질학적특성 #신비한구덩이",
+    "images": [
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779092613/qnsnkf9ntdtcmz8sjbmb.jpg"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T08:23:36.906Z"
+  },
+  {
+    "id": 58,
+    "name": "백운산",
+    "category": "nature",
+    "coordinates": {
+      "lat": 37.2012,
+      "lng": 128.6012
+    },
+    "description": "#동강조망 #등산",
+    "images": [
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779092667/ryqiaorgoi18ocnyhmpc.jpg"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T08:24:29.334Z"
+  },
+  {
+    "id": 41,
+    "name": "자개골",
+    "category": "nature",
+    "coordinates": {
+      "lat": 37.5342,
+      "lng": 128.7321
+    },
+    "description": "#계곡 #피서 #트레킹",
+    "images": [
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779093093/mkuuummmumzgojr295hn.jpg"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T08:31:36.094Z"
+  },
+  {
+    "id": 45,
+    "name": "연화폭포",
+    "category": "nature",
+    "coordinates": {
+      "lat": 37.3142,
+      "lng": 128.8124
+    },
+    "description": "#화암8경 #절경",
+    "images": [
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779093131/ak7gmcg2iz7aaswhteb7.jpg"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T08:32:14.020Z"
+  },
+  {
+    "id": 46,
+    "name": "광대곡",
+    "category": "nature",
+    "coordinates": {
+      "lat": 37.2945,
+      "lng": 128.8234
+    },
+    "description": "#화암8경 #신비로운계곡",
+    "images": [
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779093164/zqjjwoqkoxqpbdxr4tga.jpg"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T08:32:45.939Z"
+  },
+  {
+    "id": 47,
+    "name": "거북바위",
+    "category": "nature",
+    "coordinates": {
+      "lat": 37.3241,
+      "lng": 128.7894
+    },
+    "description": "#화암8경 #바위형상",
+    "images": [
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779093193/ri832qu5qdo9mfr8vrot.jpg"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T08:33:16.070Z"
+  },
+  {
+    "id": 48,
+    "name": "용마소",
+    "category": "nature",
+    "coordinates": {
+      "lat": 37.3312,
+      "lng": 128.7945
+    },
+    "description": "#화암8경 #전설",
+    "images": [
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779093534/cvvizgs606rg2s9ohcgu.jpg"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T08:38:55.725Z"
+  },
+  {
+    "id": 49,
+    "name": "취적봉",
+    "category": "nature",
+    "coordinates": {
+      "lat": 37.4124,
+      "lng": 128.8213
+    },
+    "description": "#등산 #낙동강줄기",
+    "images": [
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779093562/iupfeqwnvxv9duxw2wui.jpg"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T08:39:25.675Z"
+  },
+  {
+    "id": 104,
+    "name": "컴포즈커피 정선민둥산역점",
+    "category": "food",
+    "coordinates": {
+      "lat": 37.2445325,
+      "lng": 128.7747411
+    },
+    "description": "강원도 정선군 컴포즈커피 정선민둥산역점 #커피#컴포즈커피",
+    "images": [
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779111623/ilkpmswhnidkqrq0cjzi.webp"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T13:40:27.088Z"
+  },
+  {
+    "id": 105,
+    "name": "혜원가든",
+    "category": "food",
+    "coordinates": {
+      "lat": 37.226959,
+      "lng": 128.816519
+    },
+    "description": "강원특별자치도 정선군 사북읍 사북리 366-67",
+    "images": [
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779111653/sgtp5ywzrxj6aqslgly0.jpg"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T13:40:56.025Z"
+  },
+  {
+    "id": 108,
+    "name": "진식당",
+    "category": "food",
+    "coordinates": {
+      "lat": 37.247876,
+      "lng": 128.775655
+    },
+    "description": "강원특별자치도 정선군 남면 무릉2로 27",
+    "images": [
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779111846/bnd22p7p0onximra9wqv.png"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T13:44:09.399Z"
+  },
+  {
+    "id": 107,
+    "name": "황소실비",
+    "category": "food",
+    "coordinates": {
+      "lat": 37.227309,
+      "lng": 128.819303
+    },
+    "description": "강원특별자치도 정선군 사북읍 사북리 452-75",
+    "images": [
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779111879/zl5icuwocz1bqjiu6ksb.jpg"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T13:44:43.410Z"
+  },
+  {
+    "id": 110,
+    "name": "명월집",
+    "category": "food",
+    "coordinates": {
+      "lat": 37.268501,
+      "lng": 128.782685
+    },
+    "description": "강원 정선군 남면 도원3길 9  1층",
+    "images": [
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779112016/uix8v5twzardxpnkense.jpg"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T13:47:00.172Z"
+  },
+  {
+    "id": 140,
+    "name": "회동계곡",
+    "category": "water",
+    "coordinates": {
+      "lat": 37.414583,
+      "lng": 128.579415
+    },
+    "description": "강원특별자치도 정선군 정선읍 회동리 497-1",
+    "images": [
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779120719/cdnutbfej8jaswte0z5x.jpg"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T16:12:01.795Z"
+  },
+  {
+    "id": 124,
+    "name": "백석폭포",
+    "category": "water",
+    "coordinates": {
+      "lat": 37.4663838,
+      "lng": 128.6289204
+    },
+    "description": "#인공폭포 #드라이브 #기암절벽",
+    "images": [
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779121246/nzfnxlgvuuenpfkovtam.webp"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T16:20:48.984Z"
+  },
+  {
+    "id": 125,
+    "name": "오장폭포",
+    "category": "water",
+    "coordinates": {
+      "lat": 37.5256,
+      "lng": 128.7505
+    },
+    "description": "#경관 #인공폭포 #노추산",
+    "images": [
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779121281/a9ci1enk1dw8w3cv53mq.webp"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T16:21:25.503Z"
+  },
+  {
+    "id": 126,
+    "name": "단임계곡",
+    "category": "water",
+    "coordinates": {
+      "lat": 37.5124,
+      "lng": 128.6512
+    },
+    "description": "#오지캠핑 #청정수원",
+    "images": [
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779121345/axaftzexvwefad3vrdat.jpg"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T16:22:35.009Z"
+  },
+  {
+    "id": 127,
+    "name": "화암동굴",
+    "category": "water",
+    "coordinates": {
+      "lat": 37.349208,
+      "lng": 128.794306
+    },
+    "description": "강원특별자치도 정선군 화암면 화암리 산248 #천연동굴 #금광체험",
+    "images": [
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779121404/pkr4yscaqzfxiy4poax7.jpg"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T16:23:26.953Z"
+  },
+  {
+    "id": 128,
+    "name": "화암약수",
+    "category": "water",
+    "coordinates": {
+      "lat": 37.382,
+      "lng": 128.7842
+    },
+    "description": "#톡쏘는맛 #철분수",
+    "images": [
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779121432/e3rbw84h2nikw66f65kb.jpg"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T16:23:54.921Z"
+  },
+  {
+    "id": 129,
+    "name": "아우라지",
+    "category": "water",
+    "coordinates": {
+      "lat": 37.4764,
+      "lng": 128.7188
+    },
+    "description": "#두물머리 #송천 #골지천",
+    "images": [
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779121463/wo8j6liicf3ojfkjwdke.jpg"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T16:24:26.231Z"
+  },
+  {
+    "id": 130,
+    "name": "도롱이 연못",
+    "category": "water",
+    "coordinates": {
+      "lat": 37.189421,
+      "lng": 128.81082
+    },
+    "description": "#천연에어컨 #지각변동",
+    "images": [
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779121494/ntuzmp2ie6ccumuapemm.jpg"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T16:24:56.597Z"
+  },
+  {
+    "id": 131,
+    "name": "소금강 약수",
+    "category": "water",
+    "coordinates": {
+      "lat": 37.3245,
+      "lng": 128.7965
+    },
+    "description": "#드라이브중휴식",
+    "images": [
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779121522/txzzqrkxgb1mrjsjgbbj.jpg"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T16:25:25.669Z"
+  },
+  {
+    "id": 132,
+    "name": "동강 생태체험장",
+    "category": "water",
+    "coordinates": {
+      "lat": 37.360412,
+      "lng": 128.623485
+    },
+    "description": "#수자원보호 #민물고기",
+    "images": [
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779121563/yyyobtqjn1xcbhec1wsv.png"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T16:26:05.608Z"
+  },
+  {
+    "id": 133,
+    "name": "용탄천",
+    "category": "water",
+    "coordinates": {
+      "lat": 37.412263,
+      "lng": 128.583233
+    },
+    "description": "#청정계곡 #낚시명소",
+    "images": [
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779121633/qtswrkvljxzopbsfffxd.webp"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T16:27:15.811Z"
+  },
+  {
+    "id": 134,
+    "name": "골지천",
+    "category": "water",
+    "coordinates": {
+      "lat": 37.4842,
+      "lng": 128.7412
+    },
+    "description": "#아우라지원류 #풍경",
+    "images": [
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779121659/nebcoeujzjhnneehsjln.jpg"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T16:27:41.374Z"
+  },
+  {
+    "id": 135,
+    "name": "송천",
+    "category": "water",
+    "coordinates": {
+      "lat": 37.5112,
+      "lng": 128.7542
+    },
+    "description": "#레일바이크강변 #수변공원",
+    "images": [
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779121686/lnsg3xzcwybnchfrzdlq.jpg"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T16:28:09.138Z"
+  },
+  {
+    "id": 136,
+    "name": "광대곡폭포",
+    "category": "water",
+    "coordinates": {
+      "lat": 37.2942,
+      "lng": 128.8231
+    },
+    "description": "#숨은명소 #신비주의",
+    "images": [
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779121722/vpmp6urvmk4lssbq4jua.jpg"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T16:28:47.357Z"
+  },
+  {
+    "id": 137,
+    "name": "숙암계곡",
+    "category": "water",
+    "coordinates": {
+      "lat": 37.485206,
+      "lng": 128.609834
+    },
+    "description": "숙암계곡,강원특별자치도 정선군 북평면 숙암리",
+    "images": [
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779121747/rcp9d988c482nmpxwu2h.jpg"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T16:29:11.467Z"
+  },
+  {
+    "id": 138,
+    "name": "단곡계곡",
+    "category": "water",
+    "coordinates": {
+      "lat": 37.207834,
+      "lng": 128.709164
+    },
+    "description": "단곡계곡,강원특별자치도 정선군 신동읍 방제리 산87-147",
+    "images": [
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779121787/uo3ww9anraybzs6pyeta.jpg"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T16:29:51.091Z"
+  },
+  {
+    "id": 139,
+    "name": "항골계곡",
+    "category": "water",
+    "coordinates": {
+      "lat": 37.475418,
+      "lng": 128.663541
+    },
+    "description": "",
+    "images": [
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779121827/g0xlcswmv2e3gp1yiovn.jpg"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T16:30:30.086Z"
+  },
+  {
+    "id": 141,
+    "name": "가리왕산장구목이골입구",
+    "category": "water",
+    "coordinates": {
+      "lat": 37.487431,
+      "lng": 128.583497
+    },
+    "description": "강원특별자치도 평창군 진부면 막동리 1",
+    "images": [
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779121861/kwpxc0r1fekj2nuajzch.jpg"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T16:31:06.031Z"
+  },
+  {
+    "id": 142,
+    "name": "가리왕산 계곡",
+    "category": "water",
+    "coordinates": {
+      "lat": 37.424622,
+      "lng": 128.573535
+    },
+    "description": "강원특별자치도 정선군 정선읍 회동리",
+    "images": [
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779121890/c2l3mmy0pehlohmb6ogb.jpg"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T16:31:32.696Z"
+  },
+  {
+    "id": 143,
+    "name": "소금강계곡",
+    "category": "water",
+    "coordinates": {
+      "lat": 37.327008,
+      "lng": 128.793517
+    },
+    "description": "",
+    "images": [
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779121914/iv4egkrj7o0r0cvqbnvj.jpg"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T16:31:56.175Z"
+  },
+  {
+    "id": 144,
+    "name": "거북이약수터쉼터",
+    "category": "water",
+    "coordinates": {
+      "lat": 37.268345,
+      "lng": 128.779627
+    },
+    "description": "민둥산 제 1주차장",
+    "images": [
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779121938/hv7rzzouhpzpxqjyvilx.jpg"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T16:32:21.004Z"
+  },
+  {
+    "id": 83,
+    "name": "로미지안 가든",
+    "category": "culture",
+    "coordinates": {
+      "lat": 37.4427518,
+      "lng": 128.6412691
+    },
+    "description": "#치유 #명상 #사유의숲",
+    "images": [
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779122225/fo5hr8obkwemzmspfxjd.webp"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T16:37:11.077Z"
+  },
+  {
+    "id": 84,
+    "name": "정선아리랑시장",
+    "category": "culture",
+    "coordinates": {
+      "lat": 37.3821,
+      "lng": 128.6655
+    },
+    "description": "#5일장 #로컬푸드",
+    "images": [
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779122258/ysnmaili54jw7ufom0ub.jpg"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T16:37:44.469Z"
+  },
+  {
+    "id": 85,
+    "name": "고한 구공탄시장",
+    "category": "culture",
+    "coordinates": {
+      "lat": 37.1912,
+      "lng": 128.8442
+    },
+    "description": "#탄광기반 #야시장",
+    "images": [
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779122661/q8ibvacsxwnh9tyi8ugn.jpg"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T16:44:23.740Z"
+  },
+  {
+    "id": 86,
+    "name": "사북시장",
+    "category": "culture",
+    "coordinates": {
+      "lat": 37.2242,
+      "lng": 128.8112
+    },
+    "description": "#별꼴시장 #먹거리",
+    "images": [
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779122710/ofhpsi1nqw2cnzvlz6ym.jpg"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T16:45:13.186Z"
+  },
+  {
+    "id": 87,
+    "name": "정선군립아리랑창극단",
+    "category": "culture",
+    "coordinates": {
+      "lat": 37.3845,
+      "lng": 128.6612
+    },
+    "description": "#전통공연 #아리아콘텐츠",
+    "images": [
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779122735/p1adebnqcbgvwbmfv1k2.png"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T16:45:37.229Z"
+  },
+  {
+    "id": 88,
+    "name": "아리랑센터",
+    "category": "culture",
+    "coordinates": {
+      "lat": 37.3842,
+      "lng": 128.6615
+    },
+    "description": "#박물관 #공연장",
+    "images": [
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779122759/tc5gzqfpjlrsb8wtxrit.png"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T16:46:01.158Z"
+  },
+  {
+    "id": 89,
+    "name": "정선향교",
+    "category": "culture",
+    "coordinates": {
+      "lat": 37.3815,
+      "lng": 128.6672
+    },
+    "description": "#교육기관 #역사건축",
+    "images": [
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779122786/wfvvarya6ylutrbalfmn.jpg"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T16:46:27.934Z"
+  },
+  {
+    "id": 91,
+    "name": "민둥산 5일장",
+    "category": "culture",
+    "coordinates": {
+      "lat": 37.3806,
+      "lng": 128.6608
+    },
+    "description": "#민둥산5일장 #정선5일장 #민둥산시장 #정선여행 #정선가볼만한곳 #민둥산억새꽃축제 #49일장",
+    "images": [
+      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=2073",
+      "https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?q=80&w=1974"
+    ],
+    "wellnessTips": [],
+    "lastUpdated": "2026-05-18T16:51:40.182Z"
+  },
+  {
     "id": 109,
     "name": "82식당",
     "category": "food",
@@ -9,7 +1210,8 @@
     },
     "description": "강원 정선군 남면 도원2길 3-1 1층",
     "images": [
-      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779178853/lni5y9tnc03pqis4ukgr.jpg"
+      "https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=2070",
+      "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=2070"
     ],
     "wellnessTips": [
       "음식을 한 입 먹기 전 눈과 코로 먼저 깊게 음미하는 ‘마인드풀 이팅(Mindful Eating)’을 실천해 보세요.",
@@ -18,6 +1220,6 @@
       "맑은 차 한 잔이나 따뜻한 커피의 온기가 온몸으로 고르게 퍼지는 편안한 이완을 경험해 보세요.",
       "소중한 사람들과 맛있는 음식을 나누며 깊은 정서적 교감과 소통의 즐거움을 따뜻하게 채워갑니다."
     ],
-    "lastUpdated": "2026-05-19T08:20:57.633Z"
+    "lastUpdated": "2026-05-19T08:24:45.887Z"
   }
 ]
