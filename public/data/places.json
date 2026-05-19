@@ -1,30 +1,5 @@
 [
   {
-    "id": 112,
-    "name": "거목한방순대국",
-    "category": "food",
-    "coordinates": {
-      "lat": 37.246114,
-      "lng": 128.774432
-    },
-    "description": "강원특별자치도 정선군 남면 도원2길 10",
-    "images": [
-      "https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=2070",
-      "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=2070",
-      "https://images.unsplash.com/photo-1476224484781-a35ca36b60ef?q=80&w=2070",
-      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779163489/ykygcqlqv3lprnb5ovqk.jpg",
-      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779163560/ucdnnlhkcozet7hlwkaw.jpg"
-    ],
-    "wellnessTips": [
-      "음식을 한 입 먹기 전 눈과 코로 먼저 깊게 음미하는 ‘마인드풀 이팅(Mindful Eating)’을 실천해 보세요.",
-      "정선 현지의 신선하고 청정한 농특산물이 선사하는 건강한 맛과 대지의 활력을 온전히 느껴봅니다.",
-      "음식을 꼭꼭 씹으며 입안 가득 퍼지는 맛의 고유한 레이어와 텍스처에 부드럽게 집중해 봅니다.",
-      "맑은 차 한 잔이나 따뜻한 커피의 온기가 온몸으로 고르게 퍼지는 편안한 이완을 경험해 보세요.",
-      "소중한 사람들과 맛있는 음식을 나누며 깊은 정서적 교감과 소통의 즐거움을 따뜻하게 채워갑니다."
-    ],
-    "lastUpdated": "2026-05-19T04:06:00.749Z"
-  },
-  {
     "id": 109,
     "name": "82식당",
     "category": "food",
@@ -34,7 +9,7 @@
     },
     "description": "강원 정선군 남면 도원2길 3-1 1층",
     "images": [
-      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779188017/a1s9ldz0q9d053qn8spp.webp"
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779188344/w5aigc0pqulhndswzuyz.png"
     ],
     "wellnessTips": [
       "음식을 한 입 먹기 전 눈과 코로 먼저 깊게 음미하는 ‘마인드풀 이팅(Mindful Eating)’을 실천해 보세요.",
@@ -43,27 +18,27 @@
       "맑은 차 한 잔이나 따뜻한 커피의 온기가 온몸으로 고르게 퍼지는 편안한 이완을 경험해 보세요.",
       "소중한 사람들과 맛있는 음식을 나누며 깊은 정서적 교감과 소통의 즐거움을 따뜻하게 채워갑니다."
     ],
-    "lastUpdated": "2026-05-19T10:53:37.875Z"
+    "lastUpdated": "2026-05-19T10:59:03.494Z"
   },
   {
-    "id": 63,
-    "name": "가리왕산",
-    "category": "nature",
+    "id": 112,
+    "name": "거목한방순대국",
+    "category": "food",
     "coordinates": {
-      "lat": 37.3806,
-      "lng": 128.6608
+      "lat": 37.246114,
+      "lng": 128.774432
     },
-    "description": "#가리왕산 #강원도여행 #정선여행 #가리왕산케이블카 #정선가볼만한곳 #100대명산 #블랙야크100대명산 #등산스타그램",
+    "description": "강원특별자치도 정선군 남면 도원2길 10",
     "images": [
-      "https://images.unsplash.com/photo-1542224566-6e85f2e6772f?q=80&w=1950"
+      "https://res.cloudinary.com/dakxsp4wg/image/upload/v1779186861/xu2qrinsozx8xwr0pyqm.png"
     ],
     "wellnessTips": [
-      "피톤치드가 가장 풍부한 오전 10시에서 오후 2시 사이에 숲길을 천천히 걸어보세요.",
-      "스마트폰을 잠시 끄고 정선 자연의 고요한 바람 소리와 새소리에 온전히 귀를 기울입니다.",
-      "깊고 느린 복식 호흡을 통해 청정한 강원도의 맑은 산소로 내면을 가득 채워보세요.",
-      "초록색 나뭇잎에 시선을 고정하고 지쳐있던 눈의 피로를 부드럽게 이완시켜 줍니다.",
-      "자연과 온전히 하나가 되는 느낌으로 마음속의 스트레스와 무거운 짐을 가만히 내려놓으세요."
+      "음식을 한 입 먹기 전 눈과 코로 먼저 깊게 음미하는 ‘마인드풀 이팅(Mindful Eating)’을 실천해 보세요.",
+      "정선 현지의 신선하고 청정한 농특산물이 선사하는 건강한 맛과 대지의 활력을 온전히 느껴봅니다.",
+      "음식을 꼭꼭 씹으며 입안 가득 퍼지는 맛의 고유한 레이어와 텍스처에 부드럽게 집중해 봅니다.",
+      "맑은 차 한 잔이나 따뜻한 커피의 온기가 온몸으로 고르게 퍼지는 편안한 이완을 경험해 보세요.",
+      "소중한 사람들과 맛있는 음식을 나누며 깊은 정서적 교감과 소통의 즐거움을 따뜻하게 채워갑니다."
     ],
-    "lastUpdated": "2026-05-19T10:46:32.229Z"
+    "lastUpdated": "2026-05-19T10:34:22.247Z"
   }
 ]
