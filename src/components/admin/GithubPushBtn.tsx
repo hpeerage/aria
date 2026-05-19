@@ -46,7 +46,14 @@ export default function GithubPushBtn() {
         );
       } else {
         // 2. Local Push (Legacy)
-        const response = await fetch("/api/admin/push", { method: "POST" });
+        const allData = collectAllLocalData();
+        const response = await fetch("/api/admin/push", { 
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(allData)
+        });
         const data = await response.json();
         if (!data.success) throw new Error(data.error);
       }
