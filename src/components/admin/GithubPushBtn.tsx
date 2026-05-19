@@ -1,11 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Globe, RefreshCcw, CheckCircle2, AlertCircle, Send, Lock, Cloud } from "lucide-react";
 import { commitFileToGitHub, collectAllLocalData, GitHubConfig } from "@/lib/github-api";
 
 export default function GithubPushBtn() {
+  const router = useRouter();
   const [mounted, setMounted] = useState(false);
   const [hasCloudToken, setHasCloudToken] = useState(false);
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
@@ -34,7 +36,11 @@ export default function GithubPushBtn() {
     const cloudConfig: GitHubConfig | null = configStr ? JSON.parse(configStr) : null;
     const currentHasToken = !!cloudConfig?.token;
 
-    if (!isLocal && !currentHasToken) return;
+    if (!isLocal && !currentHasToken) {
+      alert("☁️ GitHub 동기화 설정이 되어 있지 않습니다. 설정 페이지로 이동하여 코드를 연동해 주세요!");
+      router.push("/admin/settings");
+      return;
+    }
     if (status === "loading") return;
 
     setStatus("loading");
@@ -74,7 +80,9 @@ export default function GithubPushBtn() {
     } catch (err: any) {
       console.error(err);
       setStatus("error");
-      setMessage(err.message || "동기화 실패");
+      const errMsg = err.message || "동기화 실패";
+      setMessage(errMsg);
+      alert(`⚠️ 동기화 실패:\n${errMsg}`);
       setTimeout(() => setStatus("idle"), 5000);
     }
   };
@@ -84,13 +92,13 @@ export default function GithubPushBtn() {
   return (
     <div className="relative flex flex-col items-end gap-2">
       <motion.button
-        whileHover={(isLocal || hasCloudToken) ? { scale: 1.02 } : {}}
-        whileTap={(isLocal || hasCloudToken) ? { scale: 0.98 } : {}}
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
         onClick={handlePush}
-        disabled={status === "loading" || (!isLocal && !hasCloudToken)}
+        disabled={status === "loading"}
         className={`flex items-center gap-3 px-6 py-4 rounded-2xl font-black text-xs uppercase tracking-widest transition-all shadow-xl ${
           !isLocal && !hasCloudToken
-            ? "bg-white/5 text-white/20 border border-white/5 cursor-not-allowed"
+            ? "bg-white/5 text-white/40 border border-white/10 hover:bg-white/15 cursor-pointer"
             : status === "loading" 
             ? "bg-accent text-white animate-pulse cursor-wait" 
             : status === "success"
