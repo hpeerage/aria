@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Settings, Save, Shield, Bell, Palette, Sliders, Trash2, HardDrive, User } from "lucide-react";
+import { Settings, Save, Shield, Bell, Palette, Sliders, Trash2, HardDrive, User, Share2, Copy } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useLanguage } from "@/lib/i18n/context";
 import { useAuth } from "@/lib/auth/context";
@@ -23,6 +23,42 @@ export default function AdminSettingsPage() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isSavingProfile, setIsSavingProfile] = useState(false);
   const [isSavingPassword, setIsSavingPassword] = useState(false);
+  const [importText, setImportText] = useState("");
+
+  const handleExportConfig = () => {
+    try {
+      const saved = localStorage.getItem("aria_github_config");
+      if (!saved) {
+        alert("내보낼 깃허브 설정이 없습니다. 먼저 설정을 입력하고 저장해 주세요!");
+        return;
+      }
+      const b64 = btoa(encodeURIComponent(saved));
+      navigator.clipboard.writeText(b64);
+      alert("🔑 설정 동기화 코드가 클립보드에 복사되었습니다!\n\n모바일 기기로 이 코드를 전송(카톡 등)하여 붙여넣으시면 1초 만에 설정이 연동됩니다.");
+    } catch (e) {
+      alert("내보내기 실패: " + e);
+    }
+  };
+
+  const handleImportConfig = () => {
+    if (!importText.trim()) {
+      alert("동기화 코드를 먼저 입력해 주세요!");
+      return;
+    }
+    try {
+      const decoded = decodeURIComponent(atob(importText.trim()));
+      const parsed = JSON.parse(decoded);
+      if (!parsed.token) throw new Error("유효한 토큰 정보가 없습니다.");
+      
+      localStorage.setItem("aria_github_config", decoded);
+      setConfig(parsed);
+      setImportText("");
+      alert("🎉 깃허브 동기화 설정이 성공적으로 연동되었습니다!\n이제 모바일 기기에서도 서비스 반영 버튼의 잠금이 해제되고 정상 작동합니다.");
+      window.location.reload();
+    } catch (e) {
+      alert("❌ 잘못된 동기화 코드이거나 파싱 오류가 발생했습니다. 코드를 다시 확인해 주세요!");
+    }
+  };
 
   useEffect(() => {
     if (user?.name) {
@@ -263,6 +299,65 @@ export default function AdminSettingsPage() {
              </div>
           </div>
         </motion.div>
+
+        {/* Mobile Settings Sync Card (Export/Import) */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="p-10 bg-white/5 border border-white/10 rounded-[3rem] space-y-8 hover:bg-white/10 transition-all group lg:col-span-2 shadow-2xl"
+        >
+          <div className="flex items-center gap-4">
+            <div className="p-4 bg-accent/20 text-accent rounded-2xl group-hover:bg-accent group-hover:text-white transition-all">
+              <Share2 className="w-6 h-6" />
+            </div>
+            <div>
+              <h4 className="text-2xl font-black text-white tracking-tight">모바일 설정 스마트 동기화 (Smart Sync)</h4>
+              <p className="text-[10px] font-bold text-white/30 uppercase tracking-widest">Share Cloud Credentials Between Devices</p>
+            </div>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-6 border-t border-white/5">
+            {/* Export Config */}
+            <div className="space-y-6">
+              <h5 className="text-lg font-bold text-white">1단계: 데스크톱에서 설정 내보내기</h5>
+              <p className="text-xs text-white/50 leading-relaxed">
+                현재 PC 브라우저에 저장된 깃허브 토큰과 저장소 설정을 암호화 코드로 추출하여 클립보드에 즉시 복사합니다.
+              </p>
+              <button 
+                onClick={handleExportConfig}
+                className="px-6 py-4 bg-accent text-white rounded-xl font-bold hover:scale-102 active:scale-98 transition-all flex items-center gap-2 text-sm shadow-lg shadow-accent/20"
+              >
+                <Copy className="w-4 h-4" />
+                설정 동기화 코드 복사 (Export)
+              </button>
+            </div>
+
+            {/* Import Config */}
+            <div className="space-y-4">
+              <h5 className="text-lg font-bold text-white">2단계: 모바일에서 설정 가져오기</h5>
+              <p className="text-xs text-white/50 leading-relaxed">
+                복사한 코드를 아래 칸에 붙여넣고 가져오기 버튼을 누르면 1초 만에 스마트폰에도 동일한 설정이 연동됩니다.
+              </p>
+              <div className="space-y-2">
+                <input 
+                  type="text"
+                  value={importText}
+                  onChange={(e) => setImportText(e.target.value)}
+                  placeholder="복사한 동기화 코드를 여기에 붙여넣으세요..."
+                  className="w-full px-6 py-4 bg-white/5 border border-white/10 rounded-2xl text-white outline-none focus:ring-2 focus:ring-accent transition-all font-bold text-xs"
+                />
+              </div>
+              <button 
+                onClick={handleImportConfig}
+                disabled={!importText.trim()}
+                className="px-6 py-4 bg-white/10 hover:bg-white/20 text-white rounded-xl font-bold hover:scale-102 active:scale-98 transition-all disabled:opacity-30 text-sm"
+              >
+                설정 가져오기 (Import)
+              </button>
+            </div>
+          </div>
+        </motion.div>
+
         {/* Storage Management Card */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
