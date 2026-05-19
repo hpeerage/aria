@@ -6,6 +6,7 @@ import { Camera, Upload, CheckCircle2, MapPin, X, AlertCircle, Trash2 } from "lu
 import { Place } from "@/types/place";
 import Image from "next/image";
 import { getPlacesFromGoogleSheet } from "@/lib/google-sheets";
+import GithubPushBtn from "@/components/admin/GithubPushBtn";
 
 export default function MobileSnapPage() {
   const [places, setPlaces] = useState<Place[]>([]);
@@ -300,6 +301,14 @@ export default function MobileSnapPage() {
               onChange={handleCapture}
               className="hidden"
             />
+          </div>
+
+          {/* 3. 서비스에 반영하기 (동기화 버튼 빌트인) */}
+          <div className="space-y-3 pt-6 border-t border-white/5 relative z-10">
+            <label className="text-[10px] font-black uppercase tracking-widest text-accent px-2">3. 서비스에 반영하기 (Sync)</label>
+            <div className="w-full">
+              <GithubPushBtn />
+            </div>
           </div>
         </div>
       </div>
