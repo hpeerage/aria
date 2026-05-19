@@ -72,10 +72,13 @@ export default function RootLayout({
             __html: `
               window.addEventListener('error', function(e) {
                 if (e.target && (e.target.tagName === 'SCRIPT' || e.target.tagName === 'LINK')) {
-                  // 청크 로드 실패(404) 감지 시 무한 루프 방지를 위해 세션스토리지 확인 후 강제 새로고침
-                  if (sessionStorage.getItem('chunk_failed') !== 'true') {
-                    sessionStorage.setItem('chunk_failed', 'true');
-                    window.location.reload();
+                  try {
+                    if (!sessionStorage.getItem('chunk_failed')) {
+                      sessionStorage.setItem('chunk_failed', '1');
+                      window.location.replace(window.location.pathname + '?v=' + new Date().getTime());
+                    }
+                  } catch(err) {
+                    window.location.replace(window.location.pathname + '?v=' + new Date().getTime());
                   }
                 }
               }, true);
