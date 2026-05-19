@@ -21,17 +21,14 @@ export async function commitFileToGitHub(
   console.log(`📡 GitHub API 호출 중: ${path}...`);
 
   try {
-    // 1. 기존 파일의 SHA 조회 (업데이트를 위해 필요) - 캐시 방지 처리 적용
+    // 1. 기존 파일의 SHA 조회 (업데이트를 위해 필요) - CORS 방지를 위해 Cache-Control 헤더 제외하고 쿼리 파라미터(t=timestamp)로만 캐시 우회
     let sha: string | undefined;
     const timestamp = new Date().getTime();
     const getRes = await fetch(`${url}?ref=${branch}&t=${timestamp}`, {
       headers: {
         Authorization: `token ${token}`,
         Accept: "application/vnd.github.v3+json",
-        "Cache-Control": "no-cache",
-        "Pragma": "no-cache"
       },
-      cache: "no-store"
     });
 
     if (getRes.ok) {
