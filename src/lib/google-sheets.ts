@@ -1,6 +1,7 @@
-/** [v1.1.0] Force reset and re-fetch from Google Sheets */
+// [v1.1.0] Force reset and re-fetch from Google Sheets
 import { Place } from "@/types/place";
 import { getImagesByCategory, validateImagePaths } from "./place-images";
+import customPlacesData from "../../public/data/places.json";
 
 /**
  * 원본 대화식 카테고리명을 시스템 표준 키로 변환합니다.
@@ -161,6 +162,22 @@ export async function getPlacesFromGoogleSheet(sheetId: string, sheetName?: stri
           icon: c[10]?.v ? String(c[10].v) : undefined, // [v0.11.0] 아이콘 데이터 매핑
         };
       });
+
+    // [v1.2.0] Merge custom images from public/data/places.json
+    try {
+      if (customPlacesData && Array.isArray(customPlacesData)) {
+        const customPlaces: Place[] = customPlacesData as Place[];
+        
+        customPlaces.forEach(customPlace => {
+          const target = sourcePlaces.find(p => p.id === customPlace.id);
+          if (target && customPlace.images && customPlace.images.length > 0) {
+            target.images = customPlace.images;
+          }
+        });
+      }
+    } catch (fsError) {
+      console.warn("Failed to merge public/data/places.json:", fsError);
+    }
 
     return sourcePlaces;
   } catch (error) {
