@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, Menu, X, Clock, TrendingUp, ArrowRight, LogOut, User as UserIcon } from "lucide-react";
+import { Search, Menu, X, Clock, TrendingUp, ArrowRight, LogOut, User as UserIcon, Shield } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -13,6 +13,7 @@ import AriaAuthModal from "./AriaAuthModal";
 export default function AriaHeader() {
   const { locale, setLocale, dict } = useLanguage();
   const { user, logout } = useAuth();
+  const isMaster = user && (user.email === "kococo81@gmail.com" || user.email === "hpeerage@gmail.com" || user.email === "ngy5966@naver.com" || user.email === "ngy5966@gmail.com" || user.name === "Hoon Lee");
   const router = useRouter();
   
   const [isScrolled, setIsScrolled] = useState(false);
@@ -176,6 +177,15 @@ export default function AriaHeader() {
                     <span className={`hidden md:block text-[10px] font-black uppercase tracking-widest ${isScrolled ? 'text-forest' : 'text-white'}`}>
                       {user.name}
                     </span>
+                    {isMaster && (
+                      <Link 
+                        href="/admin/dashboard"
+                        className="p-2 text-accent hover:text-white hover:bg-accent/20 transition-all rounded-xl flex items-center justify-center shrink-0"
+                        title="Admin Console"
+                      >
+                        <Shield size={14} className="animate-pulse" />
+                      </Link>
+                    )}
                     <button 
                       onClick={logout}
                       className="p-2 hover:text-accent transition-colors text-white/50"
