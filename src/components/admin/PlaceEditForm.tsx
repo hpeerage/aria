@@ -151,11 +151,30 @@ export default function PlaceEditForm({ isNew = false }: { isNew?: boolean }) {
 
     setIsSaving(true);
 
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("upload_preset", uploadPreset);
-
     try {
+      // Client-side Image Compression (모바일 기기 업로드 최적화)
+      let uploadFile: File | Blob = file;
+      try {
+        const fileToBase64 = (f: File): Promise<string> => {
+          return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(f);
+            reader.onload = () => resolve(reader.result as string);
+            reader.onerror = error => reject(error);
+          });
+        };
+        const base64 = await fileToBase64(file);
+        const compressedBase64 = await compressImage(base64, 1200, 0.7);
+        const blobRes = await fetch(compressedBase64);
+        uploadFile = await blobRes.blob();
+      } catch (compressErr) {
+        console.warn("Image compression failed, using original file:", compressErr);
+      }
+
+      const formData = new FormData();
+      formData.append("file", uploadFile, "image.webp");
+      formData.append("upload_preset", uploadPreset);
+
       const res = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
         method: "POST",
         body: formData,
