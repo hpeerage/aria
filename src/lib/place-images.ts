@@ -36,7 +36,7 @@ const CATEGORY_IMAGES: Record<string, string[]> = {
 const EXISTING_LOCAL_IMAGES: Record<number, string> = {
   1: "jpg", 2: "jpg", 3: "jpg", 4: "jpg",
   42: "jpeg", 73: "jpg", 
-  77: "webp", 78: "jpeg", 79: "jpg", 
+  78: "jpeg", 79: "jpg", 
   80: "jpg", 81: "jpeg", 82: "jpeg", 84: "webp"
 };
 
@@ -84,7 +84,7 @@ export function validateImagePaths(images: string[], id: number, category: strin
     if (img.startsWith('data:image/')) return img;
 
     // 로컬 이미지 경로 패턴 감지 (/images/XX_01.xxx)
-    const localMatch = img.match(/\/aria\/images\/(\d+)_01\.(jpg|jpeg|webp)/);
+    const localMatch = img.match(/(?:\/aria)?\/images\/(\d+)_01\.(jpg|jpeg|webp)/);
     if (localMatch) {
       const matchId = parseInt(localMatch[1], 10);
       const ext = EXISTING_LOCAL_IMAGES[matchId];
