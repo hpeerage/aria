@@ -13,7 +13,7 @@ import AriaAuthModal from "./AriaAuthModal";
 export default function AriaHeader() {
   const { locale, setLocale, dict } = useLanguage();
   const { user, logout } = useAuth();
-  const isMaster = user && (user.email === "kococo81@gmail.com" || user.email === "hpeerage@gmail.com" || user.email === "ngy5966@naver.com" || user.email === "ngy5966@gmail.com" || user.name === "Hoon Lee");
+  const isMaster = user && (user.email === "kococo81@gmail.com" || user.email === "ngy5966@naver.com" || user.email === "ngy5966@gmail.com");
   const router = useRouter();
   
   const [isScrolled, setIsScrolled] = useState(false);
