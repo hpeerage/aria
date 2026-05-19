@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Camera, Upload, CheckCircle2, MapPin, X, AlertCircle } from "lucide-react";
+import { Camera, Upload, CheckCircle2, MapPin, X, AlertCircle, Trash2 } from "lucide-react";
 import { Place } from "@/types/place";
 import Image from "next/image";
 import { getPlacesFromGoogleSheet } from "@/lib/google-sheets";
@@ -119,6 +119,37 @@ export default function MobileSnapPage() {
     }
   };
 
+  const handleDeleteImage = (imgUrl: string) => {
+    if (!selectedPlaceId) return;
+    const targetPlaceIndex = places.findIndex(p => p.id === Number(selectedPlaceId));
+    if (targetPlaceIndex === -1) return;
+
+    const updatedPlace = { ...places[targetPlaceIndex] };
+    updatedPlace.images = (updatedPlace.images || []).filter(img => img !== imgUrl);
+    updatedPlace.lastUpdated = new Date().toISOString();
+
+    const newPlaces = [...places];
+    newPlaces[targetPlaceIndex] = updatedPlace;
+    setPlaces(newPlaces);
+
+    localStorage.setItem(`aria_place_${updatedPlace.id}`, JSON.stringify(updatedPlace));
+    
+    const localListStr = localStorage.getItem('aria_local_places');
+    const localList = localListStr ? JSON.parse(localListStr) : [];
+    const listPlace = { ...updatedPlace, images: updatedPlace.images.length > 0 ? [updatedPlace.images[0]] : [] };
+    const existingIdx = localList.findIndex((p: Place) => p.id === updatedPlace.id);
+    
+    if (existingIdx >= 0) {
+      localList[existingIdx] = listPlace;
+    } else {
+      localList.push(listPlace);
+    }
+    localStorage.setItem('aria_local_places', JSON.stringify(localList));
+
+    setSuccessMsg("성공적으로 이미지가 삭제되었습니다.");
+    setTimeout(() => setSuccessMsg(""), 3000);
+  };
+
   return (
     <div className="max-w-xl mx-auto py-8">
       <AnimatePresence>
@@ -181,6 +212,60 @@ export default function MobileSnapPage() {
               </select>
             </div>
           </div>
+
+          {selectedPlaceId && (
+            <div className="space-y-3 pt-4 border-t border-white/5">
+              <label className="text-[10px] font-black uppercase tracking-widest text-accent px-2">등록된 사진 목록 ({places.find(p => p.id === Number(selectedPlaceId))?.images?.length || 0}개)</label>
+              
+              {(() => {
+                const selPlace = places.find(p => p.id === Number(selectedPlaceId));
+                const imgs = selPlace?.images || [];
+                
+                if (imgs.length === 0) {
+                  return (
+                    <div className="p-6 bg-white/5 border border-white/10 rounded-2xl text-center text-white/30 text-xs font-bold">
+                      등록된 사진이 없습니다. 첫 사진을 등록해 보세요!
+                    </div>
+                  );
+                }
+
+                return (
+                  <div className="grid grid-cols-3 gap-3">
+                    <AnimatePresence>
+                      {imgs.map((img, idx) => (
+                        <motion.div
+                          key={img + idx}
+                          layout
+                          initial={{ opacity: 0, scale: 0.8 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          exit={{ opacity: 0, scale: 0.8 }}
+                          className="relative aspect-square bg-white/5 rounded-2xl overflow-hidden border border-white/10 group"
+                        >
+                          <Image
+                            src={img}
+                            alt={`Place image ${idx + 1}`}
+                            fill
+                            className="object-cover group-hover:scale-110 transition-transform duration-500"
+                            unoptimized
+                          />
+                          {/* Hover Overlay Delete Button */}
+                          <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
+                            <button
+                              onClick={() => handleDeleteImage(img)}
+                              className="p-3 bg-red-500/80 hover:bg-red-600 rounded-xl transition-all shadow-lg active:scale-95 pointer-events-auto"
+                              title="삭제하기"
+                            >
+                              <Trash2 className="w-4 h-4 text-white" />
+                            </button>
+                          </div>
+                        </motion.div>
+                      ))}
+                    </AnimatePresence>
+                  </div>
+                );
+              })()}
+            </div>
+          )}
 
           <div className="space-y-3 pt-4">
             <label className="text-[10px] font-black uppercase tracking-widest text-accent px-2">2. 사진 촬영 및 업로드</label>
