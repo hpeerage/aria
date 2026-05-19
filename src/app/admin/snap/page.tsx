@@ -38,30 +38,61 @@ export default function MobileSnapPage() {
 
   useEffect(() => {
     async function loadPlaces() {
-      // 1. LocalStorage 확인
-      const localData = localStorage.getItem("aria_local_places");
-      let mergedPlaces: Place[] = [];
-      
-      if (localData) {
-        mergedPlaces = JSON.parse(localData);
-      }
-
-      // 2. Google Sheet에서 가져와서 병합 (로컬 데이터가 우선)
       try {
-        const sheetPlaces = await getPlacesFromGoogleSheet('1Setffm27HQ8LyOM3N9o9V8eA0ihGbZeZgN763jkm1WU');
-        sheetPlaces.forEach(sp => {
-          if (!mergedPlaces.find(lp => lp.id === sp.id)) {
-            mergedPlaces.push(sp);
+        // 1. 빌드 타임 기반 Google Sheet & 정적 places.json 데이터 로드
+        const basePlaces = await getPlacesFromGoogleSheet('1Setffm27HQ8LyOM3N9o9V8eA0ihGbZeZgN763jkm1WU');
+        let mergedPlaces = [...basePlaces];
+
+        // 2. 최신 동적 places.json 런타임 페치 (원격 서버의 최신본)
+        try {
+          const timestamp = new Date().getTime();
+          const syncRes = await fetch(`/data/places.json?t=${timestamp}`, { cache: 'no-store' });
+          if (syncRes.ok) {
+            const remotePlaces: Place[] = await syncRes.json();
+            remotePlaces.forEach(remotePlace => {
+              const idx = mergedPlaces.findIndex(p => p.id === remotePlace.id);
+              if (idx >= 0) {
+                const serverTime = new Date(mergedPlaces[idx].lastUpdated || 0).getTime();
+                const remoteTime = new Date(remotePlace.lastUpdated || 0).getTime();
+                if (remoteTime >= serverTime) {
+                  mergedPlaces[idx] = remotePlace;
+                }
+              } else {
+                mergedPlaces.push(remotePlace);
+              }
+            });
           }
-        });
+        } catch (fetchErr) {
+          console.warn("Dynamic fetch failed, fallback to static:", fetchErr);
+        }
+
+        // 3. 브라우저 LocalStorage 데이터 병합 (타임스탬프 기반 최신순 덮어쓰기)
+        const localData = localStorage.getItem("aria_local_places");
+        if (localData) {
+          const parsed = JSON.parse(localData);
+          parsed.forEach((localPlace: Place) => {
+            const idx = mergedPlaces.findIndex(p => p.id === localPlace.id);
+            if (idx >= 0) {
+              const serverTime = new Date(mergedPlaces[idx].lastUpdated || 0).getTime();
+              const localTime = new Date(localPlace.lastUpdated || 0).getTime();
+              // 로컬 데이터가 원격보다 최신이면 덮어씌움 (동일 기기 방금 찍은 사진 등)
+              if (localTime > serverTime) {
+                mergedPlaces[idx] = localPlace;
+              }
+            } else {
+              mergedPlaces.push(localPlace);
+            }
+          });
+        }
+
+        // 이름순 정렬
+        mergedPlaces.sort((a, b) => a.name.localeCompare(b.name));
+        setPlaces(mergedPlaces);
       } catch (err) {
-        console.error("Failed to fetch sheet", err);
+        console.error("Failed to load places in admin snap:", err);
       }
-      
-      // 이름순 정렬
-      mergedPlaces.sort((a, b) => a.name.localeCompare(b.name));
-      setPlaces(mergedPlaces);
     }
+    
     loadPlaces();
   }, []);
 
