@@ -22,15 +22,17 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     setIsSidebarOpen(false);
   }, [pathname]);
 
+  const normalizedPathname = pathname.replace(/\/$/, "");
+
   // 인증 상태 감지 및 비로그인 시 로그인 페이지로 리다이렉트
   useEffect(() => {
-    if (!isLoading && !user && pathname !== "/admin/login") {
+    if (!isLoading && !user && normalizedPathname !== "/admin/login") {
       router.push("/admin/login");
     }
-  }, [user, isLoading, pathname, router]);
+  }, [user, isLoading, normalizedPathname, router]);
 
   // 로그인 페이지는 레이아웃에서 제외하거나 별도로 처리해야 함
-  if (pathname === "/admin/login") return <>{children}</>;
+  if (normalizedPathname === "/admin/login") return <>{children}</>;
 
   // 로딩 상태 처리
   if (isLoading) {
