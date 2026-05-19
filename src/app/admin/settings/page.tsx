@@ -93,25 +93,49 @@ export default function AdminSettingsPage() {
   };
 
   useEffect(() => {
-    const saved = localStorage.getItem("aria_github_config");
-    if (saved) {
-      setConfig(JSON.parse(saved));
-    }
-
-    // 저장 공간 계산 (5MB 기준)
-    const calculateStorage = () => {
-      let total = 0;
-      for (const x in localStorage) {
-        if (localStorage.hasOwnProperty(x)) {
-          total += (localStorage[x].length + x.length) * 2; 
+    if (typeof window !== "undefined") {
+      // 1. URL 쿼리 파라미터로 매직 링크(QR스캔) 접근 여부 확인
+      const urlParams = new URLSearchParams(window.location.search);
+      const syncToken = urlParams.get("sync");
+      
+      if (syncToken) {
+        try {
+          const decoded = decodeURIComponent(atob(syncToken));
+          const parsed = JSON.parse(decoded);
+          if (parsed.token) {
+            localStorage.setItem("aria_github_config", decoded);
+            setConfig(parsed);
+            alert("🎉 매직 링크 연동 완료!\n스마트폰 동기화 설정이 1초 만에 부여되었습니다.");
+            window.location.href = "/admin/snap"; // 성공 시 바로 스냅 페이지로 리다이렉트
+            return;
+          }
+        } catch(e) {
+          console.error(e);
+          alert("❌ 유효하지 않은 QR 코드이거나 만료된 링크입니다.");
         }
       }
-      const usedMB = (total / 1024 / 1024).toFixed(2);
-      const percent = Math.min(Math.round((Number(usedMB) / 5) * 100), 100);
-      setStorageUsage({ used: Number(usedMB), percent });
-    };
 
-    calculateStorage();
+      // 2. 일반 로딩 시 설정 불러오기
+      const saved = localStorage.getItem("aria_github_config");
+      if (saved) {
+        setConfig(JSON.parse(saved));
+      }
+
+      // 저장 공간 계산 (5MB 기준)
+      const calculateStorage = () => {
+        let total = 0;
+        for (const x in localStorage) {
+          if (localStorage.hasOwnProperty(x)) {
+            total += (localStorage[x].length + x.length) * 2; 
+          }
+        }
+        const usedMB = (total / 1024 / 1024).toFixed(2);
+        const percent = Math.min(Math.round((Number(usedMB) / 5) * 100), 100);
+        setStorageUsage({ used: Number(usedMB), percent });
+      };
+
+      calculateStorage();
+    }
   }, []);
 
   const handleSave = () => {
@@ -120,6 +144,7 @@ export default function AdminSettingsPage() {
     setTimeout(() => {
       setIsSaving(false);
       alert("설정이 안전하게 저장되었습니다.");
+      window.location.reload(); // QR 코드를 최신화하기 위해 리로드
     }, 1000);
   };
 
@@ -317,42 +342,59 @@ export default function AdminSettingsPage() {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-6 border-t border-white/5">
-            {/* Export Config */}
+            {/* QR Export */}
             <div className="space-y-6">
-              <h5 className="text-lg font-bold text-white">1단계: 데스크톱에서 설정 내보내기</h5>
+              <h5 className="text-lg font-bold text-white">방법 1: 매직 링크 QR로 공유하기 (추천)</h5>
               <p className="text-xs text-white/50 leading-relaxed">
-                현재 PC 브라우저에 저장된 깃허브 토큰과 저장소 설정을 암호화 코드로 추출하여 클립보드에 즉시 복사합니다.
+                다른 직원의 스마트폰 카메라(기본 앱)로 아래 QR 코드를 스캔하기만 하면, 복잡한 설정 없이 1초 만에 즉시 권한이 부여됩니다.
+              </p>
+              
+              <div className="bg-white p-4 rounded-2xl w-fit flex flex-col items-center gap-3">
+                {typeof window !== "undefined" && localStorage.getItem("aria_github_config") ? (
+                  <img 
+                    src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(
+                      `${window.location.origin}/admin/settings?sync=${btoa(encodeURIComponent(localStorage.getItem("aria_github_config")!))}`
+                    )}`}
+                    alt="Sync QR Code"
+                    className="w-[150px] h-[150px]"
+                  />
+                ) : (
+                  <div className="w-[150px] h-[150px] bg-gray-200 flex items-center justify-center text-center text-xs text-gray-500 font-bold rounded-xl">
+                    위에서 설정을 먼저<br/>저장해주세요
+                  </div>
+                )}
+                <span className="text-[10px] font-black text-black/60 uppercase tracking-widest">기본 카메라로 스캔하세요</span>
+              </div>
+            </div>
+
+            {/* Manual Import */}
+            <div className="space-y-4">
+              <h5 className="text-lg font-bold text-white">방법 2: 텍스트 코드로 가져오기</h5>
+              <p className="text-xs text-white/50 leading-relaxed">
+                카메라 사용이 불가능한 경우, 아래 버튼을 눌러 텍스트 코드를 복사하고 전달하여 직접 입력할 수 있습니다.
               </p>
               <button 
                 onClick={handleExportConfig}
-                className="px-6 py-4 bg-accent text-white rounded-xl font-bold hover:scale-102 active:scale-98 transition-all flex items-center gap-2 text-sm shadow-lg shadow-accent/20"
+                className="px-4 py-3 bg-white/10 hover:bg-white/20 text-white rounded-xl font-bold transition-all flex items-center justify-center gap-2 text-xs w-full mb-2"
               >
                 <Copy className="w-4 h-4" />
-                설정 동기화 코드 복사 (Export)
+                텍스트 코드 복사 (PC용)
               </button>
-            </div>
-
-            {/* Import Config */}
-            <div className="space-y-4">
-              <h5 className="text-lg font-bold text-white">2단계: 모바일에서 설정 가져오기</h5>
-              <p className="text-xs text-white/50 leading-relaxed">
-                복사한 코드를 아래 칸에 붙여넣고 가져오기 버튼을 누르면 1초 만에 스마트폰에도 동일한 설정이 연동됩니다.
-              </p>
               <div className="space-y-2">
                 <input 
                   type="text"
                   value={importText}
                   onChange={(e) => setImportText(e.target.value)}
-                  placeholder="복사한 동기화 코드를 여기에 붙여넣으세요..."
-                  className="w-full px-6 py-4 bg-white/5 border border-white/10 rounded-2xl text-white outline-none focus:ring-2 focus:ring-accent transition-all font-bold text-xs"
+                  placeholder="복사한 코드를 여기에 붙여넣으세요..."
+                  className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white outline-none focus:ring-2 focus:ring-accent transition-all font-bold text-xs"
                 />
               </div>
               <button 
                 onClick={handleImportConfig}
                 disabled={!importText.trim()}
-                className="px-6 py-4 bg-white/10 hover:bg-white/20 text-white rounded-xl font-bold hover:scale-102 active:scale-98 transition-all disabled:opacity-30 text-sm"
+                className="w-full px-4 py-3 bg-accent/20 hover:bg-accent text-white rounded-xl font-bold transition-all disabled:opacity-30 text-xs"
               >
-                설정 가져오기 (Import)
+                가져오기 (Import)
               </button>
             </div>
           </div>
