@@ -5,13 +5,16 @@ import { motion, AnimatePresence } from "framer-motion";
 import { LayoutDashboard, Map, Settings, Globe, LogOut, Compass, Sparkles, User, HelpCircle, Camera, Menu, X } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useLanguage } from "@/lib/i18n/context";
+import { useAuth } from "@/lib/auth/context";
 import GithubPushBtn from "@/components/admin/GithubPushBtn";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const router = useRouter();
   const { dict } = useLanguage();
+  const { user, logout, isLoading } = useAuth();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   // 경로 변경 시 모바일 사이드바 자동으로 닫기
@@ -19,8 +22,28 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     setIsSidebarOpen(false);
   }, [pathname]);
 
+  // 인증 상태 감지 및 비로그인 시 로그인 페이지로 리다이렉트
+  useEffect(() => {
+    if (!isLoading && !user && pathname !== "/admin/login") {
+      router.push("/admin/login");
+    }
+  }, [user, isLoading, pathname, router]);
+
   // 로그인 페이지는 레이아웃에서 제외하거나 별도로 처리해야 함
   if (pathname === "/admin/login") return <>{children}</>;
+
+  // 로딩 상태 처리
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-forest-dark flex flex-col items-center justify-center space-y-6 text-white">
+        <div className="w-12 h-12 border-4 border-accent/20 border-t-accent rounded-full animate-spin" />
+        <p className="text-white/40 font-black uppercase tracking-[0.3em] text-xs animate-pulse">Initializing System Session...</p>
+      </div>
+    );
+  }
+
+  // 비로그인 상태일 때는 렌더링을 차단하고 리다이렉트를 대기
+  if (!user) return null;
 
   const menuItems = [
     { title: dict.admin.dashboard, icon: LayoutDashboard, href: "/admin/dashboard" },
@@ -100,21 +123,32 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <div className="mt-auto pt-8 border-t border-white/5">
           <div className="p-6 bg-white/5 rounded-[2rem] border border-white/10 space-y-4">
             <div className="flex items-center gap-4">
-              <div className="p-3 bg-white/10 rounded-2xl">
-                <User className="w-5 h-5 text-accent" />
+              <div className="p-3 bg-white/10 rounded-2xl shrink-0 overflow-hidden relative w-11 h-11">
+                {user.avatar ? (
+                  <Image src={user.avatar} alt={user.name} fill className="object-cover animate-fade-in" />
+                ) : (
+                  <User className="w-5 h-5 text-accent" />
+                )}
               </div>
-              <div>
-                <p className="text-sm font-black">Hoon Lee</p>
-                <p className="text-[10px] font-bold text-white/30">Master Operator</p>
+              <div className="min-w-0">
+                <p className="text-sm font-black truncate">{user.name}</p>
+                <p className="text-[10px] font-bold text-white/30 truncate">
+                  {user.email === "kococo81@gmail.com" || user.email === "hpeerage@gmail.com" || user.name === "Hoon Lee" 
+                    ? "Master Operator" 
+                    : "Operator"}
+                </p>
               </div>
             </div>
-            <Link 
-              href="/"
+            <button 
+              onClick={async () => {
+                await logout();
+                router.push("/admin/login");
+              }}
               className="w-full py-3 bg-white/5 hover:bg-red-500/10 hover:text-red-400 rounded-xl transition-all flex items-center justify-center gap-2 text-xs font-black uppercase tracking-widest text-white/20"
             >
               <LogOut className="w-4 h-4" />
               {dict.admin.logout}
-            </Link>
+            </button>
           </div>
         </div>
       </aside>
