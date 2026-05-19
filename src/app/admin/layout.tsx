@@ -133,7 +133,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               <div className="min-w-0">
                 <p className="text-sm font-black truncate">{user.name}</p>
                 <p className="text-[10px] font-bold text-white/30 truncate">
-                  {user.email === "kococo81@gmail.com" || user.email === "hpeerage@gmail.com" || user.name === "Hoon Lee" 
+                  {user.email === "kococo81@gmail.com" || user.email === "hpeerage@gmail.com" || user.email === "ngy5966@gmail.com" || user.name === "Hoon Lee" 
                     ? "Master Operator" 
                     : "Operator"}
                 </p>
